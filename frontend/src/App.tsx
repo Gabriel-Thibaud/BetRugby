@@ -16,16 +16,11 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-       BetRugby ! 
+       BetRugby Home Page ! 
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div>
+          Bet with your friends on Rugby
+        </div>
       </header>
     </div>
   );
