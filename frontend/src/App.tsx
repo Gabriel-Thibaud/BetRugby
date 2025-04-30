@@ -1,38 +1,29 @@
-import React, { useEffect } from 'react';
 import { Box, styled } from '@mui/material';
+import { Homepage } from './components/homepage/Homepage';
 
 const AppContainer = styled(Box)({
-  backgroundColor: "#282c34",
+  backgroundColor: "#FBF9F9",
   height: "100%",
-  width: "100%"
+  width: "100%",
+  color: "black", 
+  display: "flex", 
+  flexDirection: "column"
 });
 
-const AppHeader = styled(Box)({
-  minHeight: "100px",
+const AppContent = styled(Box)({
+  height: "100%",
   display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  color: "white"
+  justifyContent: "space-around",
+  alignItems: "center"
 });
 
 function App() {
 
-  useEffect(() => {
-    fetch("http://localhost:3001")
-    .then((res) => res.text())
-    .then((data) => console.log(data));
-  }, []);
-
-
   return (
     <AppContainer>
-      <AppHeader>
-        <Box sx={{fontSize: 42}}> BetRugby ! </Box>
-        <Box>
-          Bet on Rugby with your friends
-        </Box>
-      </AppHeader>
+      <AppContent>
+        <Homepage/>
+      </AppContent>
     </AppContainer>
   );
 }
