@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, styled } from '@mui/material';
 import { Leagues } from './Leagues';
+import { MyBets } from './MyBets';
 
 const HomepageContainer = styled(Box)({
     backgroundColor: "#FBF9F9",
@@ -18,7 +19,8 @@ const LeftContent = styled(Box)({
     width:"50%", 
     padding:"10px",
     display: "flex", 
-    flexDirection:"column"
+    flexDirection:"column",
+    justifyContent: "space-between"
 })
 
 export function Homepage() {
@@ -27,6 +29,7 @@ export function Homepage() {
         <HomepageContainer>
             <LeftContent>
                 <Leagues/>
+                <MyBets/>
             </LeftContent>
         </HomepageContainer>
     );
