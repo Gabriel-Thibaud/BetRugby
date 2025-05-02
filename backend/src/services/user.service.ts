@@ -3,7 +3,7 @@ import { User } from '@prisma/client';
 import { ulid } from 'ulid';
 
 export async function createUser(email: string, username: string, password: string): Promise<User | null> {
-  const user = await prisma.user.create({
+  const user: User = await prisma.user.create({
     data: {
       id: ulid(),
       email,

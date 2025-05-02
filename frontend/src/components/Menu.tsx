@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, styled } from '@mui/material';
 
 const MenuContainer =  styled(Box)({
@@ -15,8 +14,7 @@ const OptionsContainer = styled(Box)({
     display: "flex",
     justifyContent: "flex-end",
     gap: "15px", 
-})
-
+});
 
 export function Menu() {
 

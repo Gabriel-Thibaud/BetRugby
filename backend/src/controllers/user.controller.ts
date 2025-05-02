@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 
 export async function signUp(req: Request, res: Response, next: NextFunction) {
   try {
-    const { email, username, password } = req.body;
+    const { email, username, password }: { email: string, username: string, password: string } = req.body;
 
     const existingUser: User | null = await userService.getUserByEmail(email);
     if (existingUser)
@@ -23,7 +23,7 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
-    const { email, password } = req.body;
+    const { email, password }: { email: string, password: string } = req.body;
 
     const user: User | null = await userService.getUserByEmail(email);
     if (!user)
