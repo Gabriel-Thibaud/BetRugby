@@ -10,7 +10,6 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
     if (existingUser)
       return res.status(400).json({ error: 'Error: Email already used' });
 
-
     const user: User | null = await userService.createUser(email, username, password);
     if (!user)
       res.status(500).json({ error: 'Internal server error' });

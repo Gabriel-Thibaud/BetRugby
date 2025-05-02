@@ -36,7 +36,7 @@ const SwitchViewButton = styled(Box)({
     fontSize: "14px",
     fontWeight: "bold",
     opacity: 0.6,
-    ":hover":{
+    ":hover": {
         cursor: "pointer", 
         color: "#158030",
         opacity: 1
@@ -61,9 +61,7 @@ export function Login() {
             setIsEnabled(false);
             return;
         }  
-        console.log("Login enabled - email and password set !")
         setIsEnabled(true);
-        
     }, [email, password, confirmedPassword, username]);
 
     async function handleFormSummit() {
@@ -71,21 +69,18 @@ export function Login() {
             return;
 
         if (isLoginView) {
-    
             const loginStatus: { error: string } = await userDataSource.login(email, password);
             if (loginStatus.error){
                 setErrorMessage(loginStatus.error);
                 return;
             }
         } else  {
-            const signUpStatus: { error: string }  = await userDataSource.signUp(email, password, username);
-            if (signUpStatus.error){
+            const signUpStatus: { error: string }  = await userDataSource.signUp(email, password, username.trim());
+            if (signUpStatus.error) {
                 setErrorMessage(signUpStatus.error);
                 return;
             }
-            console.log("signUpStatus" , signUpStatus);
         }
-
         navigate("/home");
     }
 
@@ -93,7 +88,12 @@ export function Login() {
         if (isLoginView)
             return !!email && !!password;
 
-        return password === confirmedPassword && !!username && !!email && !!password;
+        return password === confirmedPassword && !!username.trim() && !!email && !!password;
+    }
+
+    function onSwitchView(){
+        setErrorMessage(""); 
+        setIsLoginView(prev => !prev); // previous state is "reversed" 
     }
 
     return (
@@ -106,7 +106,7 @@ export function Login() {
                         label="Username" 
                         variant="outlined"
                         value={username} 
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value.trim())}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                     /> 
                 }
                 <TextField 
@@ -137,14 +137,12 @@ export function Login() {
                 {errorMessage &&
                     <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
                 }
-          
                 <LoginButton is_disabled={Number(!isEnabled)} onClick={() => handleFormSummit()}>
                       {isLoginView ? "Login" : "Create"} 
                 </LoginButton>
-                <SwitchViewButton onClick={() => setIsLoginView(prev => !prev)}> {/* previous state is "reversed"  */}
+                <SwitchViewButton onClick={() => onSwitchView()}>
                     {isLoginView ? "Create an account" : "Sign in"}
                 </SwitchViewButton>
-            
             </FormContainer>
         </LoginContainer>
     );
