@@ -33,8 +33,8 @@ const DayContent = styled(Box)({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around", 
-    padding: "10px"
+    justifyContent:"space-around",
+    padding: "15px"
 });
 
 export function MyBets(){

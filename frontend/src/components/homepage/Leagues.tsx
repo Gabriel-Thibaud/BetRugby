@@ -9,7 +9,7 @@ const LeaguesContainer = styled(Box)({
     flexDirection: "column",
     gap: "10px",
     border: "2px solid #D9D9D9", 
-    boxShadow: "4px 8px #D9D9D9",
+    boxShadow: "2px 5px #D9D9D9",
     borderRadius: "10px",
 });
 
@@ -23,7 +23,7 @@ const Title = styled(Box)({
 const CustomButton = styled(Button)({
     backgroundColor: " #E5B226",
     color: "#FBF9F9",
-    boxShadow: "0px 3px #5D737E",
+    boxShadow: "0px 2px #D9D9D9",
     borderRadius: "10px",
     fontWeight: "bold",
     "&:hover":{
@@ -36,17 +36,16 @@ const Content = styled(Box)({
     width: "100%",
     paddingBottom: "15px",
     display: "flex",
+    gap: "50px",
     justifyContent: "space-around",
     alignItems: "center"
 });
 
 const LeftContent = styled(Box)({
     height: "fit-content",
-    width: "40%",
     display: "flex",
     flexDirection: "column",
     gap: "5px"
-
 });
 
 const LeagueButton = styled(Box)((props:{is_active: number}) => ({
@@ -54,18 +53,16 @@ const LeagueButton = styled(Box)((props:{is_active: number}) => ({
     color: props.is_active ? "#158030" : "#000000",
     cursor: "pointer",
     "&:hover": {
-    fontWeight : "bold"
+        fontWeight : "bold"
     }
 }));
 
-
 const RightContent = styled(Box)({
     height: "fit-content",
-    width: "30%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center", 
-    gap: "20px"
+    gap: "20px",
 });
 
 
@@ -80,7 +77,12 @@ export function Leagues(){
             <Content>
                 <LeftContent> 
                     {leaguesList.map((league)=>
-                        <LeagueButton is_active={Number(activeLeague === league)}> {league} </LeagueButton>
+                        <LeagueButton 
+                        key={league}
+                        onClick={() => setActiveLeague(league)} 
+                        is_active={Number(activeLeague === league)}> 
+                            {league} 
+                        </LeagueButton>
                     )}
                 </LeftContent>
                 <RightContent>

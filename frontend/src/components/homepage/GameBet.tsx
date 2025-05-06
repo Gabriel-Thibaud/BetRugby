@@ -4,31 +4,22 @@ import { Box, Button, MenuItem, Select, Stack, styled, TextField, Typography } f
 const BetContainer = styled(Box)({
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
-    gap: "5px"
-});
-
-const Content = styled(Box)({
-    display : "flex",
-    flexDirection: "column", 
-    alignItems: "center",
-    gap: "5px"
+    alignItems: "center"
 });
 
 const GameBetContent = styled(Box)({
     display: "flex",
     flexDirection: "row",
-    alignItems: "center", 
-    gap: "5px", 
-    fontWeight: "bold"
+    fontWeight: "bold", 
+    gap: "5px",
+    alignItems: "center",
+    marginLeft: "10px", 
+    marginBottom: "5px"
 });
 
 const PointsDifferenContent = styled(Box)({
-    height: "fit-content",
-    width: "fit-content",
     display: "flex",
     alignItems: "center", 
-    gap: "5px", 
     fontSize: "14px"
 });
 
@@ -52,7 +43,8 @@ const WarningSign = styled(Box)({
     color: "#FBF9F9",
     fontWeight: "bold",
     borderRadius: "30px",
-    width: "30px",
+    width: "25px",
+    height: "25px",
     display: "flex",
     justifyContent: "center",
     fontSize: "20px"
@@ -64,11 +56,16 @@ interface GameBetProps {
 
 export function GameBet(props: GameBetProps){
     const [clicked, setClicked] = useState<string>();
+    const [diffenrenceSelected, setDifference] = useState<string>();
 
     return(
         <BetContainer>
-            <WarningSign> ! </WarningSign>
-            <Content>
+            <Box sx={{width: "20px"}}>
+            {(!diffenrenceSelected || !clicked) && 
+                <WarningSign> ! </WarningSign>
+            }
+            </Box>
+            <Box sx={{display : "flex", flexDirection: "column"}}>
                 <GameBetContent>
                     <CustomButton onClick={() => setClicked(props.team1)} 
                         is_clicked={Number(clicked === props.team1)}> 
@@ -81,15 +78,19 @@ export function GameBet(props: GameBetProps){
                     </CustomButton>
                 </GameBetContent>
                 <PointsDifferenContent>
-                    point difference
-                    <Select sx={{height:"30px", width: "90px"}}>
+                    <Box sx={{width: "70px", textAlign: "center"}}> 
+                        point difference
+                    </Box>
+                    <Select sx={{height:"30px", width: "90px"}}
+                    value={diffenrenceSelected}
+                    onChange={(e) => setDifference(e.target.value)}>
                         <MenuItem value="0-10">0-10</MenuItem>
                         <MenuItem value="11-20">11-20</MenuItem>
                         <MenuItem value="21-30">21-30</MenuItem>
                         <MenuItem value="31+">31+</MenuItem>
                     </Select>
                 </PointsDifferenContent>
-            </Content>
+            </Box>
         </BetContainer>
     );
 }
