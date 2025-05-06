@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, styled } from '@mui/material';
 import { Leagues } from './Leagues';
+import { MyBets } from './MyBets';
 
 const HomepageContainer = styled(Box)({
     height: "100%",
@@ -30,6 +31,7 @@ export function Homepage() {
         <HomepageContainer>
             <LeftContent flex={1}>
                 <Leagues/>
+                <MyBets/>
             </LeftContent>
             <RightContent flex={1}>
             </RightContent>
