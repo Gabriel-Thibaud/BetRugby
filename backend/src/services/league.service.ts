@@ -1,20 +1,21 @@
-import { League, User } from '@prisma/client';
+import { League } from '@prisma/client';
 import { prisma } from '../prisma/client';
 import { ulid } from 'ulid';
 
 export class LeagueService {
+    constructor(private db = prisma) { }
+
     async createLeague(name: string): Promise<League> {
-        return prisma.league.create({
+        return this.db.league.create({
             data: {
                 id: ulid(),
-                name,
-                users: []
+                name
             },
         });
     }
 
     async addUser(leagueId: string, userId: string) {
-        return prisma.league.update({
+        return this.db.league.update({
             where: { id: leagueId },
             data: {
                 users: {
@@ -25,7 +26,7 @@ export class LeagueService {
     }
 
     async removeUser(leagueId: string, userId: string) {
-        return prisma.league.update({
+        return this.db.league.update({
             where: { id: leagueId },
             data: {
                 users: {
@@ -36,7 +37,7 @@ export class LeagueService {
     }
 
     async getUsers(leagueId: string) {
-        const league = await prisma.league.findUnique({
+        const league = await this.db.league.findUnique({
             where: { id: leagueId },
             include: { users: true },
         });

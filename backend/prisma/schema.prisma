@@ -33,12 +33,12 @@ model League {
 }
 
 model Bet {
-  id        String   @id    
-  gameId    String
-  userId    String     
-  pointDiff Int
-  status    String
-  winner    String
-  game      Game     @relation(fields: [gameId], references: [id])   
-  user      User     @relation(fields: [userId], references: [id])
+  id              String   @id    
+  gameId          String
+  userId          String     
+  pointDiff       Int
+  status          String
+  predictedWinner String
+  game            Game     @relation(fields: [gameId], references: [id])   
+  user            User     @relation(fields: [userId], references: [id])
 }
