@@ -27,8 +27,8 @@ export class BetController {
     try {
       const { id, status }: Partial<Bet> = req.body;
       if (id && status) {
-        const bet: Bet = await this.betService.updateStatus(id, status);
-        return res.status(201).json(bet);
+        const updatedBet: Bet = await this.betService.updateStatus(id, status);
+        return res.status(200).json(updatedBet);
       }
     } catch (error) {
       if (error instanceof Error) {

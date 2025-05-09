@@ -40,7 +40,7 @@ export class UserController {
         return res.status(404).json({ error: 'Error: User not found' });
 
       if (user.password === password)
-        return res.status(201).json({ email });
+        return res.status(200).json({ email });
       else
         return res.status(400).json({ error: 'Wrong password' });
     } catch (error) {
