@@ -7,7 +7,9 @@ export class UserController {
 
   async signUp(req: Request, res: Response) {
     try {
-      const { email, username, password }: { email: string, username: string, password: string } = req.body;
+      const { email, username, password }: Partial<User> = req.body;
+      if (!email || !username || !password)
+        return res.status(400).json({ error: 'Error: Email, username or password is missing' });;
 
       const existingUser: User | null = await this.userService.getUserByEmail(email);
       if (existingUser)
@@ -15,16 +17,16 @@ export class UserController {
 
       const user: User | null = await this.userService.createUser(email, username, password);
       if (!user)
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error' });
 
-      res.status(201).json({ user });
+      return res.status(201).json({ user });
     } catch (error) {
       if (error instanceof Error) {
         console.error('[UserController] signUP error:', error.message);
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error' });
       } else {
         console.error('[UserController] unknown error:', error);
-        res.status(500).json({ error: 'Unexpected error occurred' });
+        return res.status(500).json({ error: 'Unexpected error occurred' });
       }
     }
   };
@@ -44,10 +46,10 @@ export class UserController {
     } catch (error) {
       if (error instanceof Error) {
         console.error('[UserController] login error:', error.message);
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error' });
       } else {
         console.error('[UserController] unknown error:', error);
-        res.status(500).json({ error: 'Unexpected error occurred' });
+        return res.status(500).json({ error: 'Unexpected error occurred' });
       }
     }
   };

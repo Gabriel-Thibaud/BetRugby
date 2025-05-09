@@ -10,15 +10,15 @@ export class BetController {
       const { gameId, userId, pointDiff, predictedWinner }: Partial<Bet> = req.body;
       if (gameId && userId && pointDiff && predictedWinner) {
         const bet: Bet = await this.betService.createBet(gameId, userId, pointDiff, predictedWinner);
-        res.status(201).json(bet);
+        return res.status(201).json(bet);
       }
     } catch (error) {
       if (error instanceof Error) {
         console.error('[BetController] createBet error:', error.message);
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error' });
       } else {
         console.error('[BetController] unknown error:', error);
-        res.status(500).json({ error: 'Unexpected error occurred' });
+        return res.status(500).json({ error: 'Unexpected error occurred' });
       }
     }
   }
@@ -28,15 +28,15 @@ export class BetController {
       const { id, status }: Partial<Bet> = req.body;
       if (id && status) {
         const bet: Bet = await this.betService.updateStatus(id, status);
-        res.status(201).json(bet);
+        return res.status(201).json(bet);
       }
     } catch (error) {
       if (error instanceof Error) {
         console.error('[BetController] updateBetStatus error:', error.message);
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error' });
       } else {
         console.error('[BetController] unknown error:', error);
-        res.status(500).json({ error: 'Unexpected error occurred' });
+        return res.status(500).json({ error: 'Unexpected error occurred' });
       }
     }
   }
