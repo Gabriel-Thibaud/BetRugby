@@ -37,7 +37,7 @@ model Bet {
   gameId          String
   userId          String     
   pointDiff       Int
-  status          String
+  status          String?
   predictedWinner String
   game            Game     @relation(fields: [gameId], references: [id])   
   user            User     @relation(fields: [userId], references: [id])

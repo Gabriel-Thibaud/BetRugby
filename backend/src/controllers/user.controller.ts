@@ -18,13 +18,18 @@ export class UserController {
         res.status(500).json({ error: 'Internal server error' });
 
       res.status(201).json({ user });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('[UserController] signUP error:', error.message);
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        console.error('[UserController] unknown error:', error);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+      }
     }
   };
 
-  async login(req: Request, res: Response, next: NextFunction) {
+  async login(req: Request, res: Response) {
     try {
       const { email, password }: { email: string, password: string } = req.body;
 
@@ -36,9 +41,14 @@ export class UserController {
         return res.status(201).json({ email });
       else
         return res.status(400).json({ error: 'Wrong password' });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server Error' });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('[UserController] login error:', error.message);
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        console.error('[UserController] unknown error:', error);
+        res.status(500).json({ error: 'Unexpected error occurred' });
+      }
     }
   };
 }
