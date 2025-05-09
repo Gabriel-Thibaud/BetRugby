@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { backdropClasses, Box, Button, Stack, styled, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Button, styled, Dialog } from '@mui/material';
+import { PopUpLeagues } from './PopUpLeagues';
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
+    minWidth: "300px",
     padding: "15px",
     display: "flex", 
     alignItems: "center",
@@ -62,15 +64,22 @@ const ButtonsContainer= styled(Box)({
     display: "flex",
     flexDirection: "column",
     alignItems: "center", 
-    gap: "20px",
+    gap: "20px"
 });
 
 export function Leagues(){
+
     const leaguesList: string[] = ["Fake League 1","Fake League 2","Fake League 3","Fake League 4",];
     const [activeLeague, setActiveLeague] = useState <string>(leaguesList[0]);
+    const [selectedButton, setSelectedButton] = useState <string>("");
+    const [isOpen, setIsOpen] = useState <boolean> (false);
+    const handleClose = () => setIsOpen(false);
 
     return(
         <LeaguesContainer>
+            <Dialog open={isOpen} onClose={handleClose}>
+                <PopUpLeagues selectedButton={selectedButton} isOpen={isOpen} setIsOpen={setIsOpen}/>
+            </Dialog>
             <Title> My Leagues </Title>
             <ContentContainer >
                 <LeaguesList> 
@@ -82,12 +91,17 @@ export function Leagues(){
                         > 
                             {league} 
                         </LeagueItem >
-                    )}
+                    )
+                    }
                 </LeaguesList>
-                <ButtonContainer>
-                    <CustomButton> Create </CustomButton>
-                    <CustomButton> Join </CustomButton>
-                </ButtonContainer>
+                <ButtonsContainer>
+                    <CustomButton onClick={() => {setSelectedButton('create') ; setIsOpen(true)}}>
+                        Create 
+                    </CustomButton>
+                    <CustomButton onClick={() => {setSelectedButton('join') ; setIsOpen(true)}}>
+                        Join
+                    </CustomButton>
+                </ButtonsContainer>
             </ContentContainer > 
         </LeaguesContainer>
     );
