@@ -1,28 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Box, styled } from '@mui/material';
+import { Leagues } from './Leagues';
 
 const HomepageContainer = styled(Box)({
-    backgroundColor: "#FBF9F9",
-    height: "90%",
-    width: "95%",
-    color: "black", 
+    height: "100%",
+    width: "100%",
+    color: "#000000", 
     display: "flex", 
-    justifyContent: "space-between",
-    alignItems:"center",
-    gap: "10px"
-})
+    justifyContent: "space-around",
+    alignItems:"center"
+});
 
 const LeftContent = styled(Box)({
-    height:"100%", 
-    width:"50%", 
-    padding:"10px",
+    height: "50%",
     display: "flex", 
-    flexDirection:"column"
-})
+    flexDirection:"column",
+    justifyContent: "space-around"
+});
+
 
 export function Homepage() {
-
+    
     return (
-        <Box>Home</Box>
+        <HomepageContainer>
+            <LeftContent>
+                <Leagues/>
+            </LeftContent>
+        </HomepageContainer>
     );
 }
