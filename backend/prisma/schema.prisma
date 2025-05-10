@@ -12,4 +12,33 @@ model User {
   email     String   @unique
   username  String   @unique
   password  String
+  bets      Bet[]  
+  leagues   League[]
+}
+
+model Game {
+  id           String   @id 
+  homeTeam     String   
+  awayTeam     String   
+  competition  String
+  date         DateTime
+  score        Int?
+  bets         Bet[]
+}
+
+model League {
+  id           String   @id 
+  name         String    
+  users        User[]
+}
+
+model Bet {
+  id              String   @id    
+  gameId          String
+  userId          String     
+  pointDiff       Int
+  status          String?
+  predictedWinner String
+  game            Game     @relation(fields: [gameId], references: [id])   
+  user            User     @relation(fields: [userId], references: [id])
 }

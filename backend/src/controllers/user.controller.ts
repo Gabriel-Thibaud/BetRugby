@@ -1,40 +1,56 @@
 import { NextFunction, Request, Response } from "express";
-import * as userService from '../services/user.service';
 import { User } from '@prisma/client';
+import { UserService } from '../services/user.service'
 
-export async function signUp(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { email, username, password }: { email: string, username: string, password: string } = req.body;
+export class UserController {
+  constructor(private userService: UserService) { }
 
-    const existingUser: User | null = await userService.getUserByEmail(email);
-    if (existingUser)
-      return res.status(400).json({ error: 'Error: Email already used' });
+  async signUp(req: Request, res: Response) {
+    try {
+      const { email, username, password }: Partial<User> = req.body;
+      if (!email || !username || !password)
+        return res.status(400).json({ error: 'Error: Email, username or password is missing' });;
 
-    const user: User | null = await userService.createUser(email, username, password);
-    if (!user)
-      res.status(500).json({ error: 'Internal server error' });
+      const existingUser: User | null = await this.userService.getUserByEmail(email);
+      if (existingUser)
+        return res.status(400).json({ error: 'Error: Email already used' });
 
-    res.status(201).json({ user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
+      const user: User | null = await this.userService.createUser(email, username, password);
+      if (!user)
+        return res.status(500).json({ error: 'Internal server error' });
 
-export async function login(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { email, password }: { email: string, password: string } = req.body;
+      return res.status(201).json({ user });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('[UserController] signUP error:', error.message);
+        return res.status(500).json({ error: 'Internal server error' });
+      } else {
+        console.error('[UserController] unknown error:', error);
+        return res.status(500).json({ error: 'Unexpected error occurred' });
+      }
+    }
+  };
 
-    const user: User | null = await userService.getUserByEmail(email);
-    if (!user)
-      return res.status(404).json({ error: 'Error: User not found' });
+  async login(req: Request, res: Response) {
+    try {
+      const { email, password }: { email: string, password: string } = req.body;
 
-    if (user.password === password)
-      return res.status(201).json({ email });
-    else
-      return res.status(400).json({ error: 'Wrong password' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server Error' });
-  }
-};
+      const user: User | null = await this.userService.getUserByEmail(email);
+      if (!user)
+        return res.status(404).json({ error: 'Error: User not found' });
+
+      if (user.password === password)
+        return res.status(200).json({ email });
+      else
+        return res.status(400).json({ error: 'Wrong password' });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('[UserController] login error:', error.message);
+        return res.status(500).json({ error: 'Internal server error' });
+      } else {
+        console.error('[UserController] unknown error:', error);
+        return res.status(500).json({ error: 'Unexpected error occurred' });
+      }
+    }
+  };
+}

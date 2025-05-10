@@ -2,20 +2,24 @@ import { prisma } from '../prisma/client';
 import { User } from '@prisma/client';
 import { ulid } from 'ulid';
 
-export async function createUser(email: string, username: string, password: string): Promise<User | null> {
-  const user: User = await prisma.user.create({
-    data: {
-      id: ulid(),
-      email,
-      username,
-      password, // TODO : hasher ici plus tard
-    },
-  });
-  return user;
-};
+export class UserService {
+  constructor(private db = prisma) { }
 
-export async function getUserByEmail(email: string): Promise<User | null> {
-  return prisma.user.findUnique({
-    where: { email },
-  });
-};
+  async createUser(email: string, username: string, password: string): Promise<User | null> {
+    const user: User = await this.db.user.create({
+      data: {
+        id: ulid(),
+        email,
+        username,
+        password, // TODO : hasher ici plus tard
+      },
+    });
+    return user;
+  };
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    return this.db.user.findUnique({
+      where: { email },
+    });
+  };
+}
