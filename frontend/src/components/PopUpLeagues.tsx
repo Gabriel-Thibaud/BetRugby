@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, styled, TextField } from '@mui/material';
+import { leagueDataSource } from '../datasources';
 
 const PopUpContainer = styled(Box)({
     height: "fit-content",
@@ -31,6 +32,15 @@ interface PopupProps {
 export function PopUpLeagues(props: PopupProps){
 
     const [leagueName, setLeagueName] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
+        
+    async function handleCreateLeague() {
+        const leagueStatus: { error: string }  = await leagueDataSource.createLeague(leagueName.trim());
+            if (leagueStatus.error) {
+            setErrorMessage(leagueStatus.error);
+        return;
+        }
+    }
     
     if (props.isOpen == false) return null;
 
@@ -45,7 +55,7 @@ export function PopUpLeagues(props: PopupProps){
                 value={leagueName} 
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLeagueName(e.target.value)}
             /> 
-            <CustomButton onClick={() => props.setIsOpen(false)}>
+            <CustomButton onClick={() => {handleCreateLeague() ; props.setIsOpen(false)}}>
                 {props.selectedButton === "create" ? "Create" : "Join"}
             </CustomButton>
         </PopUpContainer>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Button, styled, Dialog } from '@mui/material';
 import { PopUpLeagues } from './PopUpLeagues';
+import { leagueDataSource } from '../datasources';
+
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
@@ -67,13 +69,26 @@ const ButtonsContainer= styled(Box)({
     gap: "20px"
 });
 
+
+
 export function Leagues(){
 
-    const leaguesList: string[] = ["Fake League 1","Fake League 2","Fake League 3","Fake League 4",];
+    const leaguesList : string[] = ["League Test 1"];
     const [activeLeague, setActiveLeague] = useState <string>(leaguesList[0]);
     const [selectedButton, setSelectedButton] = useState <string>("");
     const [isOpen, setIsOpen] = useState <boolean> (false);
     const handleClose = () => setIsOpen(false);
+
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [leagueName, setLeagueName] = useState<string>("");
+    
+    async function handleCreateLeague() {
+        const leagueStatus: { error: string }  = await leagueDataSource.createLeague(leagueName.trim());
+            if (leagueStatus.error) {
+            setErrorMessage(leagueStatus.error);
+        return;
+        }
+    }
 
     return(
         <LeaguesContainer>
