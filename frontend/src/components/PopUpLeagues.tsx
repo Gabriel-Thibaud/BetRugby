@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, styled, TextField } from '@mui/material';
-import { leagueDataSource } from '../datasources';
+import { leagueDataSource } from '../datasources/index';
 
 const PopUpContainer = styled(Box)({
     height: "fit-content",
@@ -42,7 +42,7 @@ export function PopUpLeagues(props: PopupProps){
         }
     }
     
-    if (props.isOpen == false) return null;
+    if (props.isOpen === false) return null;
 
     return(
         <PopUpContainer>
@@ -55,6 +55,9 @@ export function PopUpLeagues(props: PopupProps){
                 value={leagueName} 
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLeagueName(e.target.value)}
             /> 
+            {errorMessage &&
+                <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
+            }
             <CustomButton onClick={() => {handleCreateLeague() ; props.setIsOpen(false)}}>
                 {props.selectedButton === "create" ? "Create" : "Join"}
             </CustomButton>

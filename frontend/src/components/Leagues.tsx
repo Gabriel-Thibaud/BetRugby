@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, styled, Dialog } from '@mui/material';
 import { PopUpLeagues } from './PopUpLeagues';
-import { leagueDataSource } from '../datasources';
-
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
@@ -79,16 +77,7 @@ export function Leagues(){
     const [isOpen, setIsOpen] = useState <boolean> (false);
     const handleClose = () => setIsOpen(false);
 
-    const [errorMessage, setErrorMessage] = useState<string>("");
-    const [leagueName, setLeagueName] = useState<string>("");
-    
-    async function handleCreateLeague() {
-        const leagueStatus: { error: string }  = await leagueDataSource.createLeague(leagueName.trim());
-            if (leagueStatus.error) {
-            setErrorMessage(leagueStatus.error);
-        return;
-        }
-    }
+
 
     return(
         <LeaguesContainer>
