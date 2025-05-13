@@ -9,6 +9,7 @@ export class UserDataSource {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: "include",
             body: JSON.stringify({ email, password, username })
         });
 
@@ -26,12 +27,27 @@ export class UserDataSource {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: "include",
             body: JSON.stringify({ email, password })
         });
 
         if (!response.ok) {
             const error = await response.json();
             return { error: error.error || 'Error during the login' }
+        }
+
+        return { error: "" };
+    }
+
+    public async logout() {
+        const response: Response = await fetch(`${this.baseURL}/logout`, {
+            method: "POST",
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            return { error: error.error || 'Error during the logout' }
         }
 
         return { error: "" };
