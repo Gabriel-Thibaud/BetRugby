@@ -17,7 +17,7 @@ const CustomButton = styled(Button)({
     boxShadow: "0px 3px #D9D9D9",
     borderRadius: "10px",
     fontWeight: "bold",
-    "&:hover":{
+    ":hover":{
         backgroundColor: "rgb(140, 109, 23)",
         boxShadow: "none"
     }
@@ -25,8 +25,7 @@ const CustomButton = styled(Button)({
 
 interface PopupProps {
     selectedButton: string
-    isOpen : boolean
-    setIsOpen : (value: boolean) => void
+    onClose : (value: boolean) => void
     onLeagueCreated: (league: { id: string; name: string }) => void
 };
 
@@ -38,23 +37,20 @@ export function PopUpLeagues(props: PopupProps){
         
     async function handleCreateLeague() {
         const leagueStatus= await leagueDataSource.createLeague(leagueName.trim());
-            if (leagueStatus.error) {
+        if (leagueStatus.error) {
             setErrorMessage(leagueStatus.error);
-        return;
+            return;
         }
-
         props.onLeagueCreated(leagueStatus.league);
     }
 
     async function handleAddLeague() {
-        const leagueStatus: { error: string }  = await leagueDataSource.addLeague(leagueId.trim());
-            if (leagueStatus.error) {
+        const leagueStatus: { error: string } = await leagueDataSource.addLeague(leagueId.trim());
+        if (leagueStatus.error) {
             setErrorMessage(leagueStatus.error);
-        return;
+            return;
         }
     }
-    
-    if (props.isOpen === false) return null;
 
     return(
         <PopUpContainer>
@@ -73,10 +69,12 @@ export function PopUpLeagues(props: PopupProps){
             {errorMessage &&
                 <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
             }
-            <CustomButton onClick={props.selectedButton === "create" ? 
-                () => {handleCreateLeague() ; props.setIsOpen(false)} :
-                () => {handleAddLeague() ; props.setIsOpen(false)}
-            }>
+            <CustomButton 
+                onClick={props.selectedButton === "create" ? 
+                    () => {handleCreateLeague() ; props.onClose(true)} :
+                    () => {handleAddLeague() ; props.onClose(true)}
+                }
+            >
                 {props.selectedButton === "create" ? "Create" : "Join"}
             </CustomButton>
         </PopUpContainer>

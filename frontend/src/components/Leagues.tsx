@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Box, Button, styled, Dialog, IconButton, Tooltip } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Button, styled, Dialog } from '@mui/material';
 import { PopUpLeagues } from './PopUpLeagues';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
-    width: "100%",
     padding: "15px",
     display: "flex", 
     alignItems: "center",
@@ -19,9 +18,9 @@ const LeaguesContainer = styled(Box)({
 const UpperContainer = styled(Box)({
     display: "flex",
     justifyContent: "space-around",
-    width: "100%",
-     alignItems: "center"
-})
+    gap: "50px",
+    alignItems: "center"
+});
 
 const Title = styled(Box)({
     fontWeight: "bold",
@@ -38,7 +37,7 @@ const CustomButton = styled(Button)({
     fontWeight: "bold",
     "&:hover":{
         backgroundColor: "rgb(140, 109, 23)",
-         boxShadow: "none"
+        boxShadow: "none"
     }
 });
 
@@ -75,78 +74,118 @@ const ButtonsContainer= styled(Box)({
     gap: "20px"
 });
 
-const IdContainer = styled(Box)({
+const InviteInformation = styled(Box)({
     display: "flex",
     flexDirection: "column",
     alignItems: "end",
     fontSize: "12px", 
     color: "#D9D9D9",
-})
+});
 
-type LeagueData = {
+const IdContainer = styled(Box)({
+    display: "flex",
+    justifyContent: "flex-end",
+    minWidth: "110px",
+    gap:"5px",
+    ":hover": {
+        color: "black",
+        cursor: "pointer"
+    },
+    "svg": {
+        width: "16px",
+        height: "16px"
+    }
+});
+
+type League = {
   id: string;
   name: string;
 };
 
-
-
 export function Leagues(){
 
-    const [leagues, setLeagues] = useState <LeagueData[]>([]);
-    const [activeLeague, setActiveLeague] = useState <LeagueData| null>(leagues[0]);
+    const [leagues, setLeagues] = useState <League[]>([]);
+    const [activeLeague, setActiveLeague] = useState <League | null>(leagues[0]);
+    const [IdPreview, setIdPreview] = useState<string>("")
     const [selectedButton, setSelectedButton] = useState <string>("");
-    const [isOpen, setIsOpen] = useState <boolean> (false);
-    const handleClose = () => setIsOpen(false);
+    const [isCopied, setIsCopied] = useState<boolean>(false);
+    const [isDialogOpen, setIsDialogOpen] = useState <boolean> (false);
 
+    useEffect(()=> {
+        if (!activeLeague)
+            return;
 
+        const preview: string = `${activeLeague.id.substring(0,5)}...${activeLeague.id.substring(activeLeague.id.length - 3)}`;
+        setIdPreview(preview);
+
+    }, [activeLeague])
+
+    function onLeagueCreated(league: League) {
+        setLeagues(prev => [...prev, league]); 
+        if (!activeLeague) 
+            setActiveLeague(league);
+    }
+
+    function copyIdToClipBoard() {
+        if (!activeLeague || isCopied)
+            return;
+   
+        navigator.clipboard.writeText(activeLeague.id);   
+        setIsCopied(true);
+        setTimeout(() => {
+            setIsCopied(false);
+        }, 1500);
+    }
 
     return(
         <LeaguesContainer>
-            <Dialog open={isOpen} onClose={handleClose}>
+            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
                 <PopUpLeagues 
                     selectedButton={selectedButton} 
-                    isOpen={isOpen} 
-                    setIsOpen={setIsOpen} 
-                    onLeagueCreated={(league) => {setLeagues(prev => [...prev, league]); 
-                    if (!activeLeague) setActiveLeague(league)}}/>
+                    onClose={(isClose: boolean) => setIsDialogOpen(!isClose)} 
+                    onLeagueCreated={(league) => onLeagueCreated(league)}
+                />
             </Dialog>
             <UpperContainer>
-                <Title> 
-                    My Leagues 
-                </Title>
-                {!activeLeague ? (
-                    <Box sx={{widows: "100px"}}></Box>
-                ):(
-                    <IdContainer> 
-                        <Box sx={{fontSize:"10px"}}>Invite frineds</Box>
-                        <Box>ID : {activeLeague.id} </Box>
-                        <IconButton onClick={() => navigator.clipboard.writeText(activeLeague.id)}>
-                            <ContentCopyIcon fontSize="small" />    
-                        </IconButton>  
-                    </IdContainer>
-                )}
-
+                <Title> My Leagues </Title>
+                {activeLeague &&
+                    <InviteInformation> 
+                        <Box sx={{fontSize:"10px", paddingRight: "1px"}}> Invite friends </Box>
+                        <IdContainer onClick={() => copyIdToClipBoard()}>
+                        {isCopied ?
+                            <Box sx={{color: "black"}}> ID copied ! </Box>
+                            :
+                            <>
+                                <Box>ID: { IdPreview } </Box>
+                                <ContentCopyIcon fontSize="small" />
+                            </>
+                        }
+                        </IdContainer>
+                       
+                    </InviteInformation>
+                }               
             </UpperContainer>
             <ListContainer>
                 <LeaguesList> 
-                    {leagues.length === 0 ? (
-                        "No league for now"
-                        ) : (
-                        leagues.map((league: LeagueData) => (
-                        <LeagueItem  
-                            key={league.name}
-                            onClick={() => setActiveLeague(league)} 
-                            is_active={Number(activeLeague === league)}
-                        > 
-                            {league.name}
-                        </LeagueItem >))
-                    )}
+                    {leagues.length === 0 ? 
+                        <Box> No league for now </Box>
+                    : 
+                        leagues.map((league: League) =>
+                            <LeagueItem  
+                                key={league.name}
+                                onClick={() => setActiveLeague(league)} 
+                                is_active={Number(activeLeague === league)}
+                            > 
+                                {league.name}
+                            </LeagueItem >
+                        )
+                    }
                 </LeaguesList>
                 <ButtonsContainer>
-                    <CustomButton onClick={() => {setSelectedButton('create') ; setIsOpen(true)}}>
+                    <CustomButton onClick={() => {setSelectedButton('create') ; setIsDialogOpen(true)}}>
                         Create 
                     </CustomButton>
-                    <CustomButton onClick={() => {setSelectedButton('join') ; setIsOpen(true)}}>
+                    <CustomButton onClick={() => {setSelectedButton('join') ; setIsDialogOpen(true)}}>
                         Join
                     </CustomButton>
                 </ButtonsContainer>

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { Box, styled } from '@mui/material';
 import { Leagues } from './Leagues';
 
