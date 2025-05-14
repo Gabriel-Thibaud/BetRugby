@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Box, Button, styled, Dialog } from '@mui/material';
+import { Box, Button, styled, Dialog, IconButton, Tooltip } from '@mui/material';
 import { PopUpLeagues } from './PopUpLeagues';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
-    minWidth: "300px",
+    width: "100%",
     padding: "15px",
     display: "flex", 
     alignItems: "center",
@@ -14,6 +15,13 @@ const LeaguesContainer = styled(Box)({
     boxShadow: "2px 5px #D9D9D9",
     borderRadius: "10px",
 });
+
+const UpperContainer = styled(Box)({
+    display: "flex",
+    justifyContent: "space-around",
+    width: "100%",
+     alignItems: "center"
+})
 
 const Title = styled(Box)({
     fontWeight: "bold",
@@ -34,7 +42,7 @@ const CustomButton = styled(Button)({
     }
 });
 
-const ContentContainer = styled(Box)({
+const ListContainer = styled(Box)({
     height:"fit-content",
     width: "100%",
     paddingBottom: "15px",
@@ -67,12 +75,25 @@ const ButtonsContainer= styled(Box)({
     gap: "20px"
 });
 
+const IdContainer = styled(Box)({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "end",
+    fontSize: "12px", 
+    color: "#D9D9D9",
+})
+
+type LeagueData = {
+  id: string;
+  name: string;
+};
+
 
 
 export function Leagues(){
 
-    const leaguesList : string[] = ["League Test 1"];
-    const [activeLeague, setActiveLeague] = useState <string>(leaguesList[0]);
+    const [leagues, setLeagues] = useState <LeagueData[]>([]);
+    const [activeLeague, setActiveLeague] = useState <LeagueData| null>(leagues[0]);
     const [selectedButton, setSelectedButton] = useState <string>("");
     const [isOpen, setIsOpen] = useState <boolean> (false);
     const handleClose = () => setIsOpen(false);
@@ -82,21 +103,44 @@ export function Leagues(){
     return(
         <LeaguesContainer>
             <Dialog open={isOpen} onClose={handleClose}>
-                <PopUpLeagues selectedButton={selectedButton} isOpen={isOpen} setIsOpen={setIsOpen}/>
+                <PopUpLeagues 
+                    selectedButton={selectedButton} 
+                    isOpen={isOpen} 
+                    setIsOpen={setIsOpen} 
+                    onLeagueCreated={(league) => {setLeagues(prev => [...prev, league]); 
+                    if (!activeLeague) setActiveLeague(league)}}/>
             </Dialog>
-            <Title> My Leagues </Title>
-            <ContentContainer >
+            <UpperContainer>
+                <Title> 
+                    My Leagues 
+                </Title>
+                {!activeLeague ? (
+                    <Box sx={{widows: "100px"}}></Box>
+                ):(
+                    <IdContainer> 
+                        <Box sx={{fontSize:"10px"}}>Invite frineds</Box>
+                        <Box>ID : {activeLeague.id} </Box>
+                        <IconButton onClick={() => navigator.clipboard.writeText(activeLeague.id)}>
+                            <ContentCopyIcon fontSize="small" />    
+                        </IconButton>  
+                    </IdContainer>
+                )}
+
+            </UpperContainer>
+            <ListContainer>
                 <LeaguesList> 
-                    {leaguesList.map((league)=>
+                    {leagues.length === 0 ? (
+                        "No league for now"
+                        ) : (
+                        leagues.map((league: LeagueData) => (
                         <LeagueItem  
-                            key={league}
+                            key={league.name}
                             onClick={() => setActiveLeague(league)} 
                             is_active={Number(activeLeague === league)}
                         > 
-                            {league} 
-                        </LeagueItem >
-                    )
-                    }
+                            {league.name}
+                        </LeagueItem >))
+                    )}
                 </LeaguesList>
                 <ButtonsContainer>
                     <CustomButton onClick={() => {setSelectedButton('create') ; setIsOpen(true)}}>
@@ -106,7 +150,7 @@ export function Leagues(){
                         Join
                     </CustomButton>
                 </ButtonsContainer>
-            </ContentContainer > 
+            </ListContainer > 
         </LeaguesContainer>
     );
 }
