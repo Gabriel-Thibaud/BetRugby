@@ -1,6 +1,7 @@
 import { Box, styled } from '@mui/material';
 import { userDataSource } from '../datasources/index';
 import { useLocation, useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const MenuContainer =  styled(Box)({
     height: "35px",    
@@ -8,8 +9,7 @@ const MenuContainer =  styled(Box)({
     justifyContent: "space-between",
     alignItems: "center",
     borderBottom: "2px solid #5D737E", 
-    padding: "5px",
-    fontSize: "25px"
+    padding: "5px"
 });
 
 const MenuContent = styled(Box)({
@@ -24,14 +24,22 @@ const OptionsContainer = styled(Box)({
     justifyContent: "center",
     gap: "150px", 
     color: "#E5B226",
+    fontSize: "25px"
 });
 
-const SignOut = styled(Box)({
+const SignOutContainer = styled(Box)({
+    display: "flex",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    gap: "3px",
     cursor: "pointer",
     color: "#D9D9D9",
-    alignSelf: "flex-end",
+    fontSize: "20px",
     ":hover": {
         color: "#E5B226"
+    },
+    "svg":  {
+        paddingTop: "2px"
     }
 });
 
@@ -57,7 +65,10 @@ export function Menu() {
                         <Box> Home </Box>
                         <Box> Rules </Box>
                     </OptionsContainer>
-                     <SignOut onClick={() =>signOut()}> Sign out </SignOut>
+                    <SignOutContainer onClick={() =>signOut()}>
+                        <Box onClick={() =>signOut()}> Sign out </Box>
+                        <LogoutIcon/>
+                    </SignOutContainer>
                 </MenuContent>
             }
         </MenuContainer>
