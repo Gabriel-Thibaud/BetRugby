@@ -1,6 +1,14 @@
-import { NextFunction, Request, Response } from "express";
+import { Response, Request } from "express";
 import { User } from '@prisma/client';
-import { UserService } from '../services/user.service'
+import { UserService } from '../services/user.service';
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret";
+const isProduction = process.env.NODE_ENV === "production";
 
 export class UserController {
   constructor(private userService: UserService) { }
@@ -19,6 +27,15 @@ export class UserController {
       if (!user)
         return res.status(500).json({ error: 'Internal server error' });
 
+      // after signup, user is logged in (so a token is required)
+      const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: "lax",
+        maxAge: 3600 * 1000, // 1h
+      });
+
       return res.status(201).json({ user });
     } catch (error) {
       if (error instanceof Error) {
@@ -34,15 +51,20 @@ export class UserController {
   async login(req: Request, res: Response) {
     try {
       const { email, password }: { email: string, password: string } = req.body;
-
       const user: User | null = await this.userService.getUserByEmail(email);
-      if (!user)
-        return res.status(404).json({ error: 'Error: User not found' });
+      if (!user || !(await bcrypt.compare(password, user.password)))
+        return res.status(404).json({ error: 'Error: Invalid credentials' });
 
-      if (user.password === password)
-        return res.status(200).json({ email });
-      else
-        return res.status(400).json({ error: 'Wrong password' });
+      const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: "lax",
+        maxAge: 3600 * 1000, // 1h
+      });
+      return res.status(200).json({ message: "Logged in" });
+
     } catch (error) {
       if (error instanceof Error) {
         console.error('[UserController] login error:', error.message);
@@ -53,4 +75,13 @@ export class UserController {
       }
     }
   };
+
+  async logout(req: Request, res: Response) {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    res.status(200).json({ message: "Logged out" });
+  }
 }
