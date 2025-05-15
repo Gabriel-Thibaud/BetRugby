@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { LeagueService } from '../services/league.service';
 import { League, User } from '@prisma/client';
-import { AuthenticatedRequest } from '../type';
+import { AuthenticatedRequest } from '../types';
 
 export class LeagueController {
     constructor(private leagueService: LeagueService) { }
