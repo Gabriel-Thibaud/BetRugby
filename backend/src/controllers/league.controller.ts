@@ -2,13 +2,21 @@ import { Request, Response } from 'express';
 import { LeagueService } from '../services/league.service';
 import { League, User } from '@prisma/client';
 
+interface AuthenticatedRequest extends Request {
+    user?: { id: string };
+}
+
 export class LeagueController {
     constructor(private leagueService: LeagueService) { }
 
-    async createLeague(req: Request, res: Response) {
+    async createLeague(req: AuthenticatedRequest, res: Response) {
         try {
             const { name }: { name: string } = req.body;
-            const league: League = await this.leagueService.createLeague(name);
+            const userId: string = req.user ? req.user.id : "";
+            if (!userId)
+                return res.status(500).json({ error: "Internal error: no userID" });
+
+            const league: League = await this.leagueService.createLeague(name, userId);
             return res.status(201).json(league);
         } catch (error) {
             if (error instanceof Error) {
