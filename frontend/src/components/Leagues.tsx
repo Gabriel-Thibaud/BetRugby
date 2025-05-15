@@ -41,7 +41,7 @@ const CustomButton = styled(Button)({
     }
 });
 
-const ListContainer = styled(Box)({
+const MiddleContainer = styled(Box)({
     height:"fit-content",
     width: "100%",
     paddingBottom: "15px",
@@ -50,7 +50,7 @@ const ListContainer = styled(Box)({
     alignItems: "center"
 });
 
-const LeaguesList= styled(Box)({
+const ListContainer= styled(Box)({
     height: "fit-content",
     display: "flex",
     flexDirection: "column",
@@ -104,8 +104,8 @@ type League = {
 
 export function Leagues(){
 
-    const [leagues, setLeagues] = useState <League[]>([]);
-    const [activeLeague, setActiveLeague] = useState <League | null>(leagues[0]);
+    const [leagueList, setLeagueList] = useState <League[]>([]);
+    const [activeLeague, setActiveLeague] = useState <League | null>(leagueList[0]);
     const [IdPreview, setIdPreview] = useState<string>("")
     const [selectedButton, setSelectedButton] = useState <string>("");
     const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -120,8 +120,8 @@ export function Leagues(){
 
     }, [activeLeague])
 
-    function onLeagueCreated(league: League) {
-        setLeagues(prev => [...prev, league]); 
+    function onAddLeagueToList(league: League) {
+        setLeagueList(prev => [...prev, league]); 
         if (!activeLeague) 
             setActiveLeague(league);
     }
@@ -143,7 +143,7 @@ export function Leagues(){
                 <PopUpLeagues 
                     selectedButton={selectedButton} 
                     onClose={(isClose: boolean) => setIsDialogOpen(!isClose)} 
-                    onLeagueCreated={(league) => onLeagueCreated(league)}
+                    onAddLeague={(league) => onAddLeagueToList(league)}
                 />
             </Dialog>
             <UpperContainer>
@@ -165,14 +165,14 @@ export function Leagues(){
                     </InviteInformation>
                 }               
             </UpperContainer>
-            <ListContainer>
-                <LeaguesList> 
-                    {leagues.length === 0 ? 
+            <MiddleContainer>
+                <ListContainer> 
+                    {leagueList.length === 0 ? 
                         <Box> No league for now </Box>
                     : 
-                        leagues.map((league: League) =>
+                        leagueList.map((league: League) =>
                             <LeagueItem  
-                                key={league.name}
+                                key={league.id}
                                 onClick={() => setActiveLeague(league)} 
                                 is_active={Number(activeLeague === league)}
                             > 
@@ -180,7 +180,7 @@ export function Leagues(){
                             </LeagueItem >
                         )
                     }
-                </LeaguesList>
+                </ListContainer>
                 <ButtonsContainer>
                     <CustomButton onClick={() => {setSelectedButton('create') ; setIsDialogOpen(true)}}>
                         Create 
@@ -189,7 +189,7 @@ export function Leagues(){
                         Join
                     </CustomButton>
                 </ButtonsContainer>
-            </ListContainer > 
+            </MiddleContainer > 
         </LeaguesContainer>
     );
 }
