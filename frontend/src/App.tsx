@@ -29,9 +29,9 @@ function App() {
   BetRugby team <3 `;
 
   return (
-    <AppContainer>
-      <Menu/>
-      <Router>
+    <Router>
+      <AppContainer>
+        <Menu/>
         <AppContent>
           <Routes>
             <Route path="/" element={
@@ -43,8 +43,8 @@ function App() {
             <Route path="/home" element={<Homepage/>}/>
           </Routes>
         </AppContent>
-      </Router>
-    </AppContainer>
+      </AppContainer>
+     </Router>
   );
 }
 
