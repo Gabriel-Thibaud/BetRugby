@@ -13,5 +13,6 @@ router.post('/login', (req, res) => userController.login(req, res));
 
 router.use(authGuard);
 router.post('/logout', (req, res) => userController.logout(req, res));
+router.get('/leagues', (req, res) => userController.getLeagueIDs(req, res))
 
 export default router;

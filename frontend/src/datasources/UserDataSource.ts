@@ -1,7 +1,7 @@
 
 export class UserDataSource {
 
-    baseURL: string = "http://localhost:3001/api/users"; // TODO: update /change localhost
+    baseURL: string = "http://localhost:3001/api/user"; // TODO: update /change localhost
 
     public async signUp(email: string, password: string, username: string): Promise<{ error: string }> {
         const response: Response = await fetch(`${this.baseURL}/signup`, {

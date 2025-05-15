@@ -1,14 +1,19 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { LeagueService } from '../services/league.service';
 import { League, User } from '@prisma/client';
+import { AuthenticatedRequest } from '../types';
 
 export class LeagueController {
     constructor(private leagueService: LeagueService) { }
 
-    async createLeague(req: Request, res: Response) {
+    async createLeague(req: AuthenticatedRequest, res: Response) {
         try {
             const { name }: { name: string } = req.body;
-            const league: League = await this.leagueService.createLeague(name);
+            const userId: string = req.user ? req.user.id : "";
+            if (!userId)
+                return res.status(500).json({ error: "Internal error: no userID" });
+
+            const league: League = await this.leagueService.createLeague(name, userId);
             return res.status(201).json(league);
         } catch (error) {
             if (error instanceof Error) {
@@ -21,7 +26,7 @@ export class LeagueController {
         }
     }
 
-    async addUser(req: Request, res: Response) {
+    async addUser(req: AuthenticatedRequest, res: Response) {
         try {
             const { leagueId, userId }: { leagueId: string, userId: string } = req.body;
             const result: { name: string, id: string } = await this.leagueService.addUser(leagueId, userId);
@@ -37,7 +42,7 @@ export class LeagueController {
         }
     }
 
-    async removeUser(req: Request, res: Response) {
+    async removeUser(req: AuthenticatedRequest, res: Response) {
         try {
             const { leagueId, userId } = req.body;
             const result: { name: string, id: string } = await this.leagueService.removeUser(leagueId, userId);
@@ -54,7 +59,7 @@ export class LeagueController {
         }
     }
 
-    async getUsers(req: Request, res: Response) {
+    async getUsers(req: AuthenticatedRequest, res: Response) {
         try {
             const { leagueId } = req.params;
             const users: User[] = await this.leagueService.getUsers(leagueId);

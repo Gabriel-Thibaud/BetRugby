@@ -5,11 +5,14 @@ import { ulid } from 'ulid';
 export class LeagueService {
     constructor(private db = prisma) { }
 
-    async createLeague(name: string): Promise<League> {
+    async createLeague(name: string, userId: string): Promise<League> {
         return this.db.league.create({
             data: {
                 id: ulid(),
-                name
+                name,
+                users: {
+                    connect: { id: userId },
+                },
             },
         });
     }
