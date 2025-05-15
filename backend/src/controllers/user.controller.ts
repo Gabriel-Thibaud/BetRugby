@@ -1,9 +1,10 @@
 import { Response, Request } from "express";
-import { User } from '@prisma/client';
+import { League, User } from '@prisma/client';
 import { UserService } from '../services/user.service';
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { AuthenticatedRequest } from "../types";
 
 dotenv.config();
 
@@ -12,6 +13,8 @@ const isProduction = process.env.NODE_ENV === "production";
 
 export class UserController {
   constructor(private userService: UserService) { }
+
+  /****************** Authentification method ****************/
 
   async signUp(req: Request, res: Response) {
     try {
@@ -76,12 +79,34 @@ export class UserController {
     }
   };
 
-  async logout(req: Request, res: Response) {
+  async logout(req: AuthenticatedRequest, res: Response) {
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
     });
     res.status(200).json({ message: "Logged out" });
+  }
+
+  /****************** Methods related to leagues, bets ... ('Business logic') ****************/
+
+  async getLeagueIDs(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId: string = req.user ? req.user.id : "";
+      if (!userId)
+        return res.status(500).json({ error: "Internal error: no userID" });
+
+      const leagues: League[] = await this.userService.getLeagueIDs(userId);
+      return res.status(200).json(leagues);
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        console.error('[UserController] getLeagueIDs error:', error.message);
+        return res.status(500).json({ error: 'Internal server error' });
+      } else {
+        console.error('[UserController] unknown error:', error);
+        return res.status(500).json({ error: 'Unexpected error occurred' });
+      }
+    }
   }
 }
