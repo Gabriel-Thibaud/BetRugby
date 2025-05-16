@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Box, Button, styled, Dialog } from '@mui/material';
 import { PopUpLeagues } from './PopUpLeagues';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { UserDataSource } from '../datasources/UserDataSource';
+
+const userDataSource = new UserDataSource();
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
@@ -105,36 +108,51 @@ type League = {
 export function Leagues(){
 
     const [leagueList, setLeagueList] = useState <League[]>([]);
-    const [activeLeague, setActiveLeague] = useState <League | null>(leagueList[0]);
+    const [activeLeagueId, setActiveLeagueId] = useState <string | null>("");
     const [IdPreview, setIdPreview] = useState<string>("")
     const [selectedButton, setSelectedButton] = useState <string>("");
     const [isCopied, setIsCopied] = useState<boolean>(false);
     const [isDialogOpen, setIsDialogOpen] = useState <boolean> (false);
+    const [errorMessage, setErrorMessage] = useState <string>("");
 
     useEffect(()=> {
-        if (!activeLeague)
+        if (!activeLeagueId)
             return;
 
-        const preview: string = `${activeLeague.id.substring(0,5)}...${activeLeague.id.substring(activeLeague.id.length - 3)}`;
+        const preview: string = `${activeLeagueId.substring(0,5)}...${activeLeagueId.substring(activeLeagueId.length - 3)}`;
         setIdPreview(preview);
+    }, [activeLeagueId])
 
-    }, [activeLeague])
+    useEffect(() => {
+        handleGetLeaguesListByUser();
+    },[]);
 
-    function onAddLeagueToList(league: League) {
-        setLeagueList(prev => [...prev, league]); 
-        if (!activeLeague) 
-            setActiveLeague(league);
+    async function handleGetLeaguesListByUser() {
+        const result = await userDataSource.getLeaguesListByUser();
+
+        if (result.error)
+            setErrorMessage(result.error)
+        if (result.leagues){
+            setLeagueList(result.leagues)
+            if (!activeLeagueId && result.leagues.length)
+                setActiveLeagueId(result.leagues[0].id)
+        } 
     }
 
     function copyIdToClipBoard() {
-        if (!activeLeague || isCopied)
+        if (!activeLeagueId || isCopied)
             return;
    
-        navigator.clipboard.writeText(activeLeague.id);   
+        navigator.clipboard.writeText(activeLeagueId);   
         setIsCopied(true);
         setTimeout(() => {
             setIsCopied(false);
         }, 1500);
+    }
+
+    async function onLeagueUpdate() {
+        setIsDialogOpen(false)
+        handleGetLeaguesListByUser()
     }
 
     return(
@@ -143,12 +161,12 @@ export function Leagues(){
                 <PopUpLeagues 
                     selectedButton={selectedButton} 
                     onClose={(isClose: boolean) => setIsDialogOpen(!isClose)} 
-                    onAddLeague={(league) => onAddLeagueToList(league)}
+                    onUpdate={()=>onLeagueUpdate()}
                 />
             </Dialog>
             <UpperContainer>
                 <Title> My Leagues </Title>
-                {activeLeague &&
+                {activeLeagueId &&
                     <InviteInformation> 
                         <Box sx={{fontSize:"10px", paddingRight: "1px"}}> Invite friends </Box>
                         <IdContainer onClick={() => copyIdToClipBoard()}>
@@ -161,7 +179,6 @@ export function Leagues(){
                             </>
                         }
                         </IdContainer>
-                       
                     </InviteInformation>
                 }               
             </UpperContainer>
@@ -173,12 +190,15 @@ export function Leagues(){
                         leagueList.map((league: League) =>
                             <LeagueItem  
                                 key={league.id}
-                                onClick={() => setActiveLeague(league)} 
-                                is_active={Number(activeLeague === league)}
+                                onClick={() => setActiveLeagueId(league.id)} 
+                                is_active={Number(activeLeagueId === league.id)}
                             > 
                                 {league.name}
                             </LeagueItem >
                         )
+                    }
+                    {errorMessage &&
+                    <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
                     }
                 </ListContainer>
                 <ButtonsContainer>

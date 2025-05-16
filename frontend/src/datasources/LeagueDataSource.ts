@@ -1,7 +1,7 @@
 
 export class LeagueDataSource {
 
-    baseURL: string = "http://localhost:3001/api/league"; // TODO: update /change localhost
+    baseURL: string = "http://localhost:3001/api/league";
 
     public async createLeague(leagueName: string): Promise<
     { error: string ; league?  : {id: string, name: string}}
@@ -32,12 +32,13 @@ export class LeagueDataSource {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({Id : leagueId})
+            credentials: "include",
+            body: JSON.stringify({leagueId})
         });
 
         if (!response.ok) {
             const error = await response.json();
-            return { error: error.error || "Unable to find league"}
+            return { error: error.error || "Unable to join league"}
         }
 
         const league = await response.json();

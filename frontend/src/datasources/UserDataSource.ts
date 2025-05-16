@@ -8,7 +8,7 @@ export class UserDataSource {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-            },
+            }, 
             credentials: "include",
             body: JSON.stringify({ email, password, username })
         });
@@ -35,7 +35,6 @@ export class UserDataSource {
             const error = await response.json();
             return { error: error.error || 'Error during the login' }
         }
-
         return { error: "" };
     }
 
@@ -51,6 +50,26 @@ export class UserDataSource {
         }
 
         return { error: "" };
+    }
+
+    public async getLeaguesListByUser(): Promise<
+    { error: string ; leagues ?  : {id: string, name: string}[]}
+    > {
+        const response: Response = await fetch(`${this.baseURL}/leagues`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }, 
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            return { error: error.error || 'Fail to fetch leagues' }
+        }
+
+        const leagues = await response.json();
+        return { error: "" , leagues};
     }
 
 }
