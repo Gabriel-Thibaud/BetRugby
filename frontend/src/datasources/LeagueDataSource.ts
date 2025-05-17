@@ -1,10 +1,19 @@
 
+export type League = {
+  id: string;
+  name: string;
+};
+
+export enum DialogType {
+    CREATE,
+    JOIN
+};
+
 export class LeagueDataSource {
 
     baseURL: string = "http://localhost:3001/api/league";
 
-    public async createLeague(leagueName: string): Promise<
-    { error: string ; league?  : {id: string, name: string}}
+    public async createLeague(leagueName: string): Promise<{ error: string }
     > {
         const response: Response = await fetch(`${this.baseURL}/create`, {
             method: "POST",
@@ -20,13 +29,10 @@ export class LeagueDataSource {
             return { error: error.error || 'Error in league creation'}
         }
         
-        const league = await response.json();
-        return { error: "", league};
+        return { error: "" };
     }
 
-    public async joinLeague(leagueId: string): Promise<
-    { error: string ; league ? : {id: string, name: string}}
-    > {
+    public async joinLeague(leagueId: string): Promise<{ error: string }> {
         const response: Response = await fetch(`${this.baseURL}/join`, {
             method: "POST",
             headers: {
@@ -41,7 +47,6 @@ export class LeagueDataSource {
             return { error: error.error || "Unable to join league"}
         }
 
-        const league = await response.json();
-        return { error: "", league};
+        return { error: "" };
     }
 }
