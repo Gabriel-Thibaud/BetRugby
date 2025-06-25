@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, styled, Dialog } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 import { LeaguesDialog } from './LeaguesDialog';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { userDataSource } from '../datasources/index';
 import { League, DialogType } from '../datasources/LeagueDataSource';
-
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
@@ -39,7 +38,7 @@ const CustomButton = styled(Button)({
     borderRadius: "10px",
     fontWeight: "bold",
     "&:hover":{
-        backgroundColor: "rgb(140, 109, 23)",
+        backgroundColor: "#9E7916",
         boxShadow: "none"
     }
 });
@@ -202,14 +201,15 @@ export function Leagues(){
                         Join
                     </CustomButton>
                 </ButtonsContainer>
+
             </LeaguesContent >
-            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+            {isDialogOpen && 
                 <LeaguesDialog
-                    dialogType={dialogType} 
-                    onClose={(isClose: boolean) => setIsDialogOpen(!isClose)} 
+                    dialogType={dialogType}
+                    onClose={() => setIsDialogOpen(false)}
                     onUpdate={() => onLeagueUpdate()}
                 />
-            </Dialog>
+            }
         </LeaguesContainer>
     );
 }

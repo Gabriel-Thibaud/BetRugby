@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, styled, TextField } from '@mui/material';
+import { Box, Button, styled, TextField, Dialog } from '@mui/material';
 import { leagueDataSource } from '../datasources/index';
 import { DialogType } from '../datasources/LeagueDataSource';
 
@@ -26,7 +26,7 @@ const CustomButton = styled(Button)({
 
 interface DialogProps {
     dialogType: DialogType;
-    onClose : (value: boolean) => void;
+    onClose : () => void;
     onUpdate : () => void;
 };
 
@@ -37,27 +37,23 @@ export function LeaguesDialog(props: DialogProps){
 
     const isCreateDialog: boolean = props.dialogType === DialogType.CREATE;
         
-    async function handleAddLeagueToBackend() {// changer de nom
-        if (isCreateDialog){
-            const leagueStatus: {error: string} = await leagueDataSource.createLeague(userInput.trim());
-            if (leagueStatus.error) {
-                setErrorMessage(leagueStatus.error);
-                return;
-            }
-
-        } else {
-            const leagueStatus: {error: string} = await leagueDataSource.joinLeague(userInput.trim());
-            if (leagueStatus.error) {
-                setErrorMessage(leagueStatus.error);
-                return;
-            }
-        }
+    async function updateLeagues() {
+        let leagueStatus: {error: string} = {error: ""};
+	        if (isCreateDialog)
+	            leagueStatus = await leagueDataSource.createLeague(userInput.trim());    
+	        else
+	            leagueStatus = await leagueDataSource.joinLeague(userInput.trim());
+	
+	        if (leagueStatus.error) {
+	            setErrorMessage(leagueStatus.error);
+	            return;
+	        }
         props.onUpdate()
-        // pourrait être encore plus optimisé je pense
     }
 
     return(
-        <PopUpContainer>
+        <Dialog open={true} onClose={() => props.onClose()}>
+            <PopUpContainer>
             <Box sx={{fontWeight: "bold", fontSize: "24px"}}>
                 {isCreateDialog ? "League name" : "League ID"}
             </Box>
@@ -70,9 +66,10 @@ export function LeaguesDialog(props: DialogProps){
             {errorMessage &&
                 <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
             }
-            <CustomButton onClick={() => {handleAddLeagueToBackend()}}>
+            <CustomButton onClick={() => updateLeagues()}>
                 {isCreateDialog ? "Create" : "Join"}
             </CustomButton>
-        </PopUpContainer>
+            </PopUpContainer>
+        </Dialog>
     )
 }

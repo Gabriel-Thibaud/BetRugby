@@ -11,7 +11,6 @@ const HomepageContainer = styled(Box)({
 });
 
 const LeftContent = styled(Box)({
-    height: "50%",
     display: "flex", 
     flexDirection:"column",
     justifyContent: "space-around"

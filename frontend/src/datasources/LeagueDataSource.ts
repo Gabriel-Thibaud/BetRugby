@@ -13,8 +13,7 @@ export class LeagueDataSource {
 
     baseURL: string = "http://localhost:3001/api/league";
 
-    public async createLeague(leagueName: string): Promise<{ error: string }
-    > {
+    public async createLeague(leagueName: string): Promise<{ error: string }> {
         const response: Response = await fetch(`${this.baseURL}/create`, {
             method: "POST",
             headers: {
