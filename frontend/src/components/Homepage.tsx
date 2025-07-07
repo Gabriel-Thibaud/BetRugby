@@ -7,7 +7,8 @@ const HomepageContainer = styled(Box)({
     color: "#000000", 
     display: "flex", 
     justifyContent: "space-around",
-    alignItems:"center"
+    alignItems:"center", 
+    flexWrap: "wrap"
 });
 
 const LeftContent = styled(Box)({

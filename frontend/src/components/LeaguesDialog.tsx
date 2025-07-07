@@ -38,6 +38,11 @@ export function LeaguesDialog(props: DialogProps){
     const isCreateDialog: boolean = props.dialogType === DialogType.CREATE;
         
     async function updateLeagues() {
+        if (!userInput.trim()){
+            displayErrorMessage();
+            return;
+        }
+
         let leagueStatus: {error: string} = {error: ""};
 	        if (isCreateDialog)
 	            leagueStatus = await leagueDataSource.createLeague(userInput.trim());    
@@ -51,6 +56,21 @@ export function LeaguesDialog(props: DialogProps){
         props.onUpdate()
     }
 
+    async function handleInputChange(value: string){
+        if (!value.trim())
+            displayErrorMessage();
+        
+        if (!!errorMessage && !!value.trim())
+            setErrorMessage("");
+
+        setUserInput(value);
+    }
+
+    function displayErrorMessage(){
+        const errorMsg: string = isCreateDialog ? "Error: league name is required" : "Error: ID league is required";
+        setErrorMessage(errorMsg);
+    }
+
     return(
         <Dialog open={true} onClose={() => props.onClose()}>
             <PopUpContainer>
@@ -61,7 +81,7 @@ export function LeaguesDialog(props: DialogProps){
                 sx={{width: "200px"}}
                 label={isCreateDialog ? "My League" : "ID"} 
                 value={userInput} 
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value)} 
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e.target.value)} 
             /> 
             {errorMessage &&
                 <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>

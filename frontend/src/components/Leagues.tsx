@@ -7,7 +7,7 @@ import { League, DialogType } from '../datasources/LeagueDataSource';
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
-    padding: "15px",
+    maxWidth: "max(370px, 75vw)",
     display: "flex", 
     alignItems: "center",
     flexDirection: "column",
@@ -15,20 +15,22 @@ const LeaguesContainer = styled(Box)({
     border: "2px solid #D9D9D9", 
     boxShadow: "2px 5px #D9D9D9",
     borderRadius: "10px",
+    padding: "15px"
 });
 
 const Header = styled(Box)({
+    width: "100%",
     display: "flex",
-    justifyContent: "space-around",
-    gap: "50px",
-    alignItems: "center"
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "50px"
 });
 
 const Title = styled(Box)({
-    fontWeight: "bold",
-    fontSize: "24px",
     display: "flex",
-    alignSelf: "flex-start"
+    alignSelf: "flex-start",
+    fontWeight: "bold",
+    fontSize: "24px"
 });
 
 const CustomButton = styled(Button)({
@@ -46,10 +48,11 @@ const CustomButton = styled(Button)({
 const LeaguesContent = styled(Box)({
     height:"fit-content",
     width: "100%",
-    paddingBottom: "15px",
     display: "flex",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
+    gap: "10px",
+    paddingBottom: "15px"
 });
 
 const ListContainer= styled(Box)({
