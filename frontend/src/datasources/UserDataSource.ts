@@ -1,3 +1,4 @@
+import { League } from '../datasources/LeagueDataSource';
 
 export class UserDataSource {
 
@@ -52,23 +53,18 @@ export class UserDataSource {
         return { error: "" };
     }
 
-    public async getUserLeagueList(): Promise<
-    { error: string ; leagues: null } | {error: null ; leagues: {id: string, name: string}[] }
-    > {
+    public async getUserLeagueList(): Promise<League[] | null> {
         const response: Response = await fetch(`${this.baseURL}/leagues`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
-            }, 
+            },
             credentials: "include",
         });
 
-        if (!response.ok) {
-            const error = await response.json();
-            return { error: error.error || 'Fail to fetch leagues', leagues: null }
-        }
+        if (!response.ok)
+            return null;
 
-        const leagues = await response.json();
-        return { error: null, leagues };
+        return await response.json();
     }
 }

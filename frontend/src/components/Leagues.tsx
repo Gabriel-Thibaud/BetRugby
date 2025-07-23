@@ -125,15 +125,17 @@ export function Leagues(){
     }, [activeLeagueId])
 
     async function getLeagueList() {
-        const result = await userDataSource.getUserLeagueList();
+        const leagueList: League[] | null = await userDataSource.getUserLeagueList();
 
-        if (result.error)
-            setErrorMessage(result.error);
-        if (result.leagues){
-            setLeagueList(result.leagues);
-            if (!activeLeagueId && result.leagues.length)
-                setActiveLeagueId(result.leagues[0].id);
-        } 
+        if (!leagueList){
+            setErrorMessage("Fail to fetch leagues");
+            return;
+        }
+      
+        setLeagueList(leagueList);
+        if (!activeLeagueId && leagueList.length)
+            setActiveLeagueId(leagueList[0].id);
+         
     }
 
     function copyIdToClipBoard() {
