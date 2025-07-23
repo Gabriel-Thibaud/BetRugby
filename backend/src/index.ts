@@ -1,13 +1,26 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+import userRoutes from "./routes/user.route";
+import leagueRoutes from "./routes/league.route";
+import betRoutes from "./routes/bet.route";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
-app.get("/", (req, res) => {
-  res.send("Hello from backend eheh!");
+app.use('/api/user', userRoutes);
+app.use('/api/league', leagueRoutes);
+app.use('/api/bet', betRoutes)
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server listening on http://localhost:${PORT}`);
 });
 
-app.listen(3001, () => {
-  console.log("Server running on http://localhost:3001");
-});
+
+
