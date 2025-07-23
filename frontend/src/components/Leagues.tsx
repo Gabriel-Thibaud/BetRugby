@@ -56,10 +56,25 @@ const LeaguesContent = styled(Box)({
 });
 
 const ListContainer= styled(Box)({
-    height: "fit-content",
+    maxHeight: "25vh",
+    overflowY: "auto",
     display: "flex",
     flexDirection: "column",
-    gap: "5px"
+    gap: "5px",
+
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'transparent',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0, 0, 0, 0.1)',
+      borderRadius: '4px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    }
 });
 
 const LeagueItem = styled(Box)((props:{is_active: number}) => ({

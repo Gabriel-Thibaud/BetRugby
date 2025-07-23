@@ -13,6 +13,7 @@ const HomepageContainer = styled(Box)({
 });
 
 const LeftContent = styled(Box)({
+    height: "100%",
     display: "flex", 
     flexDirection:"column",
     justifyContent: "space-around"
