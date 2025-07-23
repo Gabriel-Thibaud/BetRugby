@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Stack, styled, TextField, Typography } from '@mui/material';
+import { Box, styled} from '@mui/material';
 import { GameBet } from './GameBet';
 
 const MyBetsContainer = styled(Box)({

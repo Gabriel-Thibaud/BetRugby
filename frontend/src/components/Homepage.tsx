@@ -1,5 +1,6 @@
 import { Box, styled } from '@mui/material';
 import { Leagues } from './Leagues';
+import { MyBets } from './MyBets';
 
 const HomepageContainer = styled(Box)({
     height: "100%",
@@ -24,6 +25,7 @@ export function Homepage() {
         <HomepageContainer>
             <LeftContent>
                 <Leagues/>
+                <MyBets/>
             </LeftContent>
         </HomepageContainer>
     );

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, MenuItem, Select, Stack, styled, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Box, Button, MenuItem, Select, styled } from '@mui/material';
 
 const BetContainer = styled(Box)({
     display: "flex",
@@ -51,12 +51,13 @@ const WarningSign = styled(Box)({
 });
 
 interface GameBetProps {
-    team1:string, team2:string
+    team1: string;
+    team2: string;
 }
 
 export function GameBet(props: GameBetProps){
     const [clicked, setClicked] = useState<string>();
-    const [diffenrenceSelected, setDifference] = useState<string>();
+    const [diffenrenceSelected, setDifference] = useState<string>("");
 
     return(
         <BetContainer>
@@ -65,15 +66,13 @@ export function GameBet(props: GameBetProps){
                 <WarningSign> ! </WarningSign>
             }
             </Box>
-            <Box sx={{display : "flex", flexDirection: "column"}}>
+            <Box sx={{display: "flex", flexDirection: "column"}}>
                 <GameBetContent>
-                    <CustomButton onClick={() => setClicked(props.team1)} 
-                        is_clicked={Number(clicked === props.team1)}> 
+                    <CustomButton onClick={() => setClicked(props.team1)} is_clicked={Number(clicked === props.team1)}> 
                         {props.team1} 
                     </CustomButton>
                     vs
-                    <CustomButton onClick={() => setClicked(props.team2)} 
-                        is_clicked={Number(clicked === props.team2)}> 
+                    <CustomButton onClick={() => setClicked(props.team2)} is_clicked={Number(clicked === props.team2)}> 
                         {props.team2}
                     </CustomButton>
                 </GameBetContent>
@@ -81,9 +80,11 @@ export function GameBet(props: GameBetProps){
                     <Box sx={{width: "70px", textAlign: "center"}}> 
                         point difference
                     </Box>
-                    <Select sx={{height:"30px", width: "90px"}}
-                    value={diffenrenceSelected}
-                    onChange={(e) => setDifference(e.target.value)}>
+                    <Select 
+                        sx={{height:"30px", width: "90px"}}
+                        value={diffenrenceSelected}
+                        onChange={(e) => setDifference(e.target.value)}
+                    >
                         <MenuItem value="0-10">0-10</MenuItem>
                         <MenuItem value="11-20">11-20</MenuItem>
                         <MenuItem value="21-30">21-30</MenuItem>
