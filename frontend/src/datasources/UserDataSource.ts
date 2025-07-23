@@ -1,3 +1,4 @@
+import { League } from '../datasources/LeagueDataSource';
 
 export class UserDataSource {
 
@@ -35,7 +36,6 @@ export class UserDataSource {
             const error = await response.json();
             return { error: error.error || 'Error during the login' }
         }
-
         return { error: "" };
     }
 
@@ -53,4 +53,18 @@ export class UserDataSource {
         return { error: "" };
     }
 
+    public async getUserLeagueList(): Promise<League[] | null> {
+        const response: Response = await fetch(`${this.baseURL}/leagues`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+        });
+
+        if (!response.ok)
+            return null;
+
+        return await response.json();
+    }
 }
