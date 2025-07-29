@@ -3,10 +3,7 @@ import { League, User } from '@prisma/client';
 import { UserService } from '../services/user.service';
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import { AuthenticatedRequest } from "../types";
-
-dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret";
 const isProduction = process.env.NODE_ENV === "production";

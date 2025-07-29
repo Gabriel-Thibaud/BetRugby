@@ -5,6 +5,7 @@ import userRoutes from "./routes/user.route";
 import leagueRoutes from "./routes/league.route";
 import betRoutes from "./routes/bet.route";
 import dotenv from "dotenv";
+import { startGameCronJobs } from "./cron/gameCron";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use('/api/bet', betRoutes)
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
+  startGameCronJobs();
 });
 
 
