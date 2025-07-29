@@ -5,10 +5,10 @@ import { Route, BrowserRouter as Router, Routes} from "react-router-dom";
 import { Homepage } from './components/Homepage';
 
 const AppContainer = styled(Box)({
-  backgroundColor: "#FBF9F9",
+  backgroundColor: "#F1F7FD",
   height: "100%",
   width: "100%",
-  color: "black", 
+  color: "#002C54",
   display: "flex", 
   flexDirection: "column"
 });

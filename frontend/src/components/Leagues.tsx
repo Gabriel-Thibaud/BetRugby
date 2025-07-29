@@ -12,10 +12,10 @@ const LeaguesContainer = styled(Box)({
     alignItems: "center",
     flexDirection: "column",
     gap: "10px",
-    border: "2px solid #D9D9D9", 
-    boxShadow: "2px 5px #D9D9D9",
+    border: "2px solid #DCE6F2",
     borderRadius: "10px",
-    padding: "15px"
+    padding: "15px",
+    backgroundColor: "#FFFFFF"
 });
 
 const Header = styled(Box)({
@@ -36,12 +36,10 @@ const Title = styled(Box)({
 const CustomButton = styled(Button)({
     backgroundColor: " #E5B226",
     color: "#FBF9F9",
-    boxShadow: "0px 3px #D9D9D9",
     borderRadius: "10px",
     fontWeight: "bold",
     "&:hover":{
-        backgroundColor: "#9E7916",
-        boxShadow: "none"
+        backgroundColor: "#9E7916"
     }
 });
 
@@ -64,7 +62,7 @@ const ListContainer= styled(Box)({
 
 const LeagueItem = styled(Box)((props:{is_active: number}) => ({
     fontWeight: props.is_active ? "bold" : "none",
-    color: props.is_active ? "#158030" : "#000000",
+    color: props.is_active ? "#158030" : "#002C54",
     cursor: "pointer",
     "&:hover": {
         fontWeight : "bold"
@@ -93,7 +91,7 @@ const IdContainer = styled(Box)({
     minWidth: "110px",
     gap:"5px",
     ":hover": {
-        color: "black",
+        color: "#002C54",
         cursor: "pointer"
     },
     "svg": {
@@ -168,7 +166,7 @@ export function Leagues(){
                         <Box sx={{fontSize:"10px", paddingRight: "1px"}}> Invite friends </Box>
                         <IdContainer onClick={() => copyIdToClipBoard()}>
                         {isCopied ?
-                            <Box sx={{color: "black"}}> ID copied ! </Box>
+                            <Box sx={{color: "#002C54"}}> ID copied ! </Box>
                             :
                             <>
                                 <Box>ID: { idPreview } </Box>

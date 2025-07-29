@@ -4,27 +4,28 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 const MenuContainer =  styled(Box)({
-    height: "35px",    
+    height: "55px",    
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottom: "2px solid #5D737E", 
-    padding: "5px"
+    padding: "5px",
+    backgroundColor: "#002C54"
 });
 
 const MenuContent = styled(Box)({
     width:"100%",
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    color: "#ffffff",
 });
 
 const OptionsContainer = styled(Box)({
     width: "85%",
     display: "flex",
     justifyContent: "center",
-    gap: "150px", 
-    color: "#E5B226",
-    fontSize: "25px"
+    gap: "150px",
+    fontSize: "22px"
 });
 
 const SignOutContainer = styled(Box)({
@@ -33,8 +34,7 @@ const SignOutContainer = styled(Box)({
     alignSelf: "flex-end",
     gap: "3px",
     cursor: "pointer",
-    color: "#D9D9D9",
-    fontSize: "20px",
+    fontSize: "18px",
     ":hover": {
         color: "#E5B226"
     },
@@ -58,7 +58,7 @@ export function Menu() {
 
     return (
         <MenuContainer>
-            <Box sx={{fontSize: "35px", color: "#E5B226"}}> BetRugby </Box>
+            <Box sx={{fontSize: "35px", color: "#ffffff", fontFamily: 'Barlow Condensed, sans-serif'}}> BetRugby </Box>
             {location.pathname !== "/" && 
                 <MenuContent>
                     <OptionsContainer>

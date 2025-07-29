@@ -9,10 +9,10 @@ const LoginContainer =  styled(Box)({
     display: "flex", 
     flexDirection: "column",
     alignContent: "center",
-    border: "2px solid #5D737E",
+    border: "2px solid #DCE6F2",
     borderRadius: "10px",
-    boxShadow: "4px 6px #5D737E",
-    padding: "15px"
+    padding: "15px",
+    backgroundColor: "#FFFFFF"
 });
 
 const FormContainer = styled(Box)({
@@ -38,7 +38,7 @@ const SwitchViewButton = styled(Box)({
     opacity: 0.6,
     ":hover": {
         cursor: "pointer", 
-        color: "#158030",
+        color: "#E5B226",
         opacity: 1
     }
 });
