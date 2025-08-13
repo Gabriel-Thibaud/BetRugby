@@ -1,22 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { LeaguesDialog } from './LeaguesDialog';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { userDataSource } from '../datasources/index';
 import { League, DialogType } from '../datasources/LeagueDataSource';
-import { blue, darkBlue, darkGold, gold, green, lightGray, red, white } from '../utils/colors';
+import { darkBlue, darkGold, gold, green, lightGray, red, white } from '../utils/colors';
+import { Button } from '../widgets/Button';
+import { Section } from '../widgets/Section';
 
-const LeaguesContainer = styled(Box)({
+const LeaguesSection = styled(Section)({
     height: "fit-content",
     maxWidth: "max(370px, 75vw)",
     display: "flex", 
     alignItems: "center",
     flexDirection: "column",
-    gap: "10px",
-    border: `2px solid ${blue}`,
-    borderRadius: "10px",
-    padding: "15px",
-    backgroundColor: white
+    gap: "10px"
 });
 
 const Header = styled(Box)({
@@ -37,8 +35,6 @@ const Title = styled(Box)({
 const CustomButton = styled(Button)({
     backgroundColor: gold,
     color: white,
-    borderRadius: "10px",
-    fontWeight: "bold",
     "&:hover":{
         backgroundColor: darkGold
     }
@@ -159,7 +155,7 @@ export function Leagues(){
     }
 
     return(
-        <LeaguesContainer>
+        <LeaguesSection>
             <Header>
                 <Title> My Leagues </Title>
                 {activeLeagueId &&
@@ -214,6 +210,6 @@ export function Leagues(){
                     onUpdate={() => onLeagueUpdate()}
                 />
             }
-        </LeaguesContainer>
+        </LeaguesSection>
     );
 }
