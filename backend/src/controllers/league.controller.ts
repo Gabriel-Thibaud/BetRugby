@@ -26,9 +26,11 @@ export class LeagueController {
         }
     }
 
-    async addUser(req: AuthenticatedRequest, res: Response) {
+    async joinLeague(req: AuthenticatedRequest, res: Response) {
         try {
-            const { leagueId, userId }: { leagueId: string, userId: string } = req.body;
+            const { leagueId }: { leagueId: string } = req.body;
+            const userId: string = req.user ? req.user.id : "";
+
             const result: { name: string, id: string } = await this.leagueService.addUser(leagueId, userId);
             return res.status(200).json(result);
         } catch (error) {
