@@ -4,6 +4,7 @@ import { LeaguesDialog } from './LeaguesDialog';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { userDataSource } from '../datasources/index';
 import { League, DialogType } from '../datasources/LeagueDataSource';
+import { blue, darkBlue, darkGold, gold, green, lightGray, red, white } from '../utils/colors';
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
@@ -12,10 +13,10 @@ const LeaguesContainer = styled(Box)({
     alignItems: "center",
     flexDirection: "column",
     gap: "10px",
-    border: "2px solid #D9D9D9", 
-    boxShadow: "2px 5px #D9D9D9",
+    border: `2px solid ${blue}`,
     borderRadius: "10px",
-    padding: "15px"
+    padding: "15px",
+    backgroundColor: white
 });
 
 const Header = styled(Box)({
@@ -34,14 +35,12 @@ const Title = styled(Box)({
 });
 
 const CustomButton = styled(Button)({
-    backgroundColor: " #E5B226",
-    color: "#FBF9F9",
-    boxShadow: "0px 3px #D9D9D9",
+    backgroundColor: gold,
+    color: white,
     borderRadius: "10px",
     fontWeight: "bold",
     "&:hover":{
-        backgroundColor: "#9E7916",
-        boxShadow: "none"
+        backgroundColor: darkGold
     }
 });
 
@@ -64,7 +63,7 @@ const ListContainer= styled(Box)({
 
 const LeagueItem = styled(Box)((props:{is_active: number}) => ({
     fontWeight: props.is_active ? "bold" : "none",
-    color: props.is_active ? "#158030" : "#000000",
+    color: props.is_active ? green : darkBlue,
     cursor: "pointer",
     "&:hover": {
         fontWeight : "bold"
@@ -84,7 +83,7 @@ const InviteInformation = styled(Box)({
     flexDirection: "column",
     alignItems: "end",
     fontSize: "12px", 
-    color: "#D9D9D9"
+    color: lightGray
 });
 
 const IdContainer = styled(Box)({
@@ -93,7 +92,7 @@ const IdContainer = styled(Box)({
     minWidth: "110px",
     gap:"5px",
     ":hover": {
-        color: "black",
+        color: darkBlue,
         cursor: "pointer"
     },
     "svg": {
@@ -168,7 +167,7 @@ export function Leagues(){
                         <Box sx={{fontSize:"10px", paddingRight: "1px"}}> Invite friends </Box>
                         <IdContainer onClick={() => copyIdToClipBoard()}>
                         {isCopied ?
-                            <Box sx={{color: "black"}}> ID copied ! </Box>
+                            <Box sx={{color: darkBlue}}> ID copied ! </Box>
                             :
                             <>
                                 <Box>ID: { idPreview } </Box>
@@ -195,7 +194,7 @@ export function Leagues(){
                         )
                     }
                     {errorMessage &&
-                        <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
+                        <Box sx={{color: red, fontSize: "12px"}}> {errorMessage} </Box>
                     }
                 </ListContainer>
                 <ButtonsContainer>
