@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Button, styled, TextField, Dialog } from '@mui/material';
+import { Box, styled, TextField, Dialog } from '@mui/material';
 import { leagueDataSource } from '../datasources/index';
 import { DialogType } from '../datasources/LeagueDataSource';
 import { darkBlue, darkGold, gold, lightGray, red, white } from '../utils/colors';
+import { Button } from '../widgets/Button';
 
 const PopUpContainer = styled(Box)({
     height: "fit-content",
@@ -17,9 +18,6 @@ const PopUpContainer = styled(Box)({
 const CustomButton = styled(Button)({
     backgroundColor: gold,
     color: white,
-    boxShadow: `0px 3px ${lightGray}`,
-    borderRadius: "10px",
-    fontWeight: "bold",
     ":hover":{
         backgroundColor: darkGold,
         boxShadow: "none"

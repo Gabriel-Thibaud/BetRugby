@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { LeaguesDialog } from './LeaguesDialog';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { userDataSource } from '../datasources/index';
 import { League, DialogType } from '../datasources/LeagueDataSource';
 import { blue, darkBlue, darkGold, gold, green, lightGray, red, white } from '../utils/colors';
+import { Button } from '../widgets/Button';
 
 const LeaguesContainer = styled(Box)({
     height: "fit-content",
@@ -37,8 +38,6 @@ const Title = styled(Box)({
 const CustomButton = styled(Button)({
     backgroundColor: gold,
     color: white,
-    borderRadius: "10px",
-    fontWeight: "bold",
     "&:hover":{
         backgroundColor: darkGold
     }

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, styled, TextField } from '@mui/material';
+import { Box, styled, TextField } from '@mui/material';
 import { userDataSource } from '../datasources/index';
 import { useNavigate } from 'react-router-dom';
-import { blue, gold, green, white, red } from '../utils/colors';
+import { blue, green, white, red, darkGreen, darkBlue } from '../utils/colors';
+import { Button } from '../widgets/Button';
 
 const LoginContainer =  styled(Box)({
     width: "40%",
@@ -30,7 +31,10 @@ const LoginButton = styled(Button)((props: {is_disabled: number}) => ({
     color: white,
     backgroundColor: green,
     opacity: props.is_disabled ? 0.5 : 1,
-    cursor: props.is_disabled ? "not-allowed" : "pointer"
+    cursor: props.is_disabled ? "not-allowed" : "pointer",
+    "&:hover":{
+        backgroundColor: darkGreen
+    }
 }));
 
 const SwitchViewButton = styled(Box)({
@@ -39,7 +43,7 @@ const SwitchViewButton = styled(Box)({
     opacity: 0.6,
     ":hover": {
         cursor: "pointer", 
-        color: gold,
+        color: darkBlue,
         opacity: 1
     }
 });
@@ -64,6 +68,10 @@ export function Login() {
         }  
         setIsEnabled(true);
     }, [email, password, confirmedPassword, username]);
+
+    useEffect(()=> {
+        setIsEnabled(isFormValid());
+    }, [isLoginView])
 
     async function handleFormSummit() {
         if (!isFormValid())
