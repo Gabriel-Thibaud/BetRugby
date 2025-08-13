@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, styled, TextField } from '@mui/material';
+import { Box, styled, TextField } from '@mui/material';
 import { userDataSource } from '../datasources/index';
 import { useNavigate } from 'react-router-dom';
+import { green, white, red, darkGreen, darkBlue } from '../utils/colors';
+import { Button } from '../widgets/Button';
+import { Section } from '../widgets/Section';
 
-const LoginContainer =  styled(Box)({
+const LoginSection =  styled(Section)({
     width: "40%",
     height: "fit-content",
     display: "flex", 
     flexDirection: "column",
     alignContent: "center",
-    border: "2px solid #5D737E",
-    borderRadius: "10px",
-    boxShadow: "4px 6px #5D737E",
-    padding: "15px"
 });
 
 const FormContainer = styled(Box)({
@@ -26,10 +25,13 @@ const FormContainer = styled(Box)({
 });
 
 const LoginButton = styled(Button)((props: {is_disabled: number}) => ({
-    color: "white",
-    backgroundColor: "#158030",
+    color: white,
+    backgroundColor: green,
     opacity: props.is_disabled ? 0.5 : 1,
-    cursor: props.is_disabled ? "not-allowed" : "pointer"
+    cursor: props.is_disabled ? "not-allowed" : "pointer",
+    "&:hover":{
+        backgroundColor: darkGreen
+    }
 }));
 
 const SwitchViewButton = styled(Box)({
@@ -38,7 +40,7 @@ const SwitchViewButton = styled(Box)({
     opacity: 0.6,
     ":hover": {
         cursor: "pointer", 
-        color: "#158030",
+        color: darkBlue,
         opacity: 1
     }
 });
@@ -63,6 +65,10 @@ export function Login() {
         }  
         setIsEnabled(true);
     }, [email, password, confirmedPassword, username]);
+
+    useEffect(()=> {
+        setIsEnabled(isFormValid());
+    }, [isLoginView])
 
     async function handleFormSummit() {
         if (!isFormValid())
@@ -97,7 +103,7 @@ export function Login() {
     }
 
     return (
-        <LoginContainer>
+        <LoginSection>
             <Box sx={{fontSize: "24px", fontWeight: "bold"}}> {isLoginView ? "Login":"Create an account"} </Box>
             <FormContainer>
                 {!isLoginView &&
@@ -105,7 +111,7 @@ export function Login() {
                         sx={{width: "200px"}}
                         label="Username" 
                         variant="outlined"
-                        value={username} 
+                        value={username}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                     /> 
                 }
@@ -135,7 +141,7 @@ export function Login() {
                     />
                 }
                 {errorMessage &&
-                    <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
+                    <Box sx={{color: red, fontSize: "12px"}}> {errorMessage} </Box>
                 }
                 <LoginButton is_disabled={Number(!isEnabled)} onClick={() => handleFormSummit()}>
                       {isLoginView ? "Login" : "Create"} 
@@ -144,6 +150,6 @@ export function Login() {
                     {isLoginView ? "Create an account" : "Sign in"}
                 </SwitchViewButton>
             </FormContainer>
-        </LoginContainer>
+        </LoginSection>
     );
 }

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Button, styled, TextField, Dialog } from '@mui/material';
+import { Box, styled, TextField, Dialog } from '@mui/material';
 import { leagueDataSource } from '../datasources/index';
 import { DialogType } from '../datasources/LeagueDataSource';
+import { darkBlue, darkGold, gold, lightGray, red, white } from '../utils/colors';
+import { Button } from '../widgets/Button';
 
 const PopUpContainer = styled(Box)({
     height: "fit-content",
@@ -9,17 +11,15 @@ const PopUpContainer = styled(Box)({
     display: "flex", 
     alignItems: "center",
     flexDirection: "column",
-    gap: "10px"
+    gap: "10px",
+    color: darkBlue
 });
 
 const CustomButton = styled(Button)({
-    backgroundColor: " #E5B226",
-    color: "#FBF9F9",
-    boxShadow: "0px 3px #D9D9D9",
-    borderRadius: "10px",
-    fontWeight: "bold",
+    backgroundColor: gold,
+    color: white,
     ":hover":{
-        backgroundColor: "rgb(140, 109, 23)",
+        backgroundColor: darkGold,
         boxShadow: "none"
     }
 });
@@ -84,7 +84,7 @@ export function LeaguesDialog(props: DialogProps){
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e.target.value)} 
             /> 
             {errorMessage &&
-                <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
+                <Box sx={{color: red, fontSize: "12px"}}> {errorMessage} </Box>
             }
             <CustomButton onClick={() => updateLeagues()}>
                 {isCreateDialog ? "Create" : "Join"}
