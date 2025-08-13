@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, styled, TextField } from '@mui/material';
 import { userDataSource } from '../datasources/index';
 import { useNavigate } from 'react-router-dom';
+import { blue, gold, green, white, red } from '../utils/colors';
 
 const LoginContainer =  styled(Box)({
     width: "40%",
@@ -9,10 +10,10 @@ const LoginContainer =  styled(Box)({
     display: "flex", 
     flexDirection: "column",
     alignContent: "center",
-    border: "2px solid #DCE6F2",
+    border: `2px solid ${blue}`,
     borderRadius: "10px",
     padding: "15px",
-    backgroundColor: "#FFFFFF"
+    backgroundColor: white
 });
 
 const FormContainer = styled(Box)({
@@ -26,8 +27,8 @@ const FormContainer = styled(Box)({
 });
 
 const LoginButton = styled(Button)((props: {is_disabled: number}) => ({
-    color: "white",
-    backgroundColor: "#158030",
+    color: white,
+    backgroundColor: green,
     opacity: props.is_disabled ? 0.5 : 1,
     cursor: props.is_disabled ? "not-allowed" : "pointer"
 }));
@@ -38,7 +39,7 @@ const SwitchViewButton = styled(Box)({
     opacity: 0.6,
     ":hover": {
         cursor: "pointer", 
-        color: "#E5B226",
+        color: gold,
         opacity: 1
     }
 });
@@ -105,7 +106,7 @@ export function Login() {
                         sx={{width: "200px"}}
                         label="Username" 
                         variant="outlined"
-                        value={username} 
+                        value={username}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                     /> 
                 }
@@ -135,7 +136,7 @@ export function Login() {
                     />
                 }
                 {errorMessage &&
-                    <Box sx={{color: "#CB1111", fontSize: "12px"}}> {errorMessage} </Box>
+                    <Box sx={{color: red, fontSize: "12px"}}> {errorMessage} </Box>
                 }
                 <LoginButton is_disabled={Number(!isEnabled)} onClick={() => handleFormSummit()}>
                       {isLoginView ? "Login" : "Create"} 
