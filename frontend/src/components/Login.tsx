@@ -2,19 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Box, styled, TextField } from '@mui/material';
 import { userDataSource } from '../datasources/index';
 import { useNavigate } from 'react-router-dom';
-import { blue, green, white, red, darkGreen, darkBlue } from '../utils/colors';
+import { green, white, red, darkGreen, darkBlue } from '../utils/colors';
 import { Button } from '../widgets/Button';
+import { Section } from '../widgets/Section';
 
-const LoginContainer =  styled(Box)({
+const LoginSection =  styled(Section)({
     width: "40%",
     height: "fit-content",
     display: "flex", 
     flexDirection: "column",
     alignContent: "center",
-    border: `2px solid ${blue}`,
-    borderRadius: "10px",
-    padding: "15px",
-    backgroundColor: white
 });
 
 const FormContainer = styled(Box)({
@@ -106,7 +103,7 @@ export function Login() {
     }
 
     return (
-        <LoginContainer>
+        <LoginSection>
             <Box sx={{fontSize: "24px", fontWeight: "bold"}}> {isLoginView ? "Login":"Create an account"} </Box>
             <FormContainer>
                 {!isLoginView &&
@@ -153,6 +150,6 @@ export function Login() {
                     {isLoginView ? "Create an account" : "Sign in"}
                 </SwitchViewButton>
             </FormContainer>
-        </LoginContainer>
+        </LoginSection>
     );
 }
