@@ -5,7 +5,7 @@ import { GameController } from "../controllers/game.controller";
 
 const router: Router = express.Router();
 
-const gameService = new GameService();
+const gameService: GameService = new GameService();
 const gameController: GameController = new GameController(gameService);
 
 router.use(authGuard);

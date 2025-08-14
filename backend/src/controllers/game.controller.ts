@@ -1,14 +1,14 @@
 import { Response, Request } from "express";
-import { AuthenticatedRequest } from "../types";
 import { GameService } from "../services/game.service";
+import { Game } from "@prisma/client";
 
 export class GameController {
     constructor(private gameService: GameService) { }
 
     async getUpcomingGames(req: Request, res: Response) {
         try {
-            const upcomingMatches = await this.gameService.getUpcomingGames()
-            return res.status(201).json(upcomingMatches);
+            const upcomingMatches: Game[] = await this.gameService.getUpcomingGames()
+            return res.status(200).json(upcomingMatches);
         } catch (error) {
             if (error instanceof Error) {
                 console.error('[GameController] getIncomingGames error:', error.message);
