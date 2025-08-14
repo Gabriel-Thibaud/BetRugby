@@ -31,7 +31,26 @@ interface Team {
 export class GameService {
     constructor(private db = prisma) { }
 
-    // fetch Women World Cup(WWC) games
+
+    // get games that start in at least 1h or more
+    async getUpcomingGames(): Promise<Game[]> {
+        const inOneHour = new Date(Date.now() + 60 * 60 * 1000);
+
+        const upcomingMatches = await prisma.game.findMany({
+            where: {
+                date: { gt: inOneHour } // "gt": greater than 
+            },
+            orderBy: {
+                date: 'asc'
+            }
+        });
+
+        return upcomingMatches;
+    }
+
+
+
+    // fetch Women World Cup(WWC) games from API (from cron)
     async fetchUpcomingWWCGamesFromAPI() {
         const response: Response = await fetch(
             `https://api.b365api.com/v3/events/upcoming?sport_id=${RUGBY_ID}&league_id=${WOMEN_WORLDCUP_ID}&token=${API_TOKEN}`,
