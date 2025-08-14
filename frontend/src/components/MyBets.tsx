@@ -1,17 +1,14 @@
 import { Box, styled} from '@mui/material';
 import { GameBet } from './GameBet';
+import { Section } from '../widgets/Section';
 
-const MyBetsContainer = styled(Box)({
+const MyBetsSection = styled(Section)({
     height: "fit-content",
     maxWidth: "max(370px, 75vw)",
     display: "flex", 
     alignItems: "center",
     flexDirection: "column",
-    gap: "10px",
-    padding: "15px",
-    border: "2px solid #D9D9D9", 
-    boxShadow: "2px 5px #D9D9D9",
-    borderRadius: "10px",
+    gap: "10px"
 });
 
 const Title = styled(Box)({
@@ -51,31 +48,32 @@ const DayContent = styled(Box)({
     alignItems: "center",
     justifyContent:"space-around",
     flexWrap: "wrap",
-    padding: "15px"
+    padding: "15px",
+    gap: "10px"
 });
 
 export function MyBets(){
 
     return(
-        <MyBetsContainer>
+        <MyBetsSection>
             <Title> My Bets </Title>
           
             <Content>
                   {/* TODO: Content has to be dynamic, so doing a loop over the days then a loop over the matchs of the day  */}
                 <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day 1  </Box>
                 <DayContent>
-                    <GameBet team1='IRL' team2='FRA'/>
-                    <GameBet team1='ECO' team2='GAL'/>
+                    <GameBet team1="Ireland Women" team2="France Women"/>
+                    <GameBet team1="Canada Women" team2="USA Women"/>
                 </DayContent>
                 <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day 2 </Box>
                 <DayContent>
-                    <GameBet team1='ANG' team2='ITA'/>
+                    <GameBet team1="England Women" team2="Ireland Women"/>
                 </DayContent>
                 <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day 3 </Box>
                 <DayContent>
-                    <GameBet team1='ANG' team2='FRA'/>
+                    <GameBet team1="England Women" team2="France Women"/>
                 </DayContent>
             </Content>
-        </MyBetsContainer>
+        </MyBetsSection>
     );
 }

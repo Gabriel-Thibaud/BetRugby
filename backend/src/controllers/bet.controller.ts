@@ -1,13 +1,15 @@
 import { Bet } from "@prisma/client";
 import { BetService } from "../services/bet.service";
 import { Request, Response } from 'express';
+import { AuthenticatedRequest } from "../types";
 
 export class BetController {
   constructor(private betService: BetService) { }
 
-  async createBet(req: Request, res: Response) {
+  async createBet(req: AuthenticatedRequest, res: Response) {
     try {
-      const { gameId, userId, pointDiff, predictedWinner }: Partial<Bet> = req.body;
+      const userId: string | undefined = req.user?.id;
+      const { gameId, pointDiff, predictedWinner }: Partial<Bet> = req.body;
       if (gameId && userId && pointDiff && predictedWinner) {
         const bet: Bet = await this.betService.createBet(gameId, userId, pointDiff, predictedWinner);
         return res.status(201).json(bet);

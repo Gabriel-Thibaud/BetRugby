@@ -76,6 +76,7 @@ const LeagueItem = styled(Box)((props:{is_active: number}) => ({
     fontWeight: props.is_active ? "bold" : "none",
     color: props.is_active ? green : darkBlue,
     cursor: "pointer",
+    paddingRight: "3px",
     "&:hover": {
         fontWeight : "bold"
     }

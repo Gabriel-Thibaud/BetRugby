@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, MenuItem, Select, styled } from '@mui/material';
+import { blue, darkBlue, green, red, white } from '../utils/colors';
+import { Country, getCountryCode } from '../utils/utilsBet';
 
 const BetContainer = styled(Box)({
     display: "flex",
@@ -17,45 +19,56 @@ const TeamsContainer = styled(Box)({
 
 const TeamButton = styled(Button)((prop:{is_clicked: number}) => ({
     width: "60px", 
-    backgroundColor : prop.is_clicked ? "#158030" : "#FBF9F9",
-    color: prop.is_clicked ? "#FBF9F9" : "#5D737E", 
-    border: "2px solid  #5D737E",
+    backgroundColor : prop.is_clicked ? green : white,
+    color: prop.is_clicked ? white : darkBlue, 
+    border: `2px solid  ${blue}`,
     borderRadius: "15px", 
     padding: "2px",
     fontWeight: "bold", 
     fontSize: "20px",
     "&:hover":{
-        backgroundColor: "#158030",
-        color : "#FBF9F9"
+        backgroundColor: green,
+        color : white
     }
 }));
 
 const PointsDifferentContainer = styled(Box)({
     display: "flex",
     alignItems: "center", 
-    fontSize: "14px"
+    fontSize: "12px"
 });
 
 const WarningSign = styled(Box)({
-    width: "25px",
-    height: "25px",
+    width: "16px",
+    height: "16px",
     display: "flex",
     justifyContent: "center",
-    backgroundColor: "#CB1111",
-    color: "#FBF9F9",
+    backgroundColor: red,
+    color: white,
     fontWeight: "bold",
     borderRadius: "30px",
-    fontSize: "20px"
+    fontSize: "14px"
 });
 
 interface GameBetProps {
-    team1: string;
-    team2: string;
+    team1: keyof typeof Country;
+    team2: keyof typeof Country;
 }
 
 export function GameBet(props: GameBetProps){
     const [clicked, setClicked] = useState<string>();
     const [diffenrenceSelected, setDifference] = useState<string>("");
+
+    useEffect(() => {
+
+        if (!!clicked && !!diffenrenceSelected)
+            handleNewBet().then();
+
+    }, [clicked, diffenrenceSelected])
+
+    async function handleNewBet(){
+        
+    }
 
     return(
         <BetContainer>
@@ -67,11 +80,11 @@ export function GameBet(props: GameBetProps){
             <Box sx={{display: "flex", flexDirection: "column"}}>
                 <TeamsContainer>
                     <TeamButton onClick={() => setClicked(props.team1)} is_clicked={Number(clicked === props.team1)}> 
-                        {props.team1} 
+                        {getCountryCode(props.team1)} 
                     </TeamButton>
                     vs
                     <TeamButton onClick={() => setClicked(props.team2)} is_clicked={Number(clicked === props.team2)}> 
-                        {props.team2}
+                        {getCountryCode(props.team2)}
                     </TeamButton>
                 </TeamsContainer>
                 <PointsDifferentContainer>
