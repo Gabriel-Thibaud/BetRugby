@@ -1,3 +1,4 @@
+import { fetchWithAuth } from "../utils/utilsAuth";
 
 export type League = {
     id: string;
@@ -14,7 +15,7 @@ export class LeagueDataSource {
     baseURL: string = "http://localhost:3001/api/league";
 
     public async createLeague(leagueName: string): Promise<{ error: string }> {
-        const response: Response = await fetch(`${this.baseURL}/create`, {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/create`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -32,7 +33,7 @@ export class LeagueDataSource {
     }
 
     public async joinLeague(leagueId: string): Promise<{ error: string }> {
-        const response: Response = await fetch(`${this.baseURL}/join`, {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/join`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

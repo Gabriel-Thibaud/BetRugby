@@ -1,9 +1,10 @@
 import { Box, styled } from '@mui/material';
 import { Menu } from './components/Menu';
 import { Login } from './components/Login';
-import { Route, BrowserRouter as Router, Routes} from "react-router-dom";
+import { Navigate, Route, BrowserRouter as Router, Routes} from "react-router-dom";
 import { Homepage } from './components/Homepage';
 import { darkBlue, lightBlue } from './utils/colors';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const AppContainer = styled(Box)({
   backgroundColor: lightBlue,
@@ -35,13 +36,14 @@ function App() {
         <Menu/>
         <AppContent>
           <Routes>
+            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/" element={
               <>
                 <Box sx={{width: "50%", textAlign: "center", whiteSpace: "pre-line"}}> {description} </Box>
                 <Login/>
               </>
             }/>
-            <Route path="/home" element={<Homepage/>}/>
+            <Route path="/home" element={<ProtectedRoute><Homepage/></ProtectedRoute>}/>
           </Routes>
         </AppContent>
       </AppContainer>
