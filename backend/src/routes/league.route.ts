@@ -11,6 +11,8 @@ const leagueController = new LeagueController(leagueService);
 
 router.post('/create', (req, res) => leagueController.createLeague(req, res));
 router.post('/join', (req, res) => leagueController.joinLeague(req, res));
+
+// TODO: check if this endpoint is used
 router.get('/users/:leagueId', (req, res) => leagueController.getUsers(req, res));
 
 export default router;

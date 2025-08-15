@@ -33,22 +33,35 @@ export class GameService {
 
 
     // get games that start in at least 1h or more
-    async getUpcomingGames(): Promise<Game[]> {
+    async getUpcomingGameIDs(): Promise<{ id: string, date: Date }[]> {
         const inOneHour: Date = new Date(Date.now() + 60 * 60 * 1000);
 
-        const upcomingMatches: Game[] = await prisma.game.findMany({
+        const upcomingGameIDs: { id: string, date: Date }[] = await prisma.game.findMany({
             where: {
                 date: { gt: inOneHour } // "gt": greater than 
+            },
+            select: {
+                id: true,
+                date: true
             },
             orderBy: {
                 date: 'asc'
             }
         });
 
-        return upcomingMatches;
+        return upcomingGameIDs;
     }
 
+    async getGameByID(gameID: string): Promise<Game | null> {
+        const game: Game | null = await this.db.game.findUnique({
+            where: { id: gameID }
+        });
 
+        if (!game)
+            throw new Error('Game not found');
+
+        return game;
+    }
 
     // fetch Women World Cup(WWC) games from API (from cron)
     async fetchUpcomingWWCGamesFromAPI() {

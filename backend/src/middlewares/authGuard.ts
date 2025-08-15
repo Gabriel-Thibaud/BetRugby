@@ -1,4 +1,4 @@
-import { Response, NextFunction, Request } from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { AuthenticatedRequest } from "../types";
 
@@ -13,10 +13,10 @@ export function authGuard(req: AuthenticatedRequest, res: Response, next: NextFu
     try {
         const payload = jwt.verify(token, JWT_SECRET) as { userId: string };
         req.user = { id: payload.userId };
-        next(); // next thing to do -> contoller
+        next(); // next thing to do -> controller
     } catch (err: any) {
         if (err.name === 'TokenExpiredError')
-            return res.status(401).json({ error: 'Xxpired token' });
+            return res.status(401).json({ error: 'Expired token' });
 
         res.status(401).json({ error: "Invalid token" });
     }
