@@ -4,7 +4,8 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.route";
 import leagueRoutes from "./routes/league.route";
 import betRoutes from "./routes/bet.route";
-import gameRoutes from "./routes/game.route"
+import gameRoutes from "./routes/game.route";
+import authRoutes from "./routes/auth.route";
 import dotenv from "dotenv";
 import { startGameCronJobs } from "./cron/gameCron";
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
+app.use("/api/auth", authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/league', leagueRoutes);
 app.use('/api/bet', betRoutes);
