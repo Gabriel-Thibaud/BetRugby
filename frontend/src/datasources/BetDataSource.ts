@@ -1,3 +1,5 @@
+import { fetchWithAuth } from "../utils/utilsAuth";
+
 export type Bet = {
     id: string,
     game: string,
@@ -13,7 +15,7 @@ export class BetDataSource {
 
     public async createBet(gameId: string, pointDiff: number, predictedWinner: string): Promise<{ error: string }> {
 
-        const response: Response = await fetch(`${this.baseURL}/create`, {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/create`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

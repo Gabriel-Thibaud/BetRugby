@@ -1,3 +1,4 @@
+import { fetchWithAuth } from "../utils/utilsAuth";
 import { Bet } from "./BetDataSource";
 
 export type Game = {
@@ -16,7 +17,7 @@ export class GameDataSource {
 
     public async getUpcomingGameIDs(): Promise<{ id: string, date: string }[]> {
 
-        const response: Response = await fetch(`${this.baseURL}/upcoming`, {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/upcoming`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +32,7 @@ export class GameDataSource {
     }
 
     public async getGameByID(gameId: string): Promise<Game | null> {
-        const response: Response = await fetch(`${this.baseURL}/${gameId}`, {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/${gameId}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
