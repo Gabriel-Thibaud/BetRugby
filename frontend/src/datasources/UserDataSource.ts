@@ -1,4 +1,5 @@
 import { League } from '../datasources/LeagueDataSource';
+import { fetchWithAuth } from '../utils/utilsAuth';
 
 export class UserDataSource {
 
@@ -54,7 +55,7 @@ export class UserDataSource {
     }
 
     public async getUserLeagueList(): Promise<League[] | null> {
-        const response: Response = await fetch(`${this.baseURL}/leagues`, {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/leagues`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
