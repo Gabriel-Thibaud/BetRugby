@@ -1,7 +1,7 @@
 
 export type League = {
-  id: string;
-  name: string;
+    id: string;
+    name: string;
 };
 
 export enum DialogType {
@@ -20,14 +20,14 @@ export class LeagueDataSource {
                 'Content-Type': 'application/json',
             },
             credentials: "include",
-            body: JSON.stringify({name : leagueName})
+            body: JSON.stringify({ name: leagueName })
         });
 
         if (!response.ok) {
             const error = await response.json();
-            return { error: error.error || 'Error in league creation'}
+            return { error: error.error || 'Error in league creation' }
         }
-        
+
         return { error: "" };
     }
 
@@ -38,12 +38,12 @@ export class LeagueDataSource {
                 'Content-Type': 'application/json',
             },
             credentials: "include",
-            body: JSON.stringify({leagueId})
+            body: JSON.stringify({ leagueId })
         });
 
         if (!response.ok) {
             const error = await response.json();
-            return { error: error.error || "Unable to join league"}
+            return { error: error.error || "Unable to join league" }
         }
 
         return { error: "" };

@@ -5,7 +5,7 @@ import { ulid } from 'ulid';
 export class BetService {
     constructor(private db = prisma) { }
 
-    async createBet(gameId: string, userId: string, pointDiff: number, predictedWinner: string): Promise<Bet> {
+    async createBet(gameId: string, userId: string, pointDiff: number, predictedWinner: string): Promise<string> {
         const game: Game | null = await this.db.game.findUnique({ where: { id: gameId } });
         if (!game)
             throw new Error("Game not found");
@@ -19,7 +19,7 @@ export class BetService {
                 predictedWinner
             }
         });
-        return bet;
+        return bet.id;
     }
 
     async updateStatus(betId: string, status: string): Promise<Bet> {

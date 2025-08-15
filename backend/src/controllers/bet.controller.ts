@@ -11,8 +11,8 @@ export class BetController {
       const userId: string | undefined = req.user?.id;
       const { gameId, pointDiff, predictedWinner }: Partial<Bet> = req.body;
       if (gameId && userId && pointDiff && predictedWinner) {
-        const bet: Bet = await this.betService.createBet(gameId, userId, pointDiff, predictedWinner);
-        return res.status(201).json(bet);
+        const betId: string = await this.betService.createBet(gameId, userId, pointDiff, predictedWinner);
+        return res.status(201).json(betId);
       }
     } catch (error) {
       if (error instanceof Error) {

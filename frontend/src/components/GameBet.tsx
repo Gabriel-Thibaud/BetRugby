@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, MenuItem, Select, styled } from '@mui/material';
 import { blue, darkBlue, green, red, white } from '../utils/colors';
-import { Country, getCountryCode } from '../utils/utilsBet';
+import { getCountryCode } from '../utils/utilsBet';
+import { betDataSource, gameDataSource } from '../datasources/index';
+import { Game } from '../datasources/GameDataSource';
 
 const BetContainer = styled(Box)({
     display: "flex",
@@ -51,40 +53,49 @@ const WarningSign = styled(Box)({
 });
 
 interface GameBetProps {
-    team1: keyof typeof Country;
-    team2: keyof typeof Country;
+    gameID: string
 }
 
 export function GameBet(props: GameBetProps){
-    const [clicked, setClicked] = useState<string>();
-    const [diffenrenceSelected, setDifference] = useState<string>("");
+    const [predictedWinner, setPredictedWinner] = useState<string>();
+    const [diffenrenceSelected, setDifference] = useState<number|string>("");
+    const [homeTeam, setHomeTeam] = useState<string|null>(null);
+    const [awayTeam, setAwayTeam] = useState<string|null>(null);
+
+    useEffect(()=> {
+        gameDataSource.getGameByID(props.gameID).then((game: Game|null)=> {
+            if(!game)
+                return;
+            setHomeTeam(game.homeTeam);
+            setAwayTeam(game.awayTeam);
+        });
+    }, [])
 
     useEffect(() => {
 
-        if (!!clicked && !!diffenrenceSelected)
-            handleNewBet().then();
+        if (!!predictedWinner && !!diffenrenceSelected && typeof diffenrenceSelected == 'number')
+            betDataSource.createBet(props.gameID, diffenrenceSelected, predictedWinner)
 
-    }, [clicked, diffenrenceSelected])
+    }, [predictedWinner, diffenrenceSelected])
 
-    async function handleNewBet(){
-        
-    }
+    if (!homeTeam || !awayTeam)
+        return <></>;
 
     return(
         <BetContainer>
             <Box sx={{width: "20px"}}>
-            {(!diffenrenceSelected || !clicked) && 
+            {(!diffenrenceSelected || !predictedWinner) && 
                 <WarningSign> ! </WarningSign>
             }
             </Box>
             <Box sx={{display: "flex", flexDirection: "column"}}>
                 <TeamsContainer>
-                    <TeamButton onClick={() => setClicked(props.team1)} is_clicked={Number(clicked === props.team1)}> 
-                        {getCountryCode(props.team1)} 
+                    <TeamButton onClick={() => setPredictedWinner(homeTeam)} is_clicked={Number(predictedWinner === homeTeam)}> 
+                        {getCountryCode(homeTeam)} 
                     </TeamButton>
                     vs
-                    <TeamButton onClick={() => setClicked(props.team2)} is_clicked={Number(clicked === props.team2)}> 
-                        {getCountryCode(props.team2)}
+                    <TeamButton onClick={() => setPredictedWinner(awayTeam)} is_clicked={Number(predictedWinner === awayTeam)}> 
+                        {getCountryCode(awayTeam)}
                     </TeamButton>
                 </TeamsContainer>
                 <PointsDifferentContainer>
@@ -96,10 +107,10 @@ export function GameBet(props: GameBetProps){
                         value={diffenrenceSelected}
                         onChange={(e) => setDifference(e.target.value)}
                     >
-                        <MenuItem value="0-10">0-10</MenuItem>
-                        <MenuItem value="11-20">11-20</MenuItem>
-                        <MenuItem value="21-30">21-30</MenuItem>
-                        <MenuItem value="31+">31+</MenuItem>
+                        <MenuItem value={10}>0-10</MenuItem>
+                        <MenuItem value={20}>11-20</MenuItem>
+                        <MenuItem value={30}>21-30</MenuItem>
+                        <MenuItem value={31}>31+</MenuItem>
                     </Select>
                 </PointsDifferentContainer>
             </Box>

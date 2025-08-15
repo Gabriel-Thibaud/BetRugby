@@ -45,7 +45,8 @@ export class LeagueService {
             include: { users: true },
         });
 
-        if (!league) throw new Error('League not found');
+        if (!league)
+            throw new Error('League not found');
         return league.users;
     }
 }

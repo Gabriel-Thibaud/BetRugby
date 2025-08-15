@@ -18,6 +18,8 @@ export enum Country {
     "Brazil Women" = "BRA"
 }
 
-export function getCountryCode(countryName: keyof typeof Country): string {
-    return Country[countryName];
+export function getCountryCode(countryName: string): string | undefined {
+    if (countryName in Country)
+        return Country[countryName as keyof typeof Country];
+    return undefined;
 }

@@ -1,6 +1,9 @@
 import { Box, styled} from '@mui/material';
 import { GameBet } from './GameBet';
 import { Section } from '../widgets/Section';
+import { useEffect, useState } from 'react';
+import { gameDataSource } from '../datasources/index';
+import React from 'react';
 
 const MyBetsSection = styled(Section)({
     height: "fit-content",
@@ -54,25 +57,41 @@ const DayContent = styled(Box)({
 
 export function MyBets(){
 
+    const [gamesByDays, setGamesByDays] = useState<Map<string, string[]>>(new Map());
+
+    useEffect(() => {
+        getUpcomingGameIDs().then((gamesByDays: Map<string, string[]>) => setGamesByDays(gamesByDays));
+    }, []);
+
+    async function getUpcomingGameIDs(): Promise<Map<string, string[]>>{
+        const upcomingGameIDs: { id: string, date: string }[] =  await gameDataSource.getUpcomingGameIDs();
+        const gamesByDays: Map<string, string[]> = new Map<string, string[]>();
+        for(const game of upcomingGameIDs){
+            const dateObj: Date = new Date(game.date);
+            const gameDay: string = dateObj.toISOString().split("T")[0]; // return the date without the time
+            if (!gamesByDays.has(gameDay))
+                gamesByDays.set(gameDay, []);
+            gamesByDays.get(gameDay)!.push(game.id); // non null assertion ONLY because the check is made beforre
+        }
+        return gamesByDays;
+    }
+
+    let dayCounter = 1;
     return(
         <MyBetsSection>
             <Title> My Bets </Title>
-          
             <Content>
-                  {/* TODO: Content has to be dynamic, so doing a loop over the days then a loop over the matchs of the day  */}
-                <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day 1  </Box>
-                <DayContent>
-                    <GameBet team1="Ireland Women" team2="France Women"/>
-                    <GameBet team1="Canada Women" team2="USA Women"/>
-                </DayContent>
-                <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day 2 </Box>
-                <DayContent>
-                    <GameBet team1="England Women" team2="Ireland Women"/>
-                </DayContent>
-                <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day 3 </Box>
-                <DayContent>
-                    <GameBet team1="England Women" team2="France Women"/>
-                </DayContent>
+                {/* TODO: check with Cams, how to define Day 1 , 2, 3 -> enum ? day1 is the August 22nd ? */}
+                {[...gamesByDays.entries()].map(([date, games]) => (
+                    <React.Fragment key={date}>
+                        <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day {dayCounter ++} </Box>
+                        <DayContent>
+                            { games.map((id: string) => 
+                                <GameBet key={id} gameID={id}/>         
+                            )}
+                        </DayContent>
+                    </React.Fragment>
+                ))}
             </Content>
         </MyBetsSection>
     );
