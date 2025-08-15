@@ -1,6 +1,7 @@
 import { Box, styled } from '@mui/material';
-import { Leagues } from './Leagues';
-import { MyBets } from './MyBets';
+import { Leagues } from './Leagues/Leagues';
+import { MyBets } from './Bets/MyBets';
+import { Leaderboard } from './Leaderboard/Leaderboard';
 
 const HomepageContainer = styled(Box)({
     height: "100%",
@@ -13,9 +14,20 @@ const HomepageContainer = styled(Box)({
 
 const LeftContent = styled(Box)({
     height: "100%",
+    maxWidth: "max(370px, 50vw)",
+    display: "flex",
+    flexDirection:"column",
+    justifyContent: "space-around",
+    padding: "10px"
+});
+
+const RightContent = styled(Box)({
+    height: "100%",
+    maxWidth: "max(370px, 50vw)",
     display: "flex", 
     flexDirection:"column",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    padding: "10px"
 });
 
 
@@ -27,6 +39,9 @@ export function Homepage() {
                 <Leagues/>
                 <MyBets/>
             </LeftContent>
+            <RightContent>
+                <Leaderboard/>
+            </RightContent>
         </HomepageContainer>
     );
 }

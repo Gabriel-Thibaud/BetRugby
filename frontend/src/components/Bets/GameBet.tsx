@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, MenuItem, Select, styled } from '@mui/material';
-import { blue, darkBlue, green, red, white } from '../utils/colors';
-import { getCountryCode } from '../utils/utilsBet';
-import { betDataSource, gameDataSource } from '../datasources/index';
-import { Game } from '../datasources/GameDataSource';
+import { blue, darkBlue, green, red, white } from '../../utils/colors';
+import { getCountryCode } from '../../utils/utilsBet';
+import { betDataSource, gameDataSource } from '../../datasources/index';
+import { Game } from '../../datasources/GameDataSource';
 
 const BetContainer = styled(Box)({
     display: "flex",
