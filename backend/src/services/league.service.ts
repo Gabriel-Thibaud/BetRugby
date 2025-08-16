@@ -38,15 +38,4 @@ export class LeagueService {
             },
         });
     }
-
-    async getUsers(leagueId: string) {
-        const league = await this.db.league.findUnique({
-            where: { id: leagueId },
-            include: { users: true },
-        });
-
-        if (!league)
-            throw new Error('League not found');
-        return league.users;
-    }
 }

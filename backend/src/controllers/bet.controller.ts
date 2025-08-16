@@ -45,22 +45,4 @@ export class BetController {
     }
   }
 
-  async updateStatus(req: Request, res: Response) {
-    try {
-      const { id, status }: Partial<Bet> = req.body;
-      if (id && status) {
-        const updatedBet: Bet = await this.betService.updateStatus(id, status);
-        return res.status(200).json(updatedBet);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('[BetController] updateBetStatus error:', error.message);
-        return res.status(500).json({ error: 'Internal server error' });
-      } else {
-        console.error('[BetController] unknown error:', error);
-        return res.status(500).json({ error: 'Unexpected error occurred' });
-      }
-    }
-  }
-
 }
