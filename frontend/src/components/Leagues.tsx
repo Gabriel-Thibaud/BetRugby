@@ -151,7 +151,6 @@ export function Leagues(props: LeaguesProps){
         setLeagueList(leagueList);
         if (!props.activeLeagueId && leagueList.length)
             props.onLeagueUpdate(leagueList[0].id);
-         
     }
 
     function copyIdToClipBoard() {

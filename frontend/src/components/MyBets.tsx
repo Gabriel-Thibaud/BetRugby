@@ -91,7 +91,7 @@ export function MyBets(props: MyBetsProps){
                         <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day {dayCounter ++} </Box>
                         <DayContent>
                             { games.map((id: string) => 
-                                <GameBet key={id} gameID={id} activeLeagueId={props.activeLeagueId}/>         
+                                <GameBet key={id} gameId={id} activeLeagueId={props.activeLeagueId}/>         
                             )}
                         </DayContent>
                     </React.Fragment>

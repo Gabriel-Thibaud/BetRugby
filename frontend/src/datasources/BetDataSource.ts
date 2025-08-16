@@ -45,9 +45,4 @@ export class BetDataSource {
 
         return await response.json();
     }
-
-    public async updateBetStatus(betID: string): Promise<{ error: string }> {
-
-        return { error: "" };
-    }
 }
