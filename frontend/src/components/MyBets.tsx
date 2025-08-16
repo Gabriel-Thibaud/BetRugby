@@ -55,7 +55,11 @@ const DayContent = styled(Box)({
     gap: "10px"
 });
 
-export function MyBets(){
+interface MyBetsProps{
+    activeLeagueId: string
+}
+
+export function MyBets(props: MyBetsProps){
 
     const [gamesByDays, setGamesByDays] = useState<Map<string, string[]>>(new Map());
 
@@ -87,7 +91,7 @@ export function MyBets(){
                         <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day {dayCounter ++} </Box>
                         <DayContent>
                             { games.map((id: string) => 
-                                <GameBet key={id} gameID={id}/>         
+                                <GameBet key={id} gameID={id} activeLeagueId={props.activeLeagueId}/>         
                             )}
                         </DayContent>
                     </React.Fragment>

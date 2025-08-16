@@ -4,6 +4,7 @@ import { blue, darkBlue, green, red, white } from '../utils/colors';
 import { getCountryCode } from '../utils/utilsBet';
 import { betDataSource, gameDataSource } from '../datasources/index';
 import { Game } from '../datasources/GameDataSource';
+import { Bet } from '../datasources/BetDataSource';
 
 const BetContainer = styled(Box)({
     display: "flex",
@@ -53,15 +54,16 @@ const WarningSign = styled(Box)({
 });
 
 interface GameBetProps {
-    gameID: string
+    gameID: string,
+    activeLeagueId: string
 }
 
 export function GameBet(props: GameBetProps){
-    const [predictedWinner, setPredictedWinner] = useState<string>();
-    const [diffenrenceSelected, setDifference] = useState<number|string>("");
     const [homeTeam, setHomeTeam] = useState<string|null>(null);
     const [awayTeam, setAwayTeam] = useState<string|null>(null);
-
+    const [predictedWinner, setPredictedWinner] = useState<string>();
+    const [diffenrenceSelected, setDifference] = useState<number|string>("");
+   
     useEffect(()=> {
         gameDataSource.getGameByID(props.gameID).then((game: Game|null)=> {
             if(!game)
@@ -69,12 +71,20 @@ export function GameBet(props: GameBetProps){
             setHomeTeam(game.homeTeam);
             setAwayTeam(game.awayTeam);
         });
+
+        // check if user has already bet on the game
+        betDataSource.getBet(props.activeLeagueId, props.gameID).then((bet: Bet|null) =>{
+            if (!bet)
+                return;
+            setDifference(bet.pointDiff);
+            setPredictedWinner(bet.predictedWinner);
+        });
     }, [])
 
     useEffect(() => {
 
         if (!!predictedWinner && !!diffenrenceSelected && typeof diffenrenceSelected == 'number')
-            betDataSource.createBet(props.gameID, diffenrenceSelected, predictedWinner)
+            betDataSource.createBet(props.activeLeagueId, props.gameID, diffenrenceSelected, predictedWinner)
 
     }, [predictedWinner, diffenrenceSelected])
 

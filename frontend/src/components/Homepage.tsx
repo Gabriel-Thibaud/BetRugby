@@ -1,6 +1,7 @@
 import { Box, styled } from '@mui/material';
 import { Leagues } from './Leagues';
 import { MyBets } from './MyBets';
+import { useState } from 'react';
 
 const HomepageContainer = styled(Box)({
     height: "100%",
@@ -21,11 +22,13 @@ const LeftContent = styled(Box)({
 
 export function Homepage() {
     
+    const [activeLeagueId, setActiveLeagueId] = useState <string>("");
+
     return (
         <HomepageContainer>
             <LeftContent>
-                <Leagues/>
-                <MyBets/>
+                <Leagues activeLeagueId={activeLeagueId} onLeagueUpdate={(leagueId: string) => setActiveLeagueId(leagueId)}/>
+                <MyBets activeLeagueId={activeLeagueId}/>
             </LeftContent>
         </HomepageContainer>
     );

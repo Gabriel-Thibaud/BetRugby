@@ -30,15 +30,21 @@ model League {
   id           String   @id 
   name         String    
   users        User[]
+  bets         Bet[]
 }
 
 model Bet {
   id              String   @id    
   gameId          String
-  userId          String     
+  userId          String
+  leagueId        String
   pointDiff       Int
   status          String?
   predictedWinner String
-  game            Game     @relation(fields: [gameId], references: [id])   
+
+  game            Game     @relation(fields: [gameId], references: [id])
   user            User     @relation(fields: [userId], references: [id])
+  league          League   @relation(fields: [leagueId], references: [id])
+
+  @@unique([userId, gameId, leagueId])
 }
