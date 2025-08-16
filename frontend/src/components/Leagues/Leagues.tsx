@@ -113,10 +113,14 @@ const IdContainer = styled(Box)({
     }
 });
 
-export function Leagues(){
+interface LeaguesProps {
+    activeLeagueId: string;
+    onLeagueUpdate: (leagueId: string) => void
+}
+
+export function Leagues(props: LeaguesProps){
 
     const [leagueList, setLeagueList] = useState <League[]>([]);
-    const [activeLeagueId, setActiveLeagueId] = useState <string>("");
     const [idPreview, setIdPreview] = useState <string>("");
     const [dialogType, setDialogType] = useState <DialogType>(DialogType.CREATE);
     const [isCopied, setIsCopied] = useState <boolean>(false);
@@ -128,12 +132,13 @@ export function Leagues(){
     },[]);
 
     useEffect(()=> {
-        if (!activeLeagueId)
+        if (!props.activeLeagueId)
             return;
 
-        const preview: string = `${activeLeagueId.substring(0,5)}...${activeLeagueId.substring(activeLeagueId.length - 3)}`;
+        const preview: string = 
+        `${props.activeLeagueId.substring(0,5)}...${props.activeLeagueId.substring(props.activeLeagueId.length - 3)}`;
         setIdPreview(preview);
-    }, [activeLeagueId])
+    }, [props.activeLeagueId])
 
     async function getLeagueList() {
         const leagueList: League[] | null = await userDataSource.getUserLeagueList();
@@ -144,16 +149,15 @@ export function Leagues(){
         }
       
         setLeagueList(leagueList);
-        if (!activeLeagueId && leagueList.length)
-            setActiveLeagueId(leagueList[0].id);
-         
+        if (!props.activeLeagueId && leagueList.length)
+            props.onLeagueUpdate(leagueList[0].id);
     }
 
     function copyIdToClipBoard() {
-        if (!activeLeagueId || isCopied)
+        if (!props.activeLeagueId || isCopied)
             return;
    
-        navigator.clipboard.writeText(activeLeagueId);   
+        navigator.clipboard.writeText(props.activeLeagueId);   
         setIsCopied(true);
         setTimeout(() => {
             setIsCopied(false);
@@ -174,7 +178,7 @@ export function Leagues(){
         <LeaguesSection>
             <Header>
                 <Title> My Leagues </Title>
-                {activeLeagueId &&
+                {props.activeLeagueId &&
                     <InviteInformation> 
                         <Box sx={{fontSize:"10px", paddingRight: "1px"}}> Invite friends </Box>
                         <IdContainer onClick={() => copyIdToClipBoard()}>
@@ -198,8 +202,8 @@ export function Leagues(){
                         leagueList.map((league: League) =>
                             <LeagueItem  
                                 key={league.id}
-                                onClick={() => setActiveLeagueId(league.id)} 
-                                is_active={Number(activeLeagueId === league.id)}
+                                onClick={() => props.onLeagueUpdate(league.id)} 
+                                is_active={Number(props.activeLeagueId === league.id)}
                             > 
                                 {league.name}
                             </LeagueItem >

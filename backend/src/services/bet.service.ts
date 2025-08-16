@@ -5,16 +5,28 @@ import { ulid } from 'ulid';
 export class BetService {
     constructor(private db = prisma) { }
 
-    async createBet(gameId: string, userId: string, pointDiff: number, predictedWinner: string): Promise<string> {
+    async createBet(userId: string, leagueId: string, gameId: string, pointDiff: number, predictedWinner: string): Promise<string> {
         const game: Game | null = await this.db.game.findUnique({ where: { id: gameId } });
         if (!game)
             throw new Error("Game not found");
 
-        const bet: Bet = await this.db.bet.create({
-            data: {
+        const bet = await this.db.bet.upsert({
+            where: {
+                userId_gameId_leagueId: {
+                    userId,
+                    gameId,
+                    leagueId
+                }
+            },
+            update: {
+                pointDiff,
+                predictedWinner
+            },
+            create: {
                 id: ulid(),
-                gameId,
                 userId,
+                gameId,
+                leagueId,
                 pointDiff,
                 predictedWinner
             }
@@ -29,4 +41,17 @@ export class BetService {
         });
     }
 
+    async getBet(userId: string, leagueId: string, gameId: string): Promise<Bet | null> {
+        const bet: Bet | null = await this.db.bet.findUnique({
+            where: {
+                userId_gameId_leagueId: {
+                    userId,
+                    gameId,
+                    leagueId
+                }
+            }
+        });
+
+        return bet;
+    }
 }

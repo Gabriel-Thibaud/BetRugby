@@ -4,6 +4,7 @@ import { blue, darkBlue, green, red, white } from '../../utils/colors';
 import { getCountryCode } from '../../utils/utilsBet';
 import { betDataSource, gameDataSource } from '../../datasources/index';
 import { Game } from '../../datasources/GameDataSource';
+import { Bet } from '../../datasources/BetDataSource';
 
 const BetContainer = styled(Box)({
     display: "flex",
@@ -53,28 +54,48 @@ const WarningSign = styled(Box)({
 });
 
 interface GameBetProps {
-    gameID: string
+    gameId: string,
+    activeLeagueId: string
 }
 
 export function GameBet(props: GameBetProps){
-    const [predictedWinner, setPredictedWinner] = useState<string>();
-    const [diffenrenceSelected, setDifference] = useState<number|string>("");
     const [homeTeam, setHomeTeam] = useState<string|null>(null);
     const [awayTeam, setAwayTeam] = useState<string|null>(null);
-
+    const [predictedWinner, setPredictedWinner] = useState<string>("");
+    const [diffenrenceSelected, setDifference] = useState<number|string>("");
+   
     useEffect(()=> {
-        gameDataSource.getGameByID(props.gameID).then((game: Game|null)=> {
-            if(!game)
+        if (!props.gameId)
+            return;
+
+        gameDataSource.getGameByID(props.gameId).then((game: Game|null) => {
+            if (!game)
                 return;
             setHomeTeam(game.homeTeam);
             setAwayTeam(game.awayTeam);
         });
     }, [])
 
+    useEffect(()=> {
+        if (!props.activeLeagueId)
+            return;
+
+        // check if user has already bet on the game
+        betDataSource.getBet(props.activeLeagueId, props.gameId).then((bet: Bet|null) => {
+            if (!bet) {
+                setPredictedWinner("");
+                setDifference("");
+                return;
+            }
+            setDifference(bet.pointDiff);
+            setPredictedWinner(bet.predictedWinner);
+        });
+    }, [props.activeLeagueId])
+
     useEffect(() => {
 
         if (!!predictedWinner && !!diffenrenceSelected && typeof diffenrenceSelected == 'number')
-            betDataSource.createBet(props.gameID, diffenrenceSelected, predictedWinner)
+            betDataSource.createBet(props.activeLeagueId, props.gameId, diffenrenceSelected, predictedWinner)
 
     }, [predictedWinner, diffenrenceSelected])
 

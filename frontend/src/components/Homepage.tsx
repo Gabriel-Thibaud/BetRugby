@@ -33,11 +33,13 @@ const RightContent = styled(Box)({
 
 export function Homepage() {
     
+    const [activeLeagueId, setActiveLeagueId] = useState <string>("");
+
     return (
         <HomepageContainer>
             <LeftContent>
-                <Leagues/>
-                <MyBets/>
+                <Leagues activeLeagueId={activeLeagueId} onLeagueUpdate={(leagueId: string) => setActiveLeagueId(leagueId)}/>
+                <MyBets activeLeagueId={activeLeagueId}/>
             </LeftContent>
             <RightContent>
                 <Leaderboard/>

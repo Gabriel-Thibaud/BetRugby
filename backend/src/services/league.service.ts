@@ -11,9 +11,9 @@ export class LeagueService {
                 id: ulid(),
                 name,
                 users: {
-                    connect: { id: userId },
-                },
-            },
+                    connect: { id: userId }
+                }
+            }
         });
     }
 
@@ -22,9 +22,9 @@ export class LeagueService {
             where: { id: leagueId },
             data: {
                 users: {
-                    connect: { id: userId },
-                },
-            },
+                    connect: { id: userId }
+                }
+            }
         });
     }
 
@@ -33,20 +33,9 @@ export class LeagueService {
             where: { id: leagueId },
             data: {
                 users: {
-                    disconnect: { id: userId },
-                },
-            },
+                    disconnect: { id: userId }
+                }
+            }
         });
-    }
-
-    async getUsers(leagueId: string) {
-        const league = await this.db.league.findUnique({
-            where: { id: leagueId },
-            include: { users: true },
-        });
-
-        if (!league)
-            throw new Error('League not found');
-        return league.users;
     }
 }
