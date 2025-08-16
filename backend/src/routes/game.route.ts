@@ -9,6 +9,7 @@ const gameService: GameService = new GameService();
 const gameController: GameController = new GameController(gameService);
 
 router.use(authGuard);
-router.get('/upcoming', (req, res) => gameController.getUpcomingGames(req, res))
+router.get('/upcoming', (req, res) => gameController.getUpcomingGameIDs(req, res));
+router.get('/:gameId', (req, res) => gameController.getGameByID(req, res));
 
 export default router;

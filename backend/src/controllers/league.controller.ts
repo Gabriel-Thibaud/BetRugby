@@ -61,19 +61,4 @@ export class LeagueController {
         }
     }
 
-    async getUsers(req: AuthenticatedRequest, res: Response) {
-        try {
-            const { leagueId } = req.params;
-            const users: User[] = await this.leagueService.getUsers(leagueId);
-            return res.status(200).json(users);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('[LeagueController] getUsers error:', error.message);
-                return res.status(500).json({ error: 'Internal server error' });
-            } else {
-                console.error('[LeagueController] unknown error:', error);
-                return res.status(500).json({ error: 'Unexpected error occurred' });
-            }
-        }
-    }
 }

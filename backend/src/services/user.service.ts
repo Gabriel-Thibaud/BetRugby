@@ -14,14 +14,14 @@ export class UserService {
         email,
         username,
         password: hashedPassword
-      },
+      }
     });
     return user;
   };
 
   async getUserByEmail(email: string): Promise<User | null> {
     return this.db.user.findUnique({
-      where: { email },
+      where: { email }
     });
   };
 
@@ -29,9 +29,7 @@ export class UserService {
     const user = await this.db.user.findUnique({
       where: { id: userId },
       include: { leagues: true }
-    }) as Prisma.UserGetPayload<{
-      include: { leagues: true }
-    }> | null;
+    }) as Prisma.UserGetPayload<{ include: { leagues: true } }> | null;
 
     if (!user)
       new Error("User not found");
