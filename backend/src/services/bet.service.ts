@@ -15,12 +15,12 @@ export class BetService {
                 userId_gameId_leagueId: {
                     userId,
                     gameId,
-                    leagueId,
-                },
+                    leagueId
+                }
             },
             update: {
                 pointDiff,
-                predictedWinner,
+                predictedWinner
             },
             create: {
                 id: ulid(),
@@ -28,8 +28,8 @@ export class BetService {
                 gameId,
                 leagueId,
                 pointDiff,
-                predictedWinner,
-            },
+                predictedWinner
+            }
         });
         return bet.id;
     }
@@ -47,9 +47,9 @@ export class BetService {
                 userId_gameId_leagueId: {
                     userId,
                     gameId,
-                    leagueId,
-                },
-            },
+                    leagueId
+                }
+            }
         });
 
         return bet;

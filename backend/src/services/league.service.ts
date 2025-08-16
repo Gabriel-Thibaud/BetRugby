@@ -11,9 +11,9 @@ export class LeagueService {
                 id: ulid(),
                 name,
                 users: {
-                    connect: { id: userId },
-                },
-            },
+                    connect: { id: userId }
+                }
+            }
         });
     }
 
@@ -22,9 +22,9 @@ export class LeagueService {
             where: { id: leagueId },
             data: {
                 users: {
-                    connect: { id: userId },
-                },
-            },
+                    connect: { id: userId }
+                }
+            }
         });
     }
 
@@ -33,9 +33,9 @@ export class LeagueService {
             where: { id: leagueId },
             data: {
                 users: {
-                    disconnect: { id: userId },
-                },
-            },
+                    disconnect: { id: userId }
+                }
+            }
         });
     }
 }

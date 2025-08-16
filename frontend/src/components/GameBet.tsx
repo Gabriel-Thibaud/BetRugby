@@ -68,8 +68,8 @@ export function GameBet(props: GameBetProps){
         if (!props.gameId)
             return;
 
-        gameDataSource.getGameByID(props.gameId).then((game: Game|null)=> {
-            if(!game)
+        gameDataSource.getGameByID(props.gameId).then((game: Game|null) => {
+            if (!game)
                 return;
             setHomeTeam(game.homeTeam);
             setAwayTeam(game.awayTeam);
@@ -81,7 +81,7 @@ export function GameBet(props: GameBetProps){
             return;
 
         // check if user has already bet on the game
-        betDataSource.getBet(props.activeLeagueId, props.gameId).then((bet: Bet|null) =>{
+        betDataSource.getBet(props.activeLeagueId, props.gameId).then((bet: Bet|null) => {
             if (!bet) {
                 setPredictedWinner("");
                 setDifference("");
