@@ -2,6 +2,7 @@ import { Box, styled } from '@mui/material';
 import { Leagues } from './Leagues/Leagues';
 import { MyBets } from './Bets/MyBets';
 import { Leaderboard } from './Leaderboard/Leaderboard';
+import { useState } from 'react';
 
 const HomepageContainer = styled(Box)({
     height: "100%",
