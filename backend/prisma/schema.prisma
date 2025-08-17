@@ -8,43 +8,56 @@ datasource db {
 }
 
 model User {
-  id        String   @id 
-  email     String   @unique
-  username  String   @unique
-  password  String
-  bets      Bet[]  
-  leagues   League[]
+  id         String       @id
+  email      String       @unique
+  username   String       @unique
+  password   String
+  bets       Bet[]
+  userLeagues UserLeague[]
 }
 
 model Game {
-  id           String   @id 
-  homeTeam     String   
-  awayTeam     String   
-  competition  String
-  date         DateTime
-  score        Int?
-  bets         Bet[]
+  id          String   @id
+  homeTeam    String
+  awayTeam    String
+  competition String
+  date        DateTime
+  score       Int?
+  bets        Bet[]
 }
 
 model League {
-  id           String   @id 
-  name         String    
-  users        User[]
-  bets         Bet[]
+  id         String       @id
+  name       String
+  bets       Bet[]
+  userLeagues UserLeague[]
 }
 
 model Bet {
-  id              String   @id    
+  id              String  @id
   gameId          String
   userId          String
   leagueId        String
   pointDiff       Int
   status          String?
   predictedWinner String
+  score           Int?
 
-  game            Game     @relation(fields: [gameId], references: [id])
-  user            User     @relation(fields: [userId], references: [id])
-  league          League   @relation(fields: [leagueId], references: [id])
+  game   Game   @relation(fields: [gameId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  league League @relation(fields: [leagueId], references: [id])
 
   @@unique([userId, gameId, leagueId])
+}
+
+model UserLeague {
+  id       String @id
+  userId   String
+  leagueId String
+  score    Int    @default(0)
+
+  user   User   @relation(fields: [userId], references: [id])
+  league League @relation(fields: [leagueId], references: [id])
+
+  @@unique([userId, leagueId])
 }

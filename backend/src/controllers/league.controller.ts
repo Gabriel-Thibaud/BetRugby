@@ -13,8 +13,8 @@ export class LeagueController {
             if (!userId)
                 return res.status(500).json({ error: "Internal error: no userID" });
 
-            const league: League = await this.leagueService.createLeague(name, userId);
-            return res.status(201).json(league);
+            const leagueId: string = await this.leagueService.createLeague(name, userId);
+            return res.status(201).json(leagueId);
         } catch (error) {
             if (error instanceof Error) {
                 console.error('[LeagueController] createLeague error:', error.message);
@@ -31,8 +31,8 @@ export class LeagueController {
             const { leagueId }: { leagueId: string } = req.body;
             const userId: string = req.user ? req.user.id : "";
 
-            const result: { name: string, id: string } = await this.leagueService.addUser(leagueId, userId);
-            return res.status(200).json(result);
+            const userLeagueId: string = await this.leagueService.addUser(leagueId, userId);
+            return res.status(200).json(userLeagueId);
         } catch (error) {
             if (error instanceof Error) {
                 console.error('[LeagueController] addUser error:', error.message);
@@ -47,8 +47,8 @@ export class LeagueController {
     async removeUser(req: AuthenticatedRequest, res: Response) {
         try {
             const { leagueId, userId } = req.body;
-            const result: { name: string, id: string } = await this.leagueService.removeUser(leagueId, userId);
-            if (result.id)
+            const removedUserId: string = await this.leagueService.removeUser(leagueId, userId);
+            if (removedUserId)
                 return res.status(200).json({ success: true });
         } catch (error) {
             if (error instanceof Error) {
