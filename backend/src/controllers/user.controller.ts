@@ -93,7 +93,7 @@ export class UserController {
       if (!userId)
         return res.status(500).json({ error: "Internal error: no userID" });
 
-      const leagues: League[] = await this.userService.getLeagueIDs(userId);
+      const leagues: League[] = await this.userService.getLeaguesByUserId(userId);
       return res.status(200).json(leagues);
     }
     catch (error) {

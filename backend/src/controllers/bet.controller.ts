@@ -1,6 +1,6 @@
 import { Bet } from "@prisma/client";
 import { BetService } from "../services/bet.service";
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthenticatedRequest } from "../types";
 
 export class BetController {
