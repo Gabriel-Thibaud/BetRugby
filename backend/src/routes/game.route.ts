@@ -1,11 +1,10 @@
 import express, { Router } from "express";
 import { authGuard } from "../middlewares/authGuard";
-import { GameService } from "../services/game.service";
 import { GameController } from "../controllers/game.controller";
+import { gameService } from "../services/services";
 
 const router: Router = express.Router();
 
-const gameService: GameService = new GameService();
 const gameController: GameController = new GameController(gameService);
 
 router.use(authGuard);

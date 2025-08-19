@@ -1,11 +1,10 @@
 import express, { Router } from "express";
-import { UserService } from "../services/user.service";
 import { UserController } from "../controllers/user.controller";
 import { authGuard } from "../middlewares/authGuard";
+import { userService } from "../services/services";
 
 const router: Router = express.Router();
 
-const userService = new UserService();
 const userController: UserController = new UserController(userService);
 
 router.post('/signup', (req, res) => userController.signUp(req, res));

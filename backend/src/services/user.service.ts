@@ -1,5 +1,5 @@
 import { prisma } from '../prisma/client';
-import { League, Prisma, User } from '@prisma/client';
+import { League, User } from '@prisma/client';
 import { ulid } from 'ulid';
 import bcrypt from "bcrypt"
 
@@ -25,18 +25,38 @@ export class UserService {
     });
   };
 
-  async getLeagueIDs(userId: string): Promise<League[]> {
-    const user = await this.db.user.findUnique({
+  async getLeaguesByUserId(userId: string): Promise<League[]> {
+
+    const userWithLeagues = await this.db.user.findUnique({
       where: { id: userId },
-      include: { leagues: true }
-    }) as Prisma.UserGetPayload<{ include: { leagues: true } }> | null;
+      include: {
+        userLeagues: {
+          include: { league: true },
+        },
+      },
+    });
 
-    if (!user)
-      new Error("User not found");
-
-    if (!user?.leagues)
+    if (!userWithLeagues)
       return [];
 
-    return user?.leagues;
+    const leagues: League[] = userWithLeagues.userLeagues.map(userLeague => userLeague.league);
+
+    return leagues;
+  }
+
+  async updateUserScore(userId: string, leagueId: string, pointsToAdd: number) {
+    await this.db.userLeague.update({
+      where: {
+        userId_leagueId: {
+          userId,
+          leagueId,
+        }
+      },
+      data: {
+        score: {
+          increment: pointsToAdd // increment: add pointsToAdd to the current score
+        }
+      }
+    });
   }
 }

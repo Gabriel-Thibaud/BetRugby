@@ -1,41 +1,66 @@
-import { League } from '@prisma/client';
+import { League, UserLeague } from '@prisma/client';
 import { prisma } from '../prisma/client';
 import { ulid } from 'ulid';
 
 export class LeagueService {
     constructor(private db = prisma) { }
 
-    async createLeague(name: string, userId: string): Promise<League> {
-        return this.db.league.create({
+    async createLeague(name: string, userId: string): Promise<string> {
+        const league: League = await this.db.league.create({
             data: {
                 id: ulid(),
-                name,
-                users: {
-                    connect: { id: userId }
-                }
+                name
             }
         });
+
+        await this.db.userLeague.create({
+            data: {
+                id: ulid(),
+                userId,
+                leagueId: league.id,
+                score: 0,
+            },
+        });
+
+        return league.id;
     }
 
-    async addUser(leagueId: string, userId: string) {
-        return this.db.league.update({
-            where: { id: leagueId },
-            data: {
-                users: {
-                    connect: { id: userId }
-                }
-            }
+    async addUser(leagueId: string, userId: string): Promise<string | { error: string }> {
+
+        const league = await this.db.league.findUnique({
+            where: { id: leagueId }
         });
+
+        if (!league)
+            return { error: "League not found" };
+
+        const userLeague: UserLeague = await this.db.userLeague.upsert({
+            where: {
+                userId_leagueId: {
+                    userId,
+                    leagueId,
+                },
+            },
+            update: {}, // nothing to do, already in the league
+            create: {
+                id: ulid(),
+                userId,
+                leagueId,
+                score: 0,
+            },
+        });
+        return userLeague.id;
     }
 
-    async removeUser(leagueId: string, userId: string) {
-        return this.db.league.update({
-            where: { id: leagueId },
-            data: {
-                users: {
-                    disconnect: { id: userId }
-                }
-            }
+    async removeUser(leagueId: string, userId: string): Promise<string> {
+        await this.db.userLeague.delete({
+            where: {
+                userId_leagueId: {
+                    userId: userId,
+                    leagueId: leagueId,
+                },
+            },
         });
+        return userId;
     }
 }
