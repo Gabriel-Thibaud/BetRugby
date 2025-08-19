@@ -31,12 +31,16 @@ export class LeagueController {
             const { leagueId }: { leagueId: string } = req.body;
             const userId: string = req.user ? req.user.id : "";
 
-            const userLeagueId: string = await this.leagueService.addUser(leagueId, userId);
+            const userLeagueId: string | { error: string } = await this.leagueService.addUser(leagueId, userId);
+
+            if (typeof userLeagueId !== "string")
+                return res.status(404).json(userLeagueId);
+
             return res.status(200).json(userLeagueId);
         } catch (error) {
             if (error instanceof Error) {
                 console.error('[LeagueController] addUser error:', error.message);
-                return res.status(500).json({ error: 'Internal server error' });
+                return res.status(500).json({ error: "Internal server error" });
             } else {
                 console.error('[LeagueController] unknown error:', error);
                 return res.status(500).json({ error: 'Unexpected error occurred' });

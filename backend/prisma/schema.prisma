@@ -3,16 +3,17 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model User {
-  id         String       @id
-  email      String       @unique
-  username   String       @unique
-  password   String
-  bets       Bet[]
+  id          String       @id
+  email       String       @unique
+  username    String       @unique
+  password    String
+  bets        Bet[]
   userLeagues UserLeague[]
 }
 
@@ -22,14 +23,15 @@ model Game {
   awayTeam    String
   competition String
   date        DateTime
-  score       Int?
+  score       String?
+  winner      String?
   bets        Bet[]
 }
 
 model League {
-  id         String       @id
-  name       String
-  bets       Bet[]
+  id          String       @id
+  name        String
+  bets        Bet[]
   userLeagues UserLeague[]
 }
 
@@ -37,15 +39,13 @@ model Bet {
   id              String  @id
   gameId          String
   userId          String
-  leagueId        String
   pointDiff       Int
-  status          String?
   predictedWinner String
+  leagueId        String
   score           Int?
-
-  game   Game   @relation(fields: [gameId], references: [id])
-  user   User   @relation(fields: [userId], references: [id])
-  league League @relation(fields: [leagueId], references: [id])
+  game            Game    @relation(fields: [gameId], references: [id])
+  league          League  @relation(fields: [leagueId], references: [id])
+  user            User    @relation(fields: [userId], references: [id])
 
   @@unique([userId, gameId, leagueId])
 }
@@ -55,9 +55,8 @@ model UserLeague {
   userId   String
   leagueId String
   score    Int    @default(0)
-
-  user   User   @relation(fields: [userId], references: [id])
-  league League @relation(fields: [leagueId], references: [id])
+  league   League @relation(fields: [leagueId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
 
   @@unique([userId, leagueId])
 }

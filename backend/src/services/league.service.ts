@@ -13,7 +13,7 @@ export class LeagueService {
             }
         });
 
-        const userLeague: UserLeague = await this.db.userLeague.create({
+        await this.db.userLeague.create({
             data: {
                 id: ulid(),
                 userId,
@@ -25,7 +25,15 @@ export class LeagueService {
         return league.id;
     }
 
-    async addUser(leagueId: string, userId: string): Promise<string> {
+    async addUser(leagueId: string, userId: string): Promise<string | { error: string }> {
+
+        const league = await this.db.league.findUnique({
+            where: { id: leagueId }
+        });
+
+        if (!league)
+            return { error: "League not found" };
+
         const userLeague: UserLeague = await this.db.userLeague.upsert({
             where: {
                 userId_leagueId: {

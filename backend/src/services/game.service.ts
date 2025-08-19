@@ -1,35 +1,37 @@
 import { prisma } from '../prisma/client';
 import { Game } from '@prisma/client';
+import { BetService } from './bet.service';
+import { UserService } from './user.service';
 
 const API_TOKEN = process.env.BETS_API_TOKEN;
 const RUGBY_ID = 8;
 const WOMEN_WORLDCUP_ID = 6390;
 
 interface ExternApiGame {
-    id: number,
-    sport_id: number,
-    time: number,
-    time_status: number,
+    id: string,
+    sport_id: string,
+    time: string,
+    time_status: string,
     league: {
-        id: number,
+        id: string,
         name: string,
         cc: string | null
     },
     home: Team,
     away: Team,
-    ss: number | string | null,
+    ss: string, // score "home-away" (ex: "31-23")
     round: number
 }
 
 interface Team {
-    id: number,
+    id: string,
     name: string,
-    image_id: number,
+    image_id: string,
     cc: string
 }
 
 export class GameService {
-    constructor(private db = prisma) { }
+    constructor(private userService: UserService, private betService: BetService, private db = prisma) { }
 
 
     // get games that start in at least 1h or more
@@ -93,14 +95,77 @@ export class GameService {
     }
 
     private mapGameData(apiGame: ExternApiGame): Game {
+        const gameTime: number = Number(apiGame.time);
         return {
             id: apiGame.id.toString(),
             homeTeam: apiGame.home.name,
             awayTeam: apiGame.away.name,
-            date: new Date(apiGame.time * 1000), // timestamp of betsAPI are in second, JS expects timestamp in millisecond
+            date: new Date(gameTime * 1000), // timestamp of betsAPI are in second, JS expects timestamp in millisecond
             competition: apiGame.league.name,
-            score: null
+            score: null,
+            winner: null
         };
+    }
+
+    async fetchTodayGameScores() {
+
+        const today: string = this.getTodayDateFormatted(); // YYYYMMDD
+        const response: Response = await fetch(
+            `https://api.b365api.com/v3/events/ended?sport_id=${RUGBY_ID}&league_id=${WOMEN_WORLDCUP_ID}&day${today}=&token=${API_TOKEN}`,
+            { method: "GET" }
+        );
+
+        if (!response.ok)
+            throw new Error("Error extern API: fetch today games scores");
+
+        const responseData: { success: number, pager: {}, results: ExternApiGame[] } = await response.json();
+        return responseData.results;
+    }
+
+    async syncGameScores() {
+        const todayGames: ExternApiGame[] = await this.fetchTodayGameScores();
+
+        if (!todayGames.length)
+            return;
+
+        for (const game of todayGames) {
+            const dbGame = await this.db.game.findUnique({
+                where: { id: game.id },
+                include: { bets: true }
+            });
+
+            if (!dbGame || dbGame.score || dbGame.winner)
+                continue;
+
+            const homeTeamScore: number = Number(game.ss.split("-")[0]);
+            const awayTeamScore: number = Number(game.ss.split("-")[1]);
+
+            const winner: string = homeTeamScore - awayTeamScore > 0 ? game.home.name : game.away.name;
+
+            await this.db.game.update({
+                where: { id: game.id },
+                data: {
+                    score: game.ss,
+                    winner
+                }
+            });
+
+            for (const bet of dbGame.bets) {
+                const betScore: number = await this.betService.updateScore(bet.id, winner, homeTeamScore, awayTeamScore);
+                if (betScore)
+                    await this.userService.updateUserScore(bet.userId, bet.leagueId, betScore);
+            }
+
+        }
+    }
+
+    private getTodayDateFormatted(): string {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, "0"); // +1 because January = 0
+        const day = String(today.getDate()).padStart(2, "0");
+
+        return `${year}${month}${day}`;
     }
 
 }

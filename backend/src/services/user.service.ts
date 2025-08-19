@@ -43,4 +43,20 @@ export class UserService {
 
     return leagues;
   }
+
+  async updateUserScore(userId: string, leagueId: string, pointsToAdd: number) {
+    await this.db.userLeague.update({
+      where: {
+        userId_leagueId: {
+          userId,
+          leagueId,
+        }
+      },
+      data: {
+        score: {
+          increment: pointsToAdd // increment: add pointsToAdd to the current score
+        }
+      }
+    });
+  }
 }
