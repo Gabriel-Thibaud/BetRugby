@@ -65,4 +65,26 @@ export class LeagueController {
         }
     }
 
+    async getScoresByLeagueId(req: AuthenticatedRequest, res: Response) {
+        try {
+            const userId: string = req.user ? req.user.id : "";
+            if (!userId)
+                return res.status(500).json({ error: "Internal error: no userID" });
+
+            const leagueId: string = req.params.leagueId;
+
+            const scores: { userId: string, username: string, score: number }[] = await this.leagueService.getScoresByLeagueId(leagueId);
+            return res.status(200).json(scores);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                console.error('[LeagueController] getScoresByLeagueId error:', error.message);
+                return res.status(500).json({ error: 'Internal server error' });
+            } else {
+                console.error('[LeagueController] unknown error:', error);
+                return res.status(500).json({ error: 'Unexpected error occurred' });
+            }
+        }
+    }
+
 }

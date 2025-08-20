@@ -49,4 +49,19 @@ export class LeagueDataSource {
 
         return { error: "" };
     }
+
+    public async getLeagueUserScore(leagueId: string): Promise<{ userId: string, username: string, score: number }[]> {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/scores/${leagueId}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+        });
+
+        if (!response.ok)
+            return [];
+
+        return await response.json();
+    }
 }

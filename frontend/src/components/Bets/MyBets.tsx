@@ -1,8 +1,8 @@
 import { Box, styled} from '@mui/material';
 import { GameBet } from './GameBet';
-import { Section } from '../widgets/Section';
+import { Section } from '../../widgets/Section';
 import { useEffect, useState } from 'react';
-import { gameDataSource } from '../datasources/index';
+import { gameDataSource } from '../../datasources/index';
 import React from 'react';
 
 const MyBetsSection = styled(Section)({

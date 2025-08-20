@@ -3,7 +3,7 @@ import { GameDataSource } from "./GameDataSource";
 import { LeagueDataSource } from "./LeagueDataSource";
 import { UserDataSource } from "./UserDataSource";
 
-export const userDataSource = new UserDataSource();
-export const leagueDataSource = new LeagueDataSource();
-export const gameDataSource = new GameDataSource();
-export const betDataSource = new BetDataSource();
+export const userDataSource: UserDataSource = new UserDataSource();
+export const leagueDataSource: LeagueDataSource = new LeagueDataSource();
+export const gameDataSource: GameDataSource = new GameDataSource();
+export const betDataSource: BetDataSource = new BetDataSource();

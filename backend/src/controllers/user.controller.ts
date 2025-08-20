@@ -106,4 +106,24 @@ export class UserController {
       }
     }
   }
+
+  async getCurrentUsername(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId: string = req.user ? req.user.id : "";
+      if (!userId)
+        return res.status(500).json({ error: "Internal error: no userID" });
+
+      const username: string = await this.userService.getUsernameByUserId(userId);
+      return res.status(200).json(username);
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        console.error('[UserController] getCurrentUsername error:', error.message);
+        return res.status(500).json({ error: 'Internal server error' });
+      } else {
+        console.error('[UserController] unknown error:', error);
+        return res.status(500).json({ error: 'Unexpected error occurred' });
+      }
+    }
+  }
 }
