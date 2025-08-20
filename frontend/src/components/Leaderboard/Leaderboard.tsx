@@ -1,9 +1,11 @@
 import { Box, styled } from "@mui/material";
 import { Section } from "../../widgets/Section";
 import { blue, darkBlue, gold, white } from "../../utils/colors";
+import { useEffect, useState } from "react";
+import { userDataSource } from "../../datasources";
 
 const LeaguesSection = styled(Section)({
-    height: "fit-content",
+    minHeight: "350px",
     display: "flex", 
     flexDirection: "column",
     alignItems: "center",
@@ -21,7 +23,8 @@ const PodiumSection = styled(Box)({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-end",
-    gap: "20px"
+    gap: "20px",
+    margin: "auto"
 });
 
 const PositionContent = styled(Box)({
@@ -71,6 +74,7 @@ const ThirdPositionBloc = styled(Bloc)({
 
 const OtherRankList = styled(Box)({
     maxHeight: "52vh",
+    width: "100%",
     overflowY: "auto",
     '&::-webkit-scrollbar': {
       width: '6px',
@@ -87,48 +91,72 @@ const OtherRankList = styled(Box)({
     }
 });
 
+const UserRanking = styled(Box)({
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+});
 
-export function Leaderboard(){
+interface LeaderboardProps {
+    activeLeagueId: string
+}
 
-    const ranking = [1,2,3,4,5,6,7,8,9,10];
+export function Leaderboard(props: LeaderboardProps){
 
-    const sortedNames = ["Gab", "Cams", "CassouilleFripouille", "Nyny Bezos", "Marine La star", "Kimy baby", "Manaaang BANG", 
-        "Coquine 1", "Coquine 2","Grand perdant 1", "Le nullos", "Orochimaru-san", "Casse noisette II","Grand perdant 2",
-        "Grand perdant 3", "Grand perdant 4"
-    ]
+    const [usernameAndScore, setUsernameAndScore] = useState<{ userId: string, username: string, score: number }[]>([])
+    const [currentUsername, setCurrentUsername] = useState<string>("");
 
-    const currentUserName = "Orochimaru-san";
+    useEffect(() => {
+        userDataSource.getCurrentUsername().then((username: string) => setCurrentUsername(username));
+    }, []);
+    
+    useEffect(() => {
+        if (!props.activeLeagueId)
+            return
+        userDataSource.getLeagueUserScore(props.activeLeagueId).then((scores) => {
+            scores.sort((a, b) => b.score - a.score); // sort in descending order
+            setUsernameAndScore(scores);
+        })
+    },[props.activeLeagueId]);
 
-    let score = 30;
     return (
         <LeaguesSection>
             <Title> Leaderboard </Title>
-            <PodiumSection>
-                <PositionContent>
-                    <RankingNumber sx={{backgroundColor: darkBlue}}> 2 </RankingNumber>
-                    <Box sx={{textAlign: "center"}}> {sortedNames[1]} </Box>
-                    <SecondPositionBloc> {65} </SecondPositionBloc>
-                </PositionContent>
-                <PositionContent>
-                    <RankingNumber sx={{backgroundColor: gold}}> 1 </RankingNumber>
-                    <Box sx={{textAlign: "center"}}> {sortedNames[0]} </Box>
-                    <FirstPositionBloc> {82} </FirstPositionBloc>
-                </PositionContent>
-                <PositionContent>
-                    <RankingNumber sx={{backgroundColor: blue}}> 3 </RankingNumber>
-                    <Box sx={{textAlign: "center"}}> {sortedNames[2]} </Box>
-                    <ThirdPositionBloc> {39} </ThirdPositionBloc>
-                </PositionContent>
-
-            </PodiumSection>
-            <OtherRankList>
-                {sortedNames.slice(3).map((name, index)=> 
-                    <Box sx={{padding: "5px 15px 5px 5px", fontWeight: currentUserName === name ? "bold": "normal"}} key={index}>
-                        {index + 3}. {name}  | {score--}
-                    </Box>
-                )}
-            </OtherRankList>
-              
+            { usernameAndScore.length === 0 ?
+                <Box sx={{margin: "auto"}}> Join a league to unlock the leaderboard ! </Box>
+            :
+                <>
+                    <PodiumSection>
+                            <PositionContent>
+                                <RankingNumber sx={{backgroundColor: darkBlue}}> 2 </RankingNumber>
+                                <Box sx={{textAlign: "center"}}> {usernameAndScore[1]?.username ?? ""} </Box>
+                                <SecondPositionBloc> {usernameAndScore[1]?.score ?? 0} </SecondPositionBloc>
+                            </PositionContent>
+                        <PositionContent>
+                            <RankingNumber sx={{backgroundColor: gold}}> 1 </RankingNumber>
+                            <Box sx={{textAlign: "center"}}> {usernameAndScore[0].username} </Box>
+                            <FirstPositionBloc> {usernameAndScore[0].score} </FirstPositionBloc>
+                        </PositionContent>
+                            <PositionContent>
+                                <RankingNumber sx={{backgroundColor: blue}}> 3 </RankingNumber>
+                                <Box sx={{textAlign: "center"}}> {usernameAndScore[2]?.username ?? ""} </Box>
+                                <ThirdPositionBloc> {usernameAndScore[2]?.score ?? 0 } </ThirdPositionBloc>
+                            </PositionContent>
+                    </PodiumSection>
+                    {usernameAndScore.length > 3 &&
+                        <OtherRankList>
+                            {usernameAndScore.slice(3).map((element, index)=>
+                                <UserRanking  key={index}>
+                                    <Box sx={{fontWeight: currentUsername === element.username ? "bold": "normal"}}>
+                                        {index + 4}. {element.username}
+                                    </Box>
+                                    <Box sx={{padding: "5px 15px 5px 5px"}}>{element.score}</Box>
+                                </UserRanking> 
+                            )}
+                        </OtherRankList>
+                    }
+                </>
+            }    
         </LeaguesSection>
     );
 }

@@ -19,7 +19,8 @@ const LeftContent = styled(Box)({
     display: "flex",
     flexDirection:"column",
     justifyContent: "space-around",
-    padding: "10px"
+    padding: "10px",
+    gap: "15px"
 });
 
 const RightContent = styled(Box)({
@@ -43,7 +44,7 @@ export function Homepage() {
                 <MyBets activeLeagueId={activeLeagueId}/>
             </LeftContent>
             <RightContent>
-                <Leaderboard/>
+                <Leaderboard activeLeagueId={activeLeagueId}/>
             </RightContent>
         </HomepageContainer>
     );

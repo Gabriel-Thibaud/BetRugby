@@ -44,6 +44,28 @@ export class UserService {
     return leagues;
   }
 
+  async getScoresByLeagueId(leagueId: string): Promise<{ userId: string, username: string, score: number }[]> {
+    const userLeagues = await this.db.userLeague.findMany({
+      where: { leagueId },
+      select: {
+        userId: true,
+        score: true,
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+
+    // to have the following object: {userId: string, username: string, score: numer}
+    return userLeagues.map(ul => ({
+      userId: ul.userId,
+      username: ul.user.username,
+      score: ul.score,
+    }));
+  }
+
   async updateUserScore(userId: string, leagueId: string, pointsToAdd: number) {
     await this.db.userLeague.update({
       where: {
@@ -58,5 +80,20 @@ export class UserService {
         }
       }
     });
+  }
+
+  async getUsernameByUserId(userId: string): Promise<string> {
+    const result: { username: string; } | null = await this.db.user.findUnique({
+      where: { id: userId },
+      select: {
+        username: true,
+      }
+    });
+
+    if (!result)
+      return "";
+
+    return result.username;
+
   }
 }
