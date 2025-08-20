@@ -68,4 +68,20 @@ export class UserDataSource {
 
         return await response.json();
     }
+
+    public async getCurrentUsername(): Promise<string> {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/currentUsername`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+        });
+
+        if (!response.ok)
+            return "";
+
+        return await response.json();
+    }
+
 }

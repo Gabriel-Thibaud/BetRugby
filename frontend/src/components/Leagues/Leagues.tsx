@@ -2,15 +2,14 @@ import { useEffect, useState } from 'react';
 import { Box, styled } from '@mui/material';
 import { LeaguesDialog } from './LeaguesDialog';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { userDataSource } from '../datasources/index';
-import { League, DialogType } from '../datasources/LeagueDataSource';
-import { darkBlue, darkGold, gold, green, lightGray, red, white } from '../utils/colors';
-import { Button } from '../widgets/Button';
-import { Section } from '../widgets/Section';
+import { userDataSource } from '../../datasources/index';
+import { League, DialogType } from '../../datasources/LeagueDataSource';
+import { darkBlue, darkGold, gold, green, lightGray, red, white } from '../../utils/colors';
+import { Button } from '../../widgets/Button';
+import { Section } from '../../widgets/Section';
 
 const LeaguesSection = styled(Section)({
     height: "fit-content",
-    maxWidth: "max(370px, 75vw)",
     display: "flex", 
     alignItems: "center",
     flexDirection: "column",
@@ -128,7 +127,13 @@ export function Leagues(props: LeaguesProps){
     const [errorMessage, setErrorMessage] = useState <string>("");
 
     useEffect(() => {
-        getLeagueList();
+        getLeagueList().then((leagueList: League[] | null) => {
+            if(!leagueList)
+                return;
+            setLeagueList(leagueList);
+            if (!props.activeLeagueId && leagueList.length)
+                props.onLeagueUpdate(leagueList[0].id);
+        });
     },[]);
 
     useEffect(()=> {
@@ -140,17 +145,15 @@ export function Leagues(props: LeaguesProps){
         setIdPreview(preview);
     }, [props.activeLeagueId])
 
-    async function getLeagueList() {
+    async function getLeagueList(): Promise<League[] | null> {
         const leagueList: League[] | null = await userDataSource.getUserLeagueList();
 
         if (!leagueList){
             setErrorMessage("Fail to fetch leagues");
-            return;
+            return null;
         }
-      
-        setLeagueList(leagueList);
-        if (!props.activeLeagueId && leagueList.length)
-            props.onLeagueUpdate(leagueList[0].id);
+
+        return leagueList;
     }
 
     function copyIdToClipBoard() {
@@ -166,7 +169,14 @@ export function Leagues(props: LeaguesProps){
 
     async function onLeagueUpdate() {
         setIsDialogOpen(false);
-        getLeagueList();
+        const leagueList: League[] | null = await getLeagueList();
+        
+        if (!leagueList)
+            return;
+        
+        setLeagueList(leagueList);
+        if (!props.activeLeagueId && leagueList.length)
+            props.onLeagueUpdate(leagueList[0].id);
     }
 
     function openDialog(dialogType: DialogType) {

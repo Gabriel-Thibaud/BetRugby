@@ -1,6 +1,7 @@
 import { Box, styled } from '@mui/material';
-import { Leagues } from './Leagues';
-import { MyBets } from './MyBets';
+import { Leagues } from './Leagues/Leagues';
+import { MyBets } from './Bets/MyBets';
+import { Leaderboard } from './Leaderboard/Leaderboard';
 import { useState } from 'react';
 
 const HomepageContainer = styled(Box)({
@@ -14,9 +15,21 @@ const HomepageContainer = styled(Box)({
 
 const LeftContent = styled(Box)({
     height: "100%",
+    maxWidth: "max(370px, 50vw)",
+    display: "flex",
+    flexDirection:"column",
+    justifyContent: "space-around",
+    padding: "10px",
+    gap: "15px"
+});
+
+const RightContent = styled(Box)({
+    height: "100%",
+    maxWidth: "max(370px, 50vw)",
     display: "flex", 
     flexDirection:"column",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    padding: "10px"
 });
 
 
@@ -30,6 +43,9 @@ export function Homepage() {
                 <Leagues activeLeagueId={activeLeagueId} onLeagueUpdate={(leagueId: string) => setActiveLeagueId(leagueId)}/>
                 <MyBets activeLeagueId={activeLeagueId}/>
             </LeftContent>
+            <RightContent>
+                <Leaderboard activeLeagueId={activeLeagueId}/>
+            </RightContent>
         </HomepageContainer>
     );
 }

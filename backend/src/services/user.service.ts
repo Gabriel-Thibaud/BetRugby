@@ -59,4 +59,19 @@ export class UserService {
       }
     });
   }
+
+  async getUsernameByUserId(userId: string): Promise<string> {
+    const result: { username: string; } | null = await this.db.user.findUnique({
+      where: { id: userId },
+      select: {
+        username: true,
+      }
+    });
+
+    if (!result)
+      return "";
+
+    return result.username;
+
+  }
 }

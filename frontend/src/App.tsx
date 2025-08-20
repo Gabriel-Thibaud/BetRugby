@@ -8,7 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 const AppContainer = styled(Box)({
   backgroundColor: lightBlue,
-  height: "100%",
+  flex: 1,   
   width: "100%",
   color: darkBlue,
   display: "flex", 
@@ -16,7 +16,7 @@ const AppContainer = styled(Box)({
 });
 
 const AppContent = styled(Box)({
-  height: "100%",
+  flex: 1, 
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center"

@@ -11,11 +11,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Box sx={{
-      height: "100vh",
+      minHeight: "100vh",
       width: "100%",
       display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      flexDirection: "column",
       backgroundColor: "transparent"
     }}
     >

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Box, styled, TextField, Dialog } from '@mui/material';
-import { leagueDataSource } from '../datasources/index';
-import { DialogType } from '../datasources/LeagueDataSource';
-import { darkBlue, darkGold, gold, lightGray, red, white } from '../utils/colors';
-import { Button } from '../widgets/Button';
+import { leagueDataSource } from '../../datasources/index';
+import { DialogType } from '../../datasources/LeagueDataSource';
+import { darkBlue, darkGold, gold, red, white } from '../../utils/colors';
+import { Button } from '../../widgets/Button';
 
 const PopUpContainer = styled(Box)({
     height: "fit-content",
