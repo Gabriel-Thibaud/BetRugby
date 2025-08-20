@@ -13,34 +13,26 @@ const MenuContainer =  styled(Box)({
     backgroundColor: darkBlue
 });
 
-const MenuContent = styled(Box)({
-    width:"100%",
-    display: "flex",
-    justifyContent: "space-between",
-    color: white,
-});
-
-const OptionsContainer = styled(Box)({
-    width: "85%",
-    display: "flex",
-    justifyContent: "center",
-    gap: "150px",
-    fontSize: "22px"
-});
-
 const SignOutContainer = styled(Box)({
+    height: "100%",
     display: "flex",
     alignItems: "center",
     alignSelf: "flex-end",
     gap: "3px",
     cursor: "pointer",
-    fontSize: "18px",
+    fontSize: "16px",
+    color: white,
     ":hover": {
         color: gold
     },
     "svg":  {
         paddingTop: "2px"
     }
+});
+
+const Logo = styled("img")({
+    height: "150px",
+    paddingTop: "8px"
 });
 
 export function Menu() {
@@ -58,18 +50,12 @@ export function Menu() {
 
     return (
         <MenuContainer>
-            <Box sx={{fontSize: "35px", color: white, fontFamily: 'Barlow Condensed, sans-serif'}}> BetRugby </Box>
+            <Logo src="./logo.svg" alt="BetRugby logo"/>
             {location.pathname !== "/" && 
-                <MenuContent>
-                    <OptionsContainer>
-                        <Box> Home </Box>
-                        <Box> Rules </Box>
-                    </OptionsContainer>
-                    <SignOutContainer onClick={() =>signOut()}>
-                        <Box onClick={() =>signOut()}> Sign out </Box>
-                        <LogoutIcon/>
-                    </SignOutContainer>
-                </MenuContent>
+                <SignOutContainer onClick={() =>signOut()}>
+                    <Box onClick={() => signOut()}> Sign out </Box>
+                    <LogoutIcon/>
+                </SignOutContainer>
             }
         </MenuContainer>
     );

@@ -44,7 +44,14 @@ const Content = styled(Box)({
       }
 });
 
-const DayContent = styled(Box)({
+const DayContainer = styled(Box)({
+    display : "flex",
+    flexDirection: "column",
+    alignItems:"center",
+    marginBottom: "20px",
+});
+
+const BetList = styled(Box)({
     width: "100%",
     display: "flex",
     flexDirection: "row",
@@ -71,8 +78,7 @@ export function MyBets(props: MyBetsProps){
         const upcomingGameIDs: { id: string, date: string }[] =  await gameDataSource.getUpcomingGameIDs();
         const gamesByDays: Map<string, string[]> = new Map<string, string[]>();
         for(const game of upcomingGameIDs){
-            const dateObj: Date = new Date(game.date);
-            const gameDay: string = dateObj.toISOString().split("T")[0]; // return the date without the time
+            const gameDay: string = formatMatchDate(game.date); 
             if (!gamesByDays.has(gameDay))
                 gamesByDays.set(gameDay, []);
             gamesByDays.get(gameDay)!.push(game.id); // non null assertion ONLY because the check is made beforre
@@ -80,23 +86,35 @@ export function MyBets(props: MyBetsProps){
         return gamesByDays;
     }
 
-    let dayCounter = 1;
+    //return the format: Friday, August 22
+    function formatMatchDate(dateStr: string): string {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString("en-US", {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+        });
+    }
+
     return(
         <MyBetsSection>
             <Title> My Bets </Title>
-            <Content>
-                {/* TODO: check with Cams, how to define Day 1 , 2, 3 -> enum ? day1 is the August 22nd ? */}
-                {[...gamesByDays.entries()].map(([date, games]) => (
-                    <React.Fragment key={date}>
-                        <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> Day {dayCounter ++} </Box>
-                        <DayContent>
-                            { games.map((id: string) => 
-                                <GameBet key={id} gameId={id} activeLeagueId={props.activeLeagueId}/>         
-                            )}
-                        </DayContent>
-                    </React.Fragment>
-                ))}
-            </Content>
+             { !props.activeLeagueId ?
+                <Box sx={{margin: "auto"}}> Join a league to unlock the leaderboard ! </Box>
+            :
+                <Content>
+                    {[...gamesByDays.entries()].map(([date, games]) => (
+                        <DayContainer key={date}>
+                            <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> {date} </Box>
+                            <BetList>
+                                { games.map((id: string) => 
+                                    <GameBet key={id} gameId={id} activeLeagueId={props.activeLeagueId}/>         
+                                )}
+                            </BetList>
+                        </DayContainer>
+                    ))}
+                </Content>
+            }
         </MyBetsSection>
     );
 }

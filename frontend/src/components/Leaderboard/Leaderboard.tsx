@@ -121,7 +121,7 @@ export function Leaderboard(props: LeaderboardProps){
     return (
         <LeaguesSection>
             <Title> Leaderboard </Title>
-            { usernameAndScore.length === 0 ?
+            { !props.activeLeagueId || usernameAndScore.length === 0 ?
                 <Box sx={{margin: "auto"}}> Join a league to unlock the leaderboard ! </Box>
             :
                 <>

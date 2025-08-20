@@ -140,7 +140,9 @@ export class GameService {
             const homeTeamScore: number = Number(game.ss.split("-")[0]);
             const awayTeamScore: number = Number(game.ss.split("-")[1]);
 
-            const winner: string = homeTeamScore - awayTeamScore > 0 ? game.home.name : game.away.name;
+            const winner: string = homeTeamScore === awayTeamScore ?
+                "Equality" :
+                homeTeamScore - awayTeamScore > 0 ? game.home.name : game.away.name;
 
             await this.db.game.update({
                 where: { id: game.id },

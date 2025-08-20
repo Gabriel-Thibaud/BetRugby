@@ -44,7 +44,8 @@ export class BetService {
             return 0;
 
         let betScore: number = 0;
-        if (winner === bet.predictedWinner) {
+
+        if (winner === bet.predictedWinner && homeTeamScore !== awayTeamScore) {
             betScore += 1; // 1 pt for correctly predicting the winner
             const realPointDiff: number = Math.abs(homeTeamScore - awayTeamScore);
             betScore += this.isPointDiffCorrect(bet.pointDiff, realPointDiff) ? 2 : 0; // 2pts for correctly predicting the point diff
@@ -75,7 +76,7 @@ export class BetService {
     private isPointDiffCorrect(diffPredicted: number, realDiff: number): boolean {
         switch (diffPredicted) {
             case 10:
-                return 0 <= realDiff && realDiff <= 10;
+                return 0 < realDiff && realDiff <= 10;
             case 20:
                 return 11 <= realDiff && realDiff <= 20;
             case 30:
