@@ -20,7 +20,7 @@ const SignOutContainer = styled(Box)({
     alignSelf: "flex-end",
     gap: "3px",
     cursor: "pointer",
-    fontSize: "18px",
+    fontSize: "16px",
     color: white,
     ":hover": {
         color: gold
