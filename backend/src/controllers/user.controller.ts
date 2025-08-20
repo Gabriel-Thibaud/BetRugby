@@ -107,28 +107,6 @@ export class UserController {
     }
   }
 
-  async getScoresByLeagueId(req: AuthenticatedRequest, res: Response) {
-    try {
-      const userId: string = req.user ? req.user.id : "";
-      if (!userId)
-        return res.status(500).json({ error: "Internal error: no userID" });
-
-      const leagueId: string = req.params.leagueId;
-
-      const scores: { userId: string, username: string, score: number }[] = await this.userService.getScoresByLeagueId(leagueId);
-      return res.status(200).json(scores);
-    }
-    catch (error) {
-      if (error instanceof Error) {
-        console.error('[UserController] getLeagueUserScore error:', error.message);
-        return res.status(500).json({ error: 'Internal server error' });
-      } else {
-        console.error('[UserController] unknown error:', error);
-        return res.status(500).json({ error: 'Unexpected error occurred' });
-      }
-    }
-  }
-
   async getCurrentUsername(req: AuthenticatedRequest, res: Response) {
     try {
       const userId: string = req.user ? req.user.id : "";

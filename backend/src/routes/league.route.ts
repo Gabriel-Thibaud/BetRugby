@@ -10,5 +10,6 @@ const leagueController = new LeagueController(leagueService);
 
 router.post('/create', (req, res) => leagueController.createLeague(req, res));
 router.post('/join', (req, res) => leagueController.joinLeague(req, res));
+router.get('/scores/:leagueId', (req, res) => leagueController.getScoresByLeagueId(req, res));
 
 export default router;

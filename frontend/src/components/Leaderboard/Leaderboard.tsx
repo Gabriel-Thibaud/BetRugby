@@ -2,7 +2,7 @@ import { Box, styled } from "@mui/material";
 import { Section } from "../../widgets/Section";
 import { blue, darkBlue, gold, white } from "../../utils/colors";
 import { useEffect, useState } from "react";
-import { userDataSource } from "../../datasources";
+import { leagueDataSource, userDataSource } from "../../datasources";
 
 const LeaguesSection = styled(Section)({
     minHeight: "350px",
@@ -42,7 +42,7 @@ const RankingNumber = styled(Box)({
     height: "24px",
     width: "24px",
     borderRadius: "20px"
-})
+});
 
 const Bloc = styled(Box)({
     width: "100%",
@@ -54,13 +54,12 @@ const Bloc = styled(Box)({
     alignItems: "center",
     borderTopLeftRadius: "10%",
     borderTopRightRadius: "10%"
-})
+});
 
 const SecondPositionBloc = styled(Bloc)({
     height: "90px",
     backgroundColor: darkBlue
 });
-
 
 const FirstPositionBloc = styled(Bloc)({
     height: "120px",
@@ -103,7 +102,7 @@ interface LeaderboardProps {
 
 export function Leaderboard(props: LeaderboardProps){
 
-    const [usernameAndScore, setUsernameAndScore] = useState<{ userId: string, username: string, score: number }[]>([])
+    const [usernameAndScore, setUsernameAndScore] = useState<{ userId: string, username: string, score: number }[]>([]);
     const [currentUsername, setCurrentUsername] = useState<string>("");
 
     useEffect(() => {
@@ -112,11 +111,11 @@ export function Leaderboard(props: LeaderboardProps){
     
     useEffect(() => {
         if (!props.activeLeagueId)
-            return
-        userDataSource.getLeagueUserScore(props.activeLeagueId).then((scores) => {
+            return;
+        leagueDataSource.getLeagueUserScore(props.activeLeagueId).then((scores) => {
             scores.sort((a, b) => b.score - a.score); // sort in descending order
             setUsernameAndScore(scores);
-        })
+        });
     },[props.activeLeagueId]);
 
     return (

@@ -10,7 +10,6 @@ import { Section } from '../../widgets/Section';
 
 const LeaguesSection = styled(Section)({
     height: "fit-content",
-    // maxWidth: "max(370px, 50vw)",
     display: "flex", 
     alignItems: "center",
     flexDirection: "column",
@@ -128,7 +127,13 @@ export function Leagues(props: LeaguesProps){
     const [errorMessage, setErrorMessage] = useState <string>("");
 
     useEffect(() => {
-        getLeagueList();
+        getLeagueList().then((leagueList: League[] | null) => {
+            if(!leagueList)
+                return;
+            setLeagueList(leagueList);
+            if (!props.activeLeagueId && leagueList.length)
+                props.onLeagueUpdate(leagueList[0].id);
+        });
     },[]);
 
     useEffect(()=> {
@@ -140,17 +145,15 @@ export function Leagues(props: LeaguesProps){
         setIdPreview(preview);
     }, [props.activeLeagueId])
 
-    async function getLeagueList() {
+    async function getLeagueList(): Promise<League[] | null> {
         const leagueList: League[] | null = await userDataSource.getUserLeagueList();
 
         if (!leagueList){
             setErrorMessage("Fail to fetch leagues");
-            return;
+            return null;
         }
-      
-        setLeagueList(leagueList);
-        if (!props.activeLeagueId && leagueList.length)
-            props.onLeagueUpdate(leagueList[0].id);
+
+        return leagueList;
     }
 
     function copyIdToClipBoard() {
@@ -166,7 +169,14 @@ export function Leagues(props: LeaguesProps){
 
     async function onLeagueUpdate() {
         setIsDialogOpen(false);
-        getLeagueList();
+        const leagueList: League[] | null = await getLeagueList();
+        
+        if (!leagueList)
+            return;
+        
+        setLeagueList(leagueList);
+        if (!props.activeLeagueId && leagueList.length)
+            props.onLeagueUpdate(leagueList[0].id);
     }
 
     function openDialog(dialogType: DialogType) {
