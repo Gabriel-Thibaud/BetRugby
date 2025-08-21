@@ -14,19 +14,25 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+
+const allowedOrigin = process.env.NODE_ENV === "production"
+  ? "https://betrugby.onrender.com" // frontend prod
+  : "http://localhost:3000";        // local dev
+
+app.use(cors({ origin: allowedOrigin, credentials: true }));
 
 app.use("/api/auth", authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/league', leagueRoutes);
 app.use('/api/bet', betRoutes);
-app.use('/api/game', gameRoutes)
+app.use('/api/game', gameRoutes);
+
+// Health check endpoint for Render
+// Render pings this endpoint to ensure the service is running and healthy.
+app.get("/health", (_req, res) => res.send("OK"));
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
   startGameCronJobs();
 });
-
-
-
