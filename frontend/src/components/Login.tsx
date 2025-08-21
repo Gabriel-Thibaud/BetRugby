@@ -94,12 +94,23 @@ export function Login() {
         if (isLoginView)
             return !!email && !!password;
 
+        if (email && !isValidEmail(email)){
+            setErrorMessage("Email is invalid");
+            return false;
+        } else
+            setErrorMessage("");
+
         return password === confirmedPassword && !!username.trim() && !!email && !!password;
     }
 
     function onSwitchView(){
         setErrorMessage(""); 
         setIsLoginView(prev => !prev); // previous state is "reversed" 
+    }
+
+    function isValidEmail(email: string): boolean {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
     }
 
     return (

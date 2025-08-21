@@ -17,7 +17,11 @@ export class UserController {
     try {
       const { email, username, password }: Partial<User> = req.body;
       if (!email || !username || !password)
-        return res.status(400).json({ error: 'Error: Email, username or password is missing' });;
+        return res.status(400).json({ error: 'Error: Email, username or password is missing' });
+
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!regex.test(email))
+        return res.status(400).json({ error: 'Error: Invalid email' });
 
       const existingUser: User | null = await this.userService.getUserByEmail(email);
       if (existingUser)
