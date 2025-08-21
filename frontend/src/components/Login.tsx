@@ -8,6 +8,7 @@ import { Section } from '../widgets/Section';
 
 const LoginSection =  styled(Section)({
     width: "40%",
+    minWidth: "250px",
     height: "fit-content",
     display: "flex", 
     flexDirection: "column",

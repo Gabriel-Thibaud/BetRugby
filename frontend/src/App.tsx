@@ -22,6 +22,16 @@ const AppContent = styled(Box)({
   alignItems: "center"
 });
 
+const LoginPageContainer = styled(Box)({
+  width: "100%",
+  display: "flex", 
+  justifyContent: "space-around",
+  alignItems:"center", 
+  flexWrap: "wrap",
+  gap: "20px",
+  padding: "10px"
+}); 
+
 function App() {
 
   const description: string = `Bet and Play with your friends ! \n
@@ -38,10 +48,10 @@ function App() {
           <Routes>
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/" element={
-              <>
+              <LoginPageContainer>
                 <Box sx={{width: "50%", textAlign: "center", whiteSpace: "pre-line"}}> {description} </Box>
                 <Login/>
-              </>
+              </LoginPageContainer>
             }/>
             <Route path="/home" element={<ProtectedRoute><Homepage/></ProtectedRoute>}/>
           </Routes>
