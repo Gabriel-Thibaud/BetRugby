@@ -12,8 +12,5 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^9.1.2"
-  },
-  "dependencies": {
-    "cors": "^2.8.5"
   }
 }
