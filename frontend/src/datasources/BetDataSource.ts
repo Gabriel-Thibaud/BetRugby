@@ -1,3 +1,4 @@
+import { API_URL } from ".";
 import { fetchWithAuth } from "../utils/utilsAuth";
 
 export type Bet = {
@@ -12,7 +13,7 @@ export type Bet = {
 
 export class BetDataSource {
 
-    baseURL: string = "http://localhost:3001/api/bet";
+    baseURL: string = `${API_URL}/api/bet`;
 
     public async createBet(leagueId: string, gameId: string, pointDiff: number, predictedWinner: string): Promise<{ error: string }> {
 

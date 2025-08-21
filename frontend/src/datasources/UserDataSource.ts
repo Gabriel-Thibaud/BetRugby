@@ -1,9 +1,10 @@
+import { API_URL } from '.';
 import { League } from '../datasources/LeagueDataSource';
 import { fetchWithAuth } from '../utils/utilsAuth';
 
 export class UserDataSource {
 
-    baseURL: string = "http://localhost:3001/api/user"; // TODO: update /change localhost
+    baseURL: string = `${API_URL}/api/user`;
 
     public async signUp(email: string, password: string, username: string): Promise<{ error: string }> {
         const response: Response = await fetch(`${this.baseURL}/signup`, {

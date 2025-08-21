@@ -1,3 +1,4 @@
+import { API_URL } from ".";
 import { fetchWithAuth } from "../utils/utilsAuth";
 
 export type League = {
@@ -12,7 +13,7 @@ export enum DialogType {
 
 export class LeagueDataSource {
 
-    baseURL: string = "http://localhost:3001/api/league";
+    baseURL: string = `${API_URL}/api/league`;
 
     public async createLeague(leagueName: string): Promise<{ error: string }> {
         const response: Response = await fetchWithAuth(`${this.baseURL}/create`, {

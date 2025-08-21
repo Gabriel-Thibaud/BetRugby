@@ -1,3 +1,4 @@
+import { API_URL } from ".";
 import { fetchWithAuth } from "../utils/utilsAuth";
 import { Bet } from "./BetDataSource";
 
@@ -13,7 +14,7 @@ export type Game = {
 
 export class GameDataSource {
 
-    private baseURL: string = "http://localhost:3001/api/game";
+    private baseURL: string = `${API_URL}/api/game`;
 
     public async getUpcomingGameIDs(): Promise<{ id: string, date: string }[]> {
 
