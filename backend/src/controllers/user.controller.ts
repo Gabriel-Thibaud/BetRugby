@@ -32,7 +32,7 @@ export class UserController {
       res.cookie("token", token, {
         httpOnly: true,
         secure: isProduction,
-        sameSite: "lax",
+        sameSite: "none", // TODO: maybe change with custom domain name from OVH
         maxAge: 3600 * 1000, // 1h
       });
 
