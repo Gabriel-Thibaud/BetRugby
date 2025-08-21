@@ -15,7 +15,12 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigin = process.env.CORS_ORIGIN || "http://localhost:3000";
+const allowedOrigin = [
+  "https://betrugby.app",
+  "https://www.betrugby.app",
+  "http://localhost:3000", // dev
+];
+
 app.use(cors({ origin: allowedOrigin, credentials: true }));
 
 app.use("/api/auth", authRoutes);
