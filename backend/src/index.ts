@@ -15,10 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigin = process.env.NODE_ENV === "production"
-  ? "https://betrugby.onrender.com" // frontend prod
-  : "http://localhost:3000";        // local dev
-
+const allowedOrigin = process.env.CORS_ORIGIN || "http://localhost:3000";
 app.use(cors({ origin: allowedOrigin, credentials: true }));
 
 app.use("/api/auth", authRoutes);
