@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 
 const API_TOKEN = process.env.BETS_API_TOKEN;
 const RUGBY_ID = 8;
-const WOMEN_WORLDCUP_ID = 6390;
+const WOMEN_WORLDCUP_ID = 41345; // old id: 6390;
 
 interface ExternApiGame {
     id: string,
@@ -19,6 +19,8 @@ interface ExternApiGame {
     },
     home: Team,
     away: Team,
+    "o_home"?: Team,
+    "o_away"?: Team,
     ss: string, // score "home-away" (ex: "31-23")
     round: number
 }

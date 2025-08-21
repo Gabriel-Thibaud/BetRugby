@@ -1,5 +1,23 @@
 
+// 2 versions because BetsAPi has changed their name
 export enum Country {
+    "New Zealand (W)" = "NZL",
+    "Ireland (W)" = "IRL",
+    "Spain (W)" = "ESP",
+    "Japan (W)" = "JPN",
+    "Wales (W)" = "WAL",
+    "Fiji (W)" = "FIJ",
+    "Canada (W)" = "CAN",
+    "Scotland (W)" = "SCO",
+    "England (W)" = "ENG",
+    "Australia (W)" = "AUS",
+    "Samoa (W)" = "SAM",
+    "USA (W)" = "USA",
+    "France (W)" = "FRA",
+    "South Africa (W)" = "RSA",
+    "Italy (W)" = "ITA",
+    "Brazil (W)" = "BRA",
+
     "New Zealand Women" = "NZL",
     "Ireland Women" = "IRL",
     "Spain Women" = "ESP",
