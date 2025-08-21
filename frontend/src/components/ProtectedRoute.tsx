@@ -1,6 +1,7 @@
 import  Box  from "@mui/material/Box";
 import { JSX, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { API_URL } from "../datasources";
 
 interface ProtectedRouteProps {
   children: JSX.Element;
@@ -13,7 +14,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res: Response = await fetch("http://localhost:3001/api/auth/check", { //TODO: change the URL
+        const res: Response = await fetch(`${API_URL}/api/auth/check`, {
           method: "GET",
           credentials: "include",
         });
