@@ -6,9 +6,9 @@ import { betService } from "../services/services";
 const router: Router = express.Router();
 router.use(authGuard);
 
-const betControlller: BetController = new BetController(betService);
+const betController: BetController = new BetController(betService);
 
-router.get("/:leagueId/:gameId", (req, res) => betControlller.getBet(req, res));
-router.post("/create", (req, res) => betControlller.createBet(req, res));
+router.get("/:leagueId/:gameId", (req, res) => betController.getBet(req, res));
+router.post("/create", (req, res) => betController.createBet(req, res));
 
 export default router;
