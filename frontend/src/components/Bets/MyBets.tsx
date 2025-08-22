@@ -3,7 +3,7 @@ import { GameBet } from './GameBet';
 import { Section } from '../../widgets/Section';
 import { useEffect, useState } from 'react';
 import { gameDataSource } from '../../datasources/index';
-import React from 'react';
+import { lightGray } from '../../utils/colors';
 
 const MyBetsSection = styled(Section)({
     height: "fit-content",
@@ -98,7 +98,10 @@ export function MyBets(props: MyBetsProps){
 
     return(
         <MyBetsSection>
-            <Title> My Bets </Title>
+            <Box sx={{width: "100%"}}>
+                <Title> My Bets </Title>
+                <Box sx={{ color: lightGray, fontSize: "14px"}}> 2025 Women's World Cup matches </Box>
+            </Box>
              { !props.activeLeagueId ?
                 <Box sx={{margin: "auto"}}> Join a league to unlock the leaderboard ! </Box>
             :
