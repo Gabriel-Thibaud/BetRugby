@@ -132,7 +132,7 @@ export function Login() {
                     label="Email" 
                     variant="outlined"
                     value={email} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value.trim())}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value.trim().toLowerCase())}
                 /> 
                 <TextField 
                     sx={{width: "200px"}} 

@@ -38,11 +38,10 @@ export class GameService {
 
     // get games that start in at least 1h or more
     async getUpcomingGameIDs(): Promise<{ id: string, date: Date }[]> {
-        const inOneHour: Date = new Date(Date.now() + 60 * 60 * 1000);
 
         const upcomingGameIDs: { id: string, date: Date }[] = await prisma.game.findMany({
             where: {
-                date: { gt: inOneHour } // "gt": greater than 
+                date: { gt: new Date(Date.now()) } // "gt": greater than 
             },
             select: {
                 id: true,
