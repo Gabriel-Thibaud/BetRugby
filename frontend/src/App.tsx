@@ -5,6 +5,8 @@ import { Navigate, Route, BrowserRouter as Router, Routes} from "react-router-do
 import { Homepage } from './components/Homepage';
 import { darkBlue, lightBlue } from './utils/colors';
 import ProtectedRoute from './components/ProtectedRoute';
+import { Section } from './widgets/Section';
+import { InstaLogo } from './utils/instagram_logo';
 
 const AppContainer = styled(Box)({
   backgroundColor: lightBlue,
@@ -23,14 +25,24 @@ const AppContent = styled(Box)({
 });
 
 const LoginPageContainer = styled(Box)({
+  height: "fit-content",
   width: "100%",
+  margin: "auto",
   display: "flex", 
   justifyContent: "space-around",
-  alignItems:"center", 
+  alignItems:"stretch", 
   flexWrap: "wrap",
   gap: "20px",
   padding: "10px"
 }); 
+
+const DescriptionWrapper = styled(Section)({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  textAlign: "center",
+  whiteSpace: "pre-line"
+});
 
 function App() {
 
@@ -49,7 +61,13 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/" element={
               <LoginPageContainer>
-                <Box sx={{width: "50%", textAlign: "center", whiteSpace: "pre-line"}}> {description} </Box>
+                <DescriptionWrapper>
+                  <img src="./dark_logo.png" alt="BetRugby logo" height={50}/>
+                  <Box>{description} </Box>
+                  <a href="https://www.instagram.com/betrugby.app/"  target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <InstaLogo/>
+                  </a>
+                </DescriptionWrapper>
                 <Login/>
               </LoginPageContainer>
             }/>
