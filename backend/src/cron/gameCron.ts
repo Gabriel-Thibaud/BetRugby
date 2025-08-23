@@ -3,8 +3,8 @@ import { gameService } from '../services/services';
 
 export function startGameCronJobs() {
 
-    // Everyday at 8h, 14h and 20h - get upcoming games
-    cron.schedule('0 8,14,20 * * *', async () => {
+    // Everyday at 6h, 15h, 17h , 19h and 23h (UTC) - get upcoming games
+    cron.schedule('0 6,15,17,19,23 * * *', async () => {
         console.log('[GameCron] Syncing upcoming games...');
         try {
             await gameService.syncUpcomingGames();
@@ -14,8 +14,8 @@ export function startGameCronJobs() {
         }
     });
 
-    // Everyday at 8h, 14h and 20h - get ended games to update scores
-    cron.schedule('0 8,14,20 * * *', async () => {
+    // Everyday at 6h, 15h, 17h , 19h and 23h (UTC) - get ended games to update scores
+    cron.schedule('0 6,15,17,19,23 * * *', async () => {
         console.log('[GameCron] Syncing games scores...');
         try {
             await gameService.syncGameScores();
