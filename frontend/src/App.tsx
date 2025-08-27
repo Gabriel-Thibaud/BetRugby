@@ -7,6 +7,7 @@ import { darkBlue, lightBlue } from './utils/colors';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Section } from './widgets/Section';
 import { InstaLogo } from './utils/instagram_logo';
+import { BetsAndResults } from './components/Bets/BetsAndResults';
 
 const AppContainer = styled(Box)({
   backgroundColor: lightBlue,
@@ -72,6 +73,7 @@ function App() {
               </LoginPageContainer>
             }/>
             <Route path="/home" element={<ProtectedRoute><Homepage/></ProtectedRoute>}/>
+            <Route path="/bets" element={<ProtectedRoute><BetsAndResults/></ProtectedRoute>}/>
           </Routes>
         </AppContent>
       </AppContainer>

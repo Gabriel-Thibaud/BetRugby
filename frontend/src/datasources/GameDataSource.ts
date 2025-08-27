@@ -47,4 +47,20 @@ export class GameDataSource {
         return await response.json();
     }
 
+    public async getGamesByCompetitionName(competitionName: string): Promise<{ id: string, date: string }[]> {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/competitionGames`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+            body: JSON.stringify({ name: competitionName })
+        });
+
+        if (!response.ok)
+            return [];
+
+        return await response.json();
+    }
+
 }

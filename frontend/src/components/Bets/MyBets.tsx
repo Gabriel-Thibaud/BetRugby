@@ -4,6 +4,7 @@ import { Section } from '../../widgets/Section';
 import { useEffect, useState } from 'react';
 import { gameDataSource } from '../../datasources/index';
 import { lightGray } from '../../utils/colors';
+import { getGameIDsByDay } from '../../utils/utilsBet';
 
 const MyBetsSection = styled(Section)({
     height: "fit-content",
@@ -76,24 +77,7 @@ export function MyBets(props: MyBetsProps){
 
     async function getUpcomingGameIDs(): Promise<Map<string, string[]>>{
         const upcomingGameIDs: { id: string, date: string }[] =  await gameDataSource.getUpcomingGameIDs();
-        const gamesByDays: Map<string, string[]> = new Map<string, string[]>();
-        for(const game of upcomingGameIDs){
-            const gameDay: string = formatMatchDate(game.date); 
-            if (!gamesByDays.has(gameDay))
-                gamesByDays.set(gameDay, []);
-            gamesByDays.get(gameDay)!.push(game.id); // non null assertion ONLY because the check is made beforre
-        }
-        return gamesByDays;
-    }
-
-    //return the format: Friday, August 22
-    function formatMatchDate(dateStr: string): string {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString("en-US", {
-            weekday: "long",
-            day: "2-digit",
-            month: "long",
-        });
+        return getGameIDsByDay(upcomingGameIDs);
     }
 
     return(

@@ -41,3 +41,24 @@ export function getCountryCode(countryName: string): string | undefined {
         return Country[countryName as keyof typeof Country];
     return undefined;
 }
+
+export function getGameIDsByDay(games: { id: string, date: string }[]): Map<string, string[]> {
+    const gamesByDays: Map<string, string[]> = new Map<string, string[]>();
+    for (const game of games) {
+        const gameDay: string = formatMatchDate(game.date);
+        if (!gamesByDays.has(gameDay))
+            gamesByDays.set(gameDay, []);
+        gamesByDays.get(gameDay)!.push(game.id); // non null assertion ONLY because the check is made beforre
+    }
+    return gamesByDays;
+}
+
+//return the format: Friday, August 22
+function formatMatchDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+    });
+}
