@@ -42,13 +42,16 @@ export function getCountryCode(countryName: string): string | undefined {
     return undefined;
 }
 
-export function getGameIDsByDay(games: { id: string, date: string }[]): Map<string, string[]> {
-    const gamesByDays: Map<string, string[]> = new Map<string, string[]>();
+export type GamesByDay = Map<string, { id: string, isUpdatable: boolean }[]>;
+
+export function getGameIDsByDay(games: { id: string, date: string }[]): GamesByDay {
+    const gamesByDays: GamesByDay = new Map();
     for (const game of games) {
         const gameDay: string = formatMatchDate(game.date);
         if (!gamesByDays.has(gameDay))
             gamesByDays.set(gameDay, []);
-        gamesByDays.get(gameDay)!.push(game.id); // non null assertion ONLY because the check is made beforre
+        const isUpdatable: boolean = new Date(game.date).getTime() > Date.now();
+        gamesByDays.get(gameDay)!.push({ id: game.id, isUpdatable }); // non null assertion ONLY because the check is made beforre
     }
     return gamesByDays;
 }

@@ -5,7 +5,7 @@ import { gameDataSource, userDataSource } from "../../datasources";
 import { League } from "../../datasources/LeagueDataSource";
 import { white } from "../../utils/colors";
 import { GameBet } from "./GameBet";
-import { getGameIDsByDay } from "../../utils/utilsBet";
+import { GamesByDay, getGameIDsByDay } from "../../utils/utilsBet";
 
 const PageContainer = styled(Box)({
     display: "flex", 
@@ -55,7 +55,7 @@ export function BetsAndResults(){
     const [leagueList, setLeagueList] = useState <League[]>([]);
 
     // gameIDs per day
-    const [womenWorldCupGames, setWomenWorldCupGames] = useState<Map<string, string[]>>(new Map());
+    const [womenWorldCupGames, setWomenWorldCupGames] = useState<GamesByDay>(new Map());
 
     //TODO: have one state array per competition (like in myBets, day and id)
 
@@ -71,7 +71,7 @@ export function BetsAndResults(){
     }, []);
 
     useEffect(() => {
-        getWomenWorlCupGames().then((gameIDsByDay: Map<string, string[]>) => {
+        getWomenWorlCupGames().then((gameIDsByDay: GamesByDay) => {
             if (!gameIDsByDay)
                 return;
             setWomenWorldCupGames(gameIDsByDay);
@@ -81,12 +81,11 @@ export function BetsAndResults(){
 
     }, [leagueId]);
 
-    async function getWomenWorlCupGames(): Promise<Map<string, string[]>> {
-        const games: { id: string, date: string }[] =  await gameDataSource.getGamesByCompetitionName(womenWorlCup);
+    async function getWomenWorlCupGames(): Promise<GamesByDay> {
+        const games: { id: string, date: string }[] =  await gameDataSource.getGamesByCompetitionName(womenWorlCup); 
         return getGameIDsByDay(games);
     }
-
-
+ 
     return (
         <PageContainer>
             <Box>
@@ -107,8 +106,13 @@ export function BetsAndResults(){
                              <DayContainer key={date}>
                                 <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> {date} </Box>
                                 <BetList>
-                                    { games.map((id: string) => 
-                                        <GameBet key={id} gameId={id} activeLeagueId={leagueId}/>         
+                                    { games.map((game:{ id: string, isUpdatable: boolean }) => 
+                                        <GameBet 
+                                            key={game.id} 
+                                            gameId={game.id} 
+                                            activeLeagueId={leagueId} 
+                                            disableBet={!game.isUpdatable}
+                                        />         
                                     )}
                                 </BetList>
                             </DayContainer>

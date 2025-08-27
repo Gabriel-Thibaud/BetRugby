@@ -12,5 +12,4 @@ router.get('/upcoming', (req, res) => gameController.getUpcomingGameIDs(req, res
 router.get('/:gameId', (req, res) => gameController.getGameByID(req, res));
 router.post('/competitionGames', (req, res) => gameController.getGamesByCompetitionName(req, res));
 
-
 export default router;

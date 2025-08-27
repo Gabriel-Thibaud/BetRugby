@@ -20,7 +20,7 @@ const TeamsContainer = styled(Box)({
     fontWeight: "bold", 
 });
 
-const TeamButton = styled(Button)((prop:{is_clicked: number}) => ({
+const TeamButton = styled(Button)((prop:{is_clicked: number, disable_bet: number}) => ({
     width: "60px", 
     backgroundColor : prop.is_clicked ? green : white,
     color: prop.is_clicked ? white : darkBlue, 
@@ -29,10 +29,13 @@ const TeamButton = styled(Button)((prop:{is_clicked: number}) => ({
     padding: "2px",
     fontWeight: "bold", 
     fontSize: "20px",
-    "&:hover":{
-        backgroundColor: green,
-        color : white
-    }
+    cursor: prop.disable_bet ? "default" : "pointer",
+    ...(!prop.disable_bet &&
+        {"&:hover":{
+            backgroundColor: green,
+            color : white
+        }}
+    )
 }));
 
 const PointsDifferentContainer = styled(Box)({
@@ -55,7 +58,8 @@ const WarningSign = styled(Box)({
 
 interface GameBetProps {
     gameId: string,
-    activeLeagueId: string
+    activeLeagueId: string,
+    disableBet: boolean  // disable the possibility to change the bet
 }
 
 export function GameBet(props: GameBetProps){
@@ -97,7 +101,13 @@ export function GameBet(props: GameBetProps){
         if (!!predictedWinner && !!diffenrenceSelected && typeof diffenrenceSelected == 'number')
             betDataSource.createBet(props.activeLeagueId, props.gameId, diffenrenceSelected, predictedWinner)
 
-    }, [predictedWinner, diffenrenceSelected])
+    }, [predictedWinner, diffenrenceSelected]);
+
+    function handleClickOnTeam(team:string){
+        if (props.disableBet)
+            return;
+        setPredictedWinner(team);
+    }
 
     if (!homeTeam || !awayTeam)
         return <></>;
@@ -105,17 +115,25 @@ export function GameBet(props: GameBetProps){
     return(
         <BetContainer>
             <Box sx={{width: "20px"}}>
-            {(!diffenrenceSelected || !predictedWinner) && 
+            {(!diffenrenceSelected || !predictedWinner ) && !props.disableBet &&
                 <WarningSign> ! </WarningSign>
             }
             </Box>
             <Box sx={{display: "flex", flexDirection: "column"}}>
                 <TeamsContainer>
-                    <TeamButton onClick={() => setPredictedWinner(homeTeam)} is_clicked={Number(predictedWinner === homeTeam)}> 
+                    <TeamButton 
+                        onClick={() => handleClickOnTeam(homeTeam)} 
+                        is_clicked={Number(predictedWinner === homeTeam)} 
+                        disable_bet={Number(props.disableBet)}
+                    > 
                         {getCountryCode(homeTeam)} 
                     </TeamButton>
                     vs
-                    <TeamButton onClick={() => setPredictedWinner(awayTeam)} is_clicked={Number(predictedWinner === awayTeam)}> 
+                    <TeamButton 
+                        onClick={() => handleClickOnTeam(awayTeam)} 
+                        is_clicked={Number(predictedWinner === awayTeam)} 
+                        disable_bet={Number(props.disableBet)}
+                    > 
                         {getCountryCode(awayTeam)}
                     </TeamButton>
                 </TeamsContainer>
@@ -127,6 +145,7 @@ export function GameBet(props: GameBetProps){
                         sx={{height:"30px", width: "90px"}}
                         value={diffenrenceSelected}
                         onChange={(e) => setDifference(e.target.value)}
+                        disabled={props.disableBet}
                     >
                         <MenuItem value={10}>0-10</MenuItem>
                         <MenuItem value={20}>11-20</MenuItem>

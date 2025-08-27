@@ -4,7 +4,7 @@ import { Section } from '../../widgets/Section';
 import { useEffect, useState } from 'react';
 import { gameDataSource } from '../../datasources/index';
 import { lightGray } from '../../utils/colors';
-import { getGameIDsByDay } from '../../utils/utilsBet';
+import { GamesByDay, getGameIDsByDay } from '../../utils/utilsBet';
 
 const MyBetsSection = styled(Section)({
     height: "fit-content",
@@ -69,13 +69,15 @@ interface MyBetsProps{
 
 export function MyBets(props: MyBetsProps){
 
-    const [gamesByDays, setGamesByDays] = useState<Map<string, string[]>>(new Map());
+    const [gamesByDays, setGamesByDays] = useState<GamesByDay>(new Map());
 
     useEffect(() => {
-        getUpcomingGameIDs().then((gamesByDays: Map<string, string[]>) => setGamesByDays(gamesByDays));
+        getUpcomingGameIDs().then((gamesByDays: GamesByDay) => 
+            setGamesByDays(gamesByDays)
+        );
     }, []);
 
-    async function getUpcomingGameIDs(): Promise<Map<string, string[]>>{
+    async function getUpcomingGameIDs(): Promise<GamesByDay> {
         const upcomingGameIDs: { id: string, date: string }[] =  await gameDataSource.getUpcomingGameIDs();
         return getGameIDsByDay(upcomingGameIDs);
     }
@@ -94,8 +96,13 @@ export function MyBets(props: MyBetsProps){
                         <DayContainer key={date}>
                             <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> {date} </Box>
                             <BetList>
-                                { games.map((id: string) => 
-                                    <GameBet key={id} gameId={id} activeLeagueId={props.activeLeagueId}/>         
+                                { games.map((game:{ id: string, isUpdatable: boolean }) => 
+                                    <GameBet 
+                                        key={game.id} 
+                                        gameId={game.id} 
+                                        activeLeagueId={props.activeLeagueId} 
+                                        disableBet={!game.isUpdatable}
+                                    />         
                                 )}
                             </BetList>
                         </DayContainer>
