@@ -14,6 +14,8 @@ export type Game = {
 
 export class GameDataSource {
 
+    // TODO : have a map to cache Games:  map<id, Game>
+
     private baseURL: string = `${API_URL}/api/game`;
 
     public async getUpcomingGameIDs(): Promise<{ id: string, date: string }[]> {

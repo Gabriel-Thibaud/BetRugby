@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, MenuItem, Select, styled } from '@mui/material';
-import { blue, darkBlue, green, red, white } from '../../utils/colors';
+import { blue, darkBlue, gold, green, red, white } from '../../utils/colors';
 import { getCountryCode } from '../../utils/utilsBet';
 import { betDataSource, gameDataSource } from '../../datasources/index';
 import { Game } from '../../datasources/GameDataSource';
@@ -8,7 +8,11 @@ import { Bet } from '../../datasources/BetDataSource';
 
 const BetContainer = styled(Box)({
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+
+    "@media (max-width: 1010px)":{
+        marginBottom: "10px"
+    }
 });
 
 const TeamsContainer = styled(Box)({
@@ -56,6 +60,13 @@ const WarningSign = styled(Box)({
     fontSize: "14px"
 });
 
+const ScoreWrapper = styled(Box)({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    color: gold
+});
+
 interface GameBetProps {
     gameId: string,
     activeLeagueId: string,
@@ -67,6 +78,7 @@ export function GameBet(props: GameBetProps){
     const [awayTeam, setAwayTeam] = useState<string|null>(null);
     const [predictedWinner, setPredictedWinner] = useState<string>("");
     const [diffenrenceSelected, setDifference] = useState<number|string>("");
+    const [betScore, setBetScore] =  useState<number>(0);
    
     useEffect(()=> {
         if (!props.gameId)
@@ -93,6 +105,7 @@ export function GameBet(props: GameBetProps){
             }
             setDifference(bet.pointDiff);
             setPredictedWinner(bet.predictedWinner);
+            setBetScore(bet.score ?? 0);
         });
     }, [props.activeLeagueId])
 
@@ -115,9 +128,9 @@ export function GameBet(props: GameBetProps){
     return(
         <BetContainer>
             <Box sx={{width: "20px"}}>
-            {(!diffenrenceSelected || !predictedWinner ) && !props.disableBet &&
-                <WarningSign> ! </WarningSign>
-            }
+                {(!diffenrenceSelected || !predictedWinner ) && !props.disableBet &&
+                    <WarningSign> ! </WarningSign>
+                }
             </Box>
             <Box sx={{display: "flex", flexDirection: "column"}}>
                 <TeamsContainer>
@@ -154,6 +167,11 @@ export function GameBet(props: GameBetProps){
                     </Select>
                 </PointsDifferentContainer>
             </Box>
+            { props.disableBet &&
+                <ScoreWrapper>
+                    <Box> +{betScore} </Box> 
+                </ScoreWrapper>
+            }
         </BetContainer>
     );
 }

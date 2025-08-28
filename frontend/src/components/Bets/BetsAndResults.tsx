@@ -3,26 +3,34 @@ import { useEffect, useState } from "react";
 import { Section } from "../../widgets/Section";
 import { gameDataSource, userDataSource } from "../../datasources";
 import { League } from "../../datasources/LeagueDataSource";
-import { white } from "../../utils/colors";
 import { GameBet } from "./GameBet";
 import { GamesByDay, getGameIDsByDay } from "../../utils/utilsBet";
+import { GameResult } from "./GameResult";
+import { DailyScore } from "./DailyScore";
+import { darkBlue, white } from "../../utils/colors";
 
 const PageContainer = styled(Box)({
     display: "flex", 
     flexDirection: "column",
+    width: "100%"
+});
 
+const SelectLeague = styled(Box)({
+    margin: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px"
 });
 
 const BetsContainer =  styled(Section)({
-    width: "100%",
-    minWidth: "95vw",
     display: "flex", 
     flexDirection: "column",
-    margin: "5px"
+    margin: "10px"
 });
 
 const Title = styled(Box)({
-    fontSize: "20px", 
+    fontSize: "24px", 
     fontWeight: "bold"
 });
 
@@ -44,6 +52,12 @@ const BetList = styled(Box)({
     gap: "10px"
 });
 
+const GameContainer = styled(Box)({
+    display: "flex", 
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "5px"
+});
 
 export function BetsAndResults(){
 
@@ -64,7 +78,6 @@ export function BetsAndResults(){
             if  (!leagues)
                 return;
             setLeagueList(leagues);
-            console.log(leagueId, leagues.length, leagues[0])
             if (!leagueId && !!leagues.length)
                 setLeagueId(leagues[0].id);
         })
@@ -75,9 +88,7 @@ export function BetsAndResults(){
             if (!gameIDsByDay)
                 return;
             setWomenWorldCupGames(gameIDsByDay);
-
-        })
-        // betDataSource.getBet()
+        });
 
     }, [leagueId]);
 
@@ -88,7 +99,8 @@ export function BetsAndResults(){
  
     return (
         <PageContainer>
-            <Box>
+            <SelectLeague>
+                <Box sx={{color: darkBlue, fontSize: "18px", fontWeight: "bold"}}>League:</Box>
                 <Select sx={{height:"30px", width: "fit-content", backgroundColor: white}}
                         value={leagueId}
                         onChange={(e) => setLeagueId(e.target.value)}
@@ -97,31 +109,33 @@ export function BetsAndResults(){
                         <MenuItem key={league.id} value={league.id}> {league.name} </MenuItem>
                     )}
                 </Select>
-            </Box>
+            </SelectLeague>
             <Box sx={{ display: "flex", flexDirection: "column"}}>
                <BetsContainer>
-                    <Title> My Bets </Title>
+                    <Title> Bets & Results </Title>
                     <Box>
                         {[...womenWorldCupGames.entries()].map(([date, games]) => (
                              <DayContainer key={date}>
-                                <Box sx={{fontWeight: "bold ", fontSize: "20px"}}> {date} </Box>
-                                <BetList>
-                                    { games.map((game:{ id: string, isUpdatable: boolean }) => 
-                                        <GameBet 
-                                            key={game.id} 
-                                            gameId={game.id} 
-                                            activeLeagueId={leagueId} 
-                                            disableBet={!game.isUpdatable}
-                                        />         
-                                    )}
-                                </BetList>
+                                <Box sx={{fontWeight: "bold ", fontSize: "24px"}}> {date} </Box>
+                                <Box sx={{ display: "flex", alignItems: "center", width:"100%"}}>
+                                    <BetList>
+                                        { games.map((game:{ id: string, isUpdatable: boolean }) => 
+                                            <GameContainer sx={{}} key={game.id}>
+                                                <GameResult gameId={game.id}/>
+                                                <GameBet gameId={game.id} activeLeagueId={leagueId} disableBet={!game.isUpdatable}/>
+                                            </GameContainer >       
+                                        )}
+                                    </BetList>
+                                    <DailyScore 
+                                        leagueId={leagueId} 
+                                        gameIDs={games.map((game: { id: string, isUpdatable: boolean }) => game.id)}
+                                    />
+                                </Box>
                             </DayContainer>
                         ))}
                     </Box>
                 </BetsContainer>
             </Box>
-            
-
         </PageContainer>
     );
 }
