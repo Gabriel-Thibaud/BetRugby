@@ -9,7 +9,6 @@ import { Bet } from '../../datasources/BetDataSource';
 const BetContainer = styled(Box)({
     display: "flex",
     alignItems: "center",
-
     "@media (max-width: 1010px)":{
         marginBottom: "10px"
     }

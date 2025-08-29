@@ -69,8 +69,6 @@ export function BetsAndResults(){
 
     const womenWorlCup: string = "Women's Rugby World Cup"; // name from BetsAPI (so it might change)
 
-    // TODO: check if from my bets i can send activeLeagueId
-
     const [leagueId, setLeagueId] = useState<string>("");
     const [leagueList, setLeagueList] = useState <League[]>([]);
 
@@ -81,7 +79,7 @@ export function BetsAndResults(){
 
     useEffect(() => {
         userDataSource.getUserLeagueList().then((leagues:League[]|null) => {
-            if  (!leagues)
+            if (!leagues)
                 return;
             setLeagueList(leagues);
             if (!leagueId && !!leagues.length)

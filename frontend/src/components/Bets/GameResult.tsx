@@ -15,7 +15,7 @@ const GameResultContainer = styled(Box)({
     color: white, 
     backgroundColor: darkBlue, 
     padding: "8px", 
-    borderRadius: "12px",
+    borderRadius: "12px"
 });
 
 interface GameResultProps {
@@ -52,7 +52,6 @@ export function GameResult(props: GameResultProps){
     return (
         <Box sx={{display: "flex"}}>
             <Box sx={{width: "20px"}}/> {/*Not clean but to match with the same box in GameBet*/}
-        
             <GameResultContainer>
                 <Box> {getCountryCode(homeTeam)} </Box>
                 <Box sx={{display: "flex", width: "fit-content"}}>
@@ -65,8 +64,7 @@ export function GameResult(props: GameResultProps){
                     }
                 </Box>
                 <Box> {getCountryCode(awayTeam)} </Box>
-
             </GameResultContainer>
         </Box>
-    )
+    );
 }
