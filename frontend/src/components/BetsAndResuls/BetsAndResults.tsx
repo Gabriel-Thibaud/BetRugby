@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Section } from "../../widgets/Section";
 import { gameDataSource, userDataSource } from "../../datasources";
 import { League } from "../../datasources/LeagueDataSource";
-import { GameBet } from "./GameBet";
+import { GameBet } from "../Bets/GameBet";
 import { GamesByDay, getGameIDsByDay } from "../../utils/utilsBet";
 import { GameResult } from "./GameResult";
 import { DailyScore } from "./DailyScore";

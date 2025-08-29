@@ -7,7 +7,7 @@ import { darkBlue, lightBlue } from './utils/colors';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Section } from './widgets/Section';
 import { InstaLogo } from './utils/instagram_logo';
-import { BetsAndResults } from './components/Bets/BetsAndResults';
+import { BetsAndResults } from './components/BetsAndResuls/BetsAndResults';
 
 const AppContainer = styled(Box)({
   backgroundColor: lightBlue,
