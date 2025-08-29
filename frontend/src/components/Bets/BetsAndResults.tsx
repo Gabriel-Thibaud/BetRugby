@@ -15,7 +15,7 @@ const PageContainer = styled(Box)({
     width: "100%"
 });
 
-const SelectLeague = styled(Box)({
+const SelectLeague = styled(Section)({
     margin: "10px",
     display: "flex",
     alignItems: "center",
@@ -23,10 +23,16 @@ const SelectLeague = styled(Box)({
     gap: "10px"
 });
 
-const BetsContainer =  styled(Section)({
+const MainContainer = styled(Section)({
     display: "flex", 
     flexDirection: "column",
     margin: "10px"
+});
+
+const BetsContainer = styled(Box)({
+    "@media (max-width: 1010px)":{
+        margin: "20px"
+    }
 });
 
 const Title = styled(Box)({
@@ -71,7 +77,7 @@ export function BetsAndResults(){
     // gameIDs per day
     const [womenWorldCupGames, setWomenWorldCupGames] = useState<GamesByDay>(new Map());
 
-    //TODO: have one state array per competition (like in myBets, day and id)
+    //TODO: have one state array per competition
 
     useEffect(() => {
         userDataSource.getUserLeagueList().then((leagues:League[]|null) => {
@@ -111,9 +117,9 @@ export function BetsAndResults(){
                 </Select>
             </SelectLeague>
             <Box sx={{ display: "flex", flexDirection: "column"}}>
-               <BetsContainer>
+               <MainContainer>
                     <Title> Bets & Results </Title>
-                    <Box>
+                    <BetsContainer>
                         {[...womenWorldCupGames.entries()].map(([date, games]) => (
                              <DayContainer key={date}>
                                 <Box sx={{fontWeight: "bold ", fontSize: "24px"}}> {date} </Box>
@@ -133,8 +139,8 @@ export function BetsAndResults(){
                                 </Box>
                             </DayContainer>
                         ))}
-                    </Box>
-                </BetsContainer>
+                    </BetsContainer>
+                </MainContainer>
             </Box>
         </PageContainer>
     );
