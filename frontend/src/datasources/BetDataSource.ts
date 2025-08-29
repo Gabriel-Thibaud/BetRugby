@@ -7,8 +7,8 @@ export type Bet = {
     userId: string,
     leagueId: string,
     pointDiff: string,
-    status: string, // change to Enum ?
-    predictedWinner: string
+    predictedWinner: string,
+    score?: number
 }
 
 export class BetDataSource {

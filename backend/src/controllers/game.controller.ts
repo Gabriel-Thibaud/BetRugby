@@ -36,4 +36,21 @@ export class GameController {
         }
     }
 
+    async getGamesByCompetitionName(req: Request, res: Response) {
+        try {
+            const competitionName: string = req.params.name;
+            const gameIDs: { id: string, date: Date }[] = await this.gameService.getGamesByCompetitionName(competitionName);
+            return res.status(200).json(gameIDs);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('[GameController] getGamesByCompetitionName error:', error.message);
+                return res.status(500).json({ error: 'Internal server error' });
+            } else {
+                console.error('[GameController] unknown error:', error);
+                return res.status(500).json({ error: 'Unexpected error occurred' });
+            }
+        }
+    }
+
+
 }

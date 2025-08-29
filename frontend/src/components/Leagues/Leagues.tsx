@@ -128,7 +128,7 @@ export function Leagues(props: LeaguesProps){
 
     useEffect(() => {
         getLeagueList().then((leagueList: League[] | null) => {
-            if(!leagueList)
+            if (!leagueList)
                 return;
             setLeagueList(leagueList);
             if (!props.activeLeagueId && leagueList.length)

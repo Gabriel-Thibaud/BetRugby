@@ -36,7 +36,7 @@ export class GameService {
     constructor(private userService: UserService, private betService: BetService, private db = prisma) { }
 
 
-    // get games that start in at least 1h or more
+    // get games that start in at least 1h or more (all competitions)
     async getUpcomingGameIDs(): Promise<{ id: string, date: Date }[]> {
 
         const upcomingGameIDs: { id: string, date: Date }[] = await prisma.game.findMany({
@@ -169,6 +169,23 @@ export class GameService {
         const day = String(today.getDate()).padStart(2, "0");
 
         return `${year}${month}${day}`;
+    }
+
+    public async getGamesByCompetitionName(competitionName: string): Promise<{ id: string, date: Date }[]> {
+        const gameIDs: { id: string, date: Date }[] = await prisma.game.findMany({
+            where: {
+                competition: competitionName
+            },
+            select: {
+                id: true,
+                date: true
+            },
+            orderBy: {
+                date: 'asc'
+            }
+        });
+
+        return gameIDs;
     }
 
 }

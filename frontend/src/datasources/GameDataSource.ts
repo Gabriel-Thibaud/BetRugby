@@ -14,6 +14,8 @@ export type Game = {
 
 export class GameDataSource {
 
+    // TODO : have a map to cache Games:  map<id, Game>
+
     private baseURL: string = `${API_URL}/api/game`;
 
     public async getUpcomingGameIDs(): Promise<{ id: string, date: string }[]> {
@@ -43,6 +45,22 @@ export class GameDataSource {
 
         if (!response.ok)
             return null;
+
+        return await response.json();
+    }
+
+    public async getGamesByCompetitionName(competitionName: string): Promise<{ id: string, date: string }[]> {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/competitionGames`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+            body: JSON.stringify({ name: competitionName })
+        });
+
+        if (!response.ok)
+            return [];
 
         return await response.json();
     }
