@@ -1,10 +1,11 @@
-import { Box, styled} from '@mui/material';
+import { Box, Checkbox, styled} from '@mui/material';
 import { GameBet } from './GameBet';
 import { Section } from '../../widgets/Section';
 import { useEffect, useState } from 'react';
 import { gameDataSource } from '../../datasources/index';
 import { lightGray } from '../../utils/colors';
 import { GamesByDay, getGameIDsByDay } from '../../utils/utilsBet';
+import { AllLeaguesWarning } from './AllLeaguesWarning';
 
 const MyBetsSection = styled(Section)({
     height: "fit-content",
@@ -15,11 +16,23 @@ const MyBetsSection = styled(Section)({
     gap: "10px"
 });
 
-const Title = styled(Box)({
+const HeaderContainer = styled(Box)({
     width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    gap: "5px"
+});
+
+const Title = styled(Box)({
     fontWeight: "bold ", 
     fontSize: "24px",
     textAlign: "left"
+});
+
+const CheckBoxWrapper = styled(Box)({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "right"
 });
 
 const Content = styled(Box)({
@@ -70,6 +83,8 @@ interface MyBetsProps{
 export function MyBets(props: MyBetsProps){
 
     const [gamesByDays, setGamesByDays] = useState<GamesByDay>(new Map());
+    const [allLeaguesChecked, setAllLeaguesChecked] = useState<boolean>(false);
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
 
     useEffect(() => {
         getUpcomingGameIDs().then((gamesByDays: GamesByDay) => 
@@ -77,17 +92,37 @@ export function MyBets(props: MyBetsProps){
         );
     }, []);
 
+    useEffect(() => {
+        if (allLeaguesChecked)
+            setOpenDialog(true);
+    }, [allLeaguesChecked]);
+
     async function getUpcomingGameIDs(): Promise<GamesByDay> {
         const upcomingGameIDs: { id: string, date: string }[] =  await gameDataSource.getUpcomingGameIDs();
         return getGameIDsByDay(upcomingGameIDs);
     }
 
+    function cancelAllLeagueOption(){
+        setAllLeaguesChecked(false);
+        setOpenDialog(false);
+    }
+
     return(
         <MyBetsSection>
-            <Box sx={{width: "100%"}}>
-                <Title> My Bets </Title>
-                <Box sx={{ color: lightGray, fontSize: "14px"}}> 2025 Women's World Cup matches </Box>
-            </Box>
+            <HeaderContainer>
+                <Box sx={{display: "flex", justifyContent: "space-between"}}>
+                    <Title> My Bets </Title>
+                    <CheckBoxWrapper>
+                        <Box sx={{textAlign: "right"}}> Apply to all leagues </Box>
+                        <Checkbox 
+                            checked={allLeaguesChecked} 
+                            onChange={(e) => setAllLeaguesChecked(e.target.checked)} 
+                            sx={{padding: "2px"}}
+                        />
+                    </CheckBoxWrapper>
+                </Box>
+                <Box sx={{ color: lightGray, fontSize: "14px"}}> 2025 Women's World Cup matches </Box>  
+            </HeaderContainer>
              { !props.activeLeagueId ?
                 <Box sx={{margin: "auto"}}> Join a league to unlock the leaderboard ! </Box>
             :
@@ -102,12 +137,19 @@ export function MyBets(props: MyBetsProps){
                                         gameId={game.id} 
                                         activeLeagueId={props.activeLeagueId} 
                                         disableBet={!game.isUpdatable}
+                                        allLeaguesChecked={allLeaguesChecked}
                                     />         
                                 )}
                             </BetList>
                         </DayContainer>
                     ))}
                 </Content>
+            }
+            {openDialog && 
+                <AllLeaguesWarning 
+                    onCancel={() => cancelAllLeagueOption()}
+                    onConfirm={() => setOpenDialog(false)}
+                />
             }
         </MyBetsSection>
     );

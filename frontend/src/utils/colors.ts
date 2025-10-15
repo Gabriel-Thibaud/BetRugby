@@ -12,3 +12,5 @@ export const white = "#FFFFFF";     // section background
 export const lightGray = "#D9D9D9";
 
 export const red = "#CB1111";       // error message/icon
+
+export const overlay = "rgba(35, 41, 47, 0.5)";

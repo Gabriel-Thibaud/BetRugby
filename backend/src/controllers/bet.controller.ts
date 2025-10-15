@@ -25,6 +25,25 @@ export class BetController {
     }
   }
 
+  async createAllLeaguesBet(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId: string | undefined = req.user?.id;
+      const { gameId, pointDiff, predictedWinner }: Partial<Bet> = req.body;
+      if (userId && gameId && pointDiff && predictedWinner) {
+        await this.betService.createAllLeaguesBet(userId, gameId, pointDiff, predictedWinner);
+        return res.status(201);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('[BetController] createAllLeaguesBet error:', error.message);
+        return res.status(500).json({ error: 'Internal server error' });
+      } else {
+        console.error('[BetController] unknown error:', error);
+        return res.status(500).json({ error: 'Unexpected error occurred' });
+      }
+    }
+  }
+
   async getBet(req: AuthenticatedRequest, res: Response) {
     try {
       const userId: string | undefined = req.user?.id;
