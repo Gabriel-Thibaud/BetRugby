@@ -69,7 +69,8 @@ const ScoreWrapper = styled(Box)({
 interface GameBetProps {
     gameId: string,
     activeLeagueId: string,
-    disableBet: boolean  // disable the possibility to change the bet
+    disableBet: boolean,  // disable the possibility to change the bet
+    allLeaguesChecked?: boolean
 }
 
 export function GameBet(props: GameBetProps){
@@ -110,8 +111,9 @@ export function GameBet(props: GameBetProps){
 
     useEffect(() => {
 
-        if (!!predictedWinner && !!diffenrenceSelected && typeof diffenrenceSelected == 'number')
-            betDataSource.createBet(props.activeLeagueId, props.gameId, diffenrenceSelected, predictedWinner)
+        if (!!predictedWinner && !!diffenrenceSelected && typeof diffenrenceSelected == 'number' && !props.disableBet)
+            props.allLeaguesChecked ? betDataSource.createAllLeaguesBet(props.gameId, diffenrenceSelected, predictedWinner)
+                                    : betDataSource.createBet(props.activeLeagueId, props.gameId, diffenrenceSelected, predictedWinner);
 
     }, [predictedWinner, diffenrenceSelected]);
 

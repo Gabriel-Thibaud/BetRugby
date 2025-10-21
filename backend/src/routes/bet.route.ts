@@ -10,5 +10,6 @@ const betController: BetController = new BetController(betService);
 
 router.get("/:leagueId/:gameId", (req, res) => betController.getBet(req, res));
 router.post("/create", (req, res) => betController.createBet(req, res));
+router.post("/allLeagues/create", (req, res) => betController.createAllLeaguesBet(req, res));
 
 export default router;

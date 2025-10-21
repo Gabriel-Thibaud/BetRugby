@@ -32,6 +32,22 @@ export class BetDataSource {
         return { error: "" };
     }
 
+    public async createAllLeaguesBet(gameId: string, pointDiff: number, predictedWinner: string): Promise<{ error: string }> {
+        const response: Response = await fetchWithAuth(`${this.baseURL}/allLeagues/create`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+            body: JSON.stringify({ gameId, pointDiff, predictedWinner })
+        });
+
+        if (!response.ok)
+            return { error: "Error in bet creation" };
+
+        return { error: "" };
+    }
+
     public async getBet(leagueId: string, gameId: string): Promise<Bet | null> {
         const response: Response = await fetchWithAuth(`${this.baseURL}/${leagueId}/${gameId}`, {
             method: "GET",

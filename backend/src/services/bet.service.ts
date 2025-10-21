@@ -34,6 +34,24 @@ export class BetService {
         return bet.id;
     }
 
+    async createAllLeaguesBet(userId: string, gameId: string, pointDiff: number, predictedWinner: string): Promise<boolean> {
+        const userLeagueIDs: { leagueId: string; }[] = await this.db.userLeague.findMany({
+            where: { userId },
+            select: { leagueId: true }
+        });
+
+        if (!userLeagueIDs.length)
+            throw new Error("User has no league");
+
+        for (const leagueObj of userLeagueIDs) {
+            const leagueId: string = await this.createBet(userId, leagueObj.leagueId, gameId, pointDiff, predictedWinner);
+            if (!leagueId)
+                console.error(`Error when creating/updating bet in the league: ${leagueObj.leagueId} for game: ${gameId}`);
+        }
+
+        return true;
+    }
+
     async updateScore(betId: string, winner: string, homeTeamScore: number, awayTeamScore: number): Promise<number> {
 
         const bet: Bet | null = await this.db.bet.findUnique({
