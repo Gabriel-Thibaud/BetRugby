@@ -26,9 +26,8 @@ export async function adminGuard(req: AuthenticatedRequest, res: Response, next:
     try {
         console.log(" ENTER IN ADMIN ADMIN ")
         const userId = req.user?.id; // fetch id thanks to authGuard
-        if (!userId) {
+        if (!userId)
             return res.status(401).json({ error: "Unauthorized" });
-        }
 
         const user = await prisma.user.findUnique({
             where: { id: userId },

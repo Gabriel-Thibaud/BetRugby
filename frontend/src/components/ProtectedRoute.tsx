@@ -43,7 +43,6 @@ export default function ProtectedRoute({ children, adminPage = false }: Protecte
   // also check for auth of course
   async function checkAdmin(){
     try {
-        console.log(" HERE CHECK ADMIN ADMIN ");
         const res: Response = await fetch(`${API_URL}/api/auth/check-admin`, {
           method: "GET",
           credentials: "include",
