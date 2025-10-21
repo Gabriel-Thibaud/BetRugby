@@ -113,7 +113,7 @@ export function MyBets(props: MyBetsProps){
                 <Box sx={{display: "flex", justifyContent: "space-between"}}>
                     <Title> My Bets </Title>
                     <CheckBoxWrapper>
-                        <Box sx={{textAlign: "right"}}> Apply to all leagues </Box>
+                        <Box sx={{textAlign: "right", fontSize: "14px"}}> Apply to all leagues </Box>
                         <Checkbox 
                             checked={allLeaguesChecked} 
                             onChange={(e) => setAllLeaguesChecked(e.target.checked)} 

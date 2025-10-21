@@ -44,7 +44,6 @@ export function Dialog(props: DialogProps) {
     const dialogRef = createRef<HTMLDivElement>();
 
     function handleWrapperClick(e: React.MouseEvent<HTMLDivElement>){
-
         // verify that the click is outside (e.target not in dialogRef)
         if (props.closeOnClickOutside && !dialogRef.current?.contains(e.target as Node)){
             e.stopPropagation();
