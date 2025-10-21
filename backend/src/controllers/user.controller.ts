@@ -4,9 +4,7 @@ import { UserService } from '../services/user.service';
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 import { AuthenticatedRequest } from "../types";
-
-const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret";
-const isProduction = process.env.NODE_ENV === "production";
+import { isProduction, JWT_SECRET } from "../config";
 
 export class UserController {
   constructor(private userService: UserService) { }
@@ -83,7 +81,7 @@ export class UserController {
   async logout(req: AuthenticatedRequest, res: Response) {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       sameSite: "lax",
     });
     res.status(200).json({ message: "Logged out" });

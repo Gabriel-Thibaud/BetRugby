@@ -9,6 +9,7 @@ import { Section } from './widgets/Section';
 import { InstaLogo } from './utils/instagram_logo';
 import { BetsAndResults } from './components/BetsAndResuls/BetsAndResults';
 import { appDialogRef } from './widgets/Dialog';
+import { AdminHomepage } from './components/Admin/AdminHomepage';
 
 const AppContainer = styled(Box)({
   backgroundColor: lightBlue,
@@ -75,6 +76,7 @@ function App() {
             }/>
             <Route path="/home" element={<ProtectedRoute><Homepage/></ProtectedRoute>}/>
             <Route path="/bets" element={<ProtectedRoute><BetsAndResults/></ProtectedRoute>}/>
+            <Route path="/admin" element={<ProtectedRoute adminPage><AdminHomepage/></ProtectedRoute>}/>
           </Routes>
         </AppContent>
         <Box id="dialog-container" ref={appDialogRef}/>

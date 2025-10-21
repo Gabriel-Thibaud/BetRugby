@@ -6,10 +6,8 @@ import leagueRoutes from "./routes/league.route";
 import betRoutes from "./routes/bet.route";
 import gameRoutes from "./routes/game.route";
 import authRoutes from "./routes/auth.route";
-import dotenv from "dotenv";
 import { startGameCronJobs } from "./cron/gameCron";
-
-dotenv.config();
+import { PORT } from "./config";
 
 const app = express();
 app.use(express.json());
@@ -33,7 +31,6 @@ app.use('/api/game', gameRoutes);
 // Render pings this endpoint to ensure the service is running and healthy.
 app.get("/health", (_req, res) => res.send("OK"));
 
-const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
   startGameCronJobs();

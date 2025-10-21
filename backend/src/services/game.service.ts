@@ -2,8 +2,8 @@ import { prisma } from '../prisma/client';
 import { Game } from '@prisma/client';
 import { BetService } from './bet.service';
 import { UserService } from './user.service';
+import { API_TOKEN } from "../config";
 
-const API_TOKEN = process.env.BETS_API_TOKEN;
 const RUGBY_ID = 8;
 const WOMEN_WORLDCUP_ID = 41345; // old id: 6390;
 
